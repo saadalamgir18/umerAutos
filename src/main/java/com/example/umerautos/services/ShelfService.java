@@ -1,11 +1,12 @@
 package com.example.umerautos.services;
 
+import com.example.umerautos.dto.ShelfResponseDTO;
 import com.example.umerautos.entities.ShelfCode;
 
 import java.util.List;
 
 public interface ShelfService {
-    ShelfCode createOne(ShelfCode shelfCode);
+    ShelfResponseDTO createOne(ShelfCode shelfCode);
 
-    List<ShelfCode> findAll();
+    List<ShelfResponseDTO> findAll();
 }

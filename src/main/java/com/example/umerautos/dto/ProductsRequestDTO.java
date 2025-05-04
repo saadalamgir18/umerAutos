@@ -16,6 +16,8 @@ import java.util.UUID;
 @Builder
 public class ProductsRequestDTO {
 
+    private UUID id;
+
     private String name;
 
 
@@ -39,5 +41,6 @@ public class ProductsRequestDTO {
     private UUID supplierId; //associate with supplier
 
     private UUID shelfCodeId;
+
 
 }

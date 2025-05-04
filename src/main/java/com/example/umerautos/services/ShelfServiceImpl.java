@@ -1,10 +1,12 @@
 package com.example.umerautos.services;
 
+import com.example.umerautos.dto.ShelfResponseDTO;
 import com.example.umerautos.entities.ShelfCode;
 import com.example.umerautos.repositories.ShelfCodeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShelfServiceImpl implements ShelfService{
@@ -15,12 +17,14 @@ public class ShelfServiceImpl implements ShelfService{
     }
 
     @Override
-    public ShelfCode createOne(ShelfCode shelfCode) {
-        return shelfCodeRepository.save(shelfCode);
+    public ShelfResponseDTO createOne(ShelfCode shelfCode) {
+        ShelfCode newShelfCode = shelfCodeRepository.save(shelfCode);
+        return ShelfResponseDTO.mapToDTO(newShelfCode);
     }
 
     @Override
-    public List<ShelfCode> findAll() {
-        return shelfCodeRepository.findAll();
+    public List<ShelfResponseDTO> findAll() {
+        List<ShelfCode> shelfCode =  shelfCodeRepository.findAll();
+        return shelfCode.stream().map(ShelfResponseDTO::mapToDTO).collect(Collectors.toList());
     }
 }

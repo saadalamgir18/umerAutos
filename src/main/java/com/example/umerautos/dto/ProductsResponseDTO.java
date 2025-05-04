@@ -4,6 +4,7 @@ package com.example.umerautos.dto;
 import com.example.umerautos.entities.Products;
 import lombok.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -12,6 +13,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class ProductsResponseDTO {
+
+    protected Date createdAt;
+
+    protected Date updatedAt;
 
     private UUID id;
     private String name;
@@ -48,8 +53,8 @@ public class ProductsResponseDTO {
                 .purchasePrice(product.getPurchasePrice())
                 .sellingPrice(product.getSellingPrice())
 
-//                .brandId(product.getBrand().getId())
-//                .brandName(product.getBrand().getName())
+                .brandId(product.getBrand().getId())
+                .brandName(product.getBrand().getName())
 
 //                .modelId(product.getCompatibleModels().getId())
 //                .modelName(product.getCompatibleModels().getName())

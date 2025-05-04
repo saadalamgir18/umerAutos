@@ -1,15 +1,20 @@
 package com.example.umerautos.services;
 
+import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductsServiceImpl implements ProductsService{
@@ -54,13 +59,17 @@ public class ProductsServiceImpl implements ProductsService{
     }
 
     @Override
-    public List<Products> findAll(String productName) {
-        return productsRepo.findByName(productName);
+    public List<ProductsResponseDTO> findAll(String productName) {
+       List<Products> products = productsRepo.findByName(productName);
+        return products.stream()
+                .map(ProductsResponseDTO::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ProductsResponseDTO findById(UUID id) {
         Optional<Products> dbProduct = productsRepo.findById(id);
+
         if (dbProduct.isPresent()){
             return ProductsResponseDTO.mapToDto(dbProduct.get());
         }else{
@@ -74,8 +83,19 @@ public class ProductsServiceImpl implements ProductsService{
     }
 
     @Override
-    public void deleteOne(UUID id) {
+    public ResponseEntity<?> deleteOne(UUID id) {
 
-        productsRepo.deleteById(id);
+        Optional<Products> products = productsRepo.findById(id);
+        if (products.isPresent()){
+
+            productsRepo.deleteById(id);
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "product deleted successful!", null);
+
+        }else {
+            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "product does not exit with id: " + id, null);
+
+
+        }
+
     }
 }

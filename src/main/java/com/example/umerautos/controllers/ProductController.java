@@ -1,9 +1,12 @@
 package com.example.umerautos.controllers;
 
+import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.services.ProductsService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,33 +17,55 @@ import java.util.UUID;
 @RequestMapping("/api/v1")
 public class ProductController {
 
-    private ProductsService productsService;
+    private final ProductsService productsService;
 
     public ProductController(ProductsService productsService) {
         this.productsService = productsService;
     }
 
     @GetMapping("/products")
-    public List<Products> findAll(@RequestParam(required = false) String name){
-        System.out.println(name);
-        return productsService.findAll(name);
+    public ResponseEntity<?> findAll(@RequestParam(required = false) String name){
+        List<ProductsResponseDTO> productsResponseDTO = productsService.findAll(name);
+        if (!productsResponseDTO.isEmpty()){
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", productsResponseDTO);
+        }
+        else {
+            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "something went wrong", null);
+
+        }
+
     }
     @GetMapping("/products/{productId}")
-    public ProductsResponseDTO findAll(@PathVariable UUID productId){
-        return productsService.findById(productId);
+    public ResponseEntity<?>  findAll(@PathVariable UUID productId){
+        ProductsResponseDTO productsResponseDTO = productsService.findById(productId);
+        if (productsResponseDTO.getId() != null){
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", productsResponseDTO);
+        }
+        else {
+            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "product does not exist on id " + productId, null);
+
+        }
     }
 
     @PostMapping("/products")
-    public ProductsResponseDTO save(@RequestBody ProductsRequestDTO productsRequestDTO){
-        System.out.println(productsRequestDTO);
-        return productsService.createOne(productsRequestDTO);
+    public ResponseEntity<Object> save(@RequestBody ProductsRequestDTO productsRequestDTO){
+        ProductsResponseDTO productsResponseDTO = productsService.createOne(productsRequestDTO);
+        if (productsResponseDTO.getId() != null){
+            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", productsResponseDTO);
+        }
+        else {
+            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
+
+        }
+
     }
 
     @DeleteMapping("/products/{productId}")
-    public void deleteOne(@PathVariable UUID productId){
+    public ResponseEntity<?> deleteOne(@PathVariable UUID productId){
         System.out.println("deleting product on this id: " + productId);
 
-        productsService.deleteOne(productId);
+        return productsService.deleteOne(productId);
+
 
     }
 }
