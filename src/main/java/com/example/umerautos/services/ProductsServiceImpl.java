@@ -3,6 +3,7 @@ package com.example.umerautos.services;
 import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
+import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +30,11 @@ public class ProductsServiceImpl implements ProductsService{
 
     @Override
     public ProductsResponseDTO createOne(ProductsRequestDTO products) {
+        Set<CompatibleModels> models = new HashSet<>(compatibleModelsRepository.findAllById(products.getCompatibleModelIds()));
 
 
-           Products newProduct  = Products.builder()
+
+        Products newProduct  = Products.builder()
                 .name(products.getName())
                 .brand(brandsRepository.findById(products.getBrandId()).orElse(null))
 //                .compatibleModels(compatibleModelsRepository.findById(products.getModelId()).orElse(null))
@@ -46,6 +46,7 @@ public class ProductsServiceImpl implements ProductsService{
                 .sellingPrice(products.getSellingPrice())
 //                .supplierId(suppliersRepository.findById(products.getSupplierId()).orElse(null))
                 .shelfCode(shelfCodeRepository.findById(products.getShelfCodeId()).orElse(null))
+                .compatibleModels(models)
                 .build();
 
 
@@ -61,6 +62,8 @@ public class ProductsServiceImpl implements ProductsService{
     @Override
     public List<ProductsResponseDTO> findAll(String productName) {
        List<Products> products = productsRepo.findByName(productName);
+
+        products.stream().forEach(products1 -> System.out.println(products1.getCompatibleModels()));
         return products.stream()
                 .map(ProductsResponseDTO::mapToDto)
                 .collect(Collectors.toList());

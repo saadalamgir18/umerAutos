@@ -2,7 +2,11 @@ package com.example.umerautos.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -22,9 +26,13 @@ public class Products extends BaseModel {
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "modelId")
-    private CompatibleModels compatibleModels; //associate with compatible model
+    @ManyToMany
+    @JoinTable(
+            name = "product_compatible_models",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "model_id")
+    )
+    private Set<CompatibleModels> compatibleModels; //associate with compatible model
 
     @ManyToOne
     @JoinColumn(name = "categoryId")

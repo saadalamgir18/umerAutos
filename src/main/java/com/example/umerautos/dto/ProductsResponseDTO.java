@@ -1,17 +1,21 @@
 package com.example.umerautos.dto;
 
 
+import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class ProductsResponseDTO {
 
     protected Date createdAt;
@@ -41,6 +45,11 @@ public class ProductsResponseDTO {
 
     private UUID shelfCodeId;
     private String shelfCodeName;
+    private Set<String> compatibleModels;
+
+
+
+
 
 
     public static ProductsResponseDTO mapToDto(Products product) {
@@ -67,6 +76,9 @@ public class ProductsResponseDTO {
 
                 .shelfCodeId(product.getShelfCode().getId())
                 .shelfCodeName(product.getShelfCode().getName())
+                .createdAt(product.getCreatedAt())
+                .updatedAt(product.getUpdatedAt())
+                .compatibleModels(product.getCompatibleModels().stream().map(CompatibleModels::getName).collect(Collectors.toSet()))
 
                 .build();
 

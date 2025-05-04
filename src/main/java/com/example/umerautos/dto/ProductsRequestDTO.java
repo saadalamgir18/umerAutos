@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -14,9 +15,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class ProductsRequestDTO {
 
-    private UUID id;
 
     private String name;
 
@@ -25,8 +26,6 @@ public class ProductsRequestDTO {
 
     private UUID modelId; //associate with compatible model
 
-
-    private UUID categoryId; // associate with category
 
     private String sku;
 
@@ -41,6 +40,8 @@ public class ProductsRequestDTO {
     private UUID supplierId; //associate with supplier
 
     private UUID shelfCodeId;
+    private Set<UUID> compatibleModelIds; // just IDs for now
+
 
 
 }

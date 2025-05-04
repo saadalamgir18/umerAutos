@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ShelfRequestDTO {
+public class CompatibleModelRequestDTO {
     private String name;
 }
