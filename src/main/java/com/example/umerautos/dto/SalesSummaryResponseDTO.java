@@ -13,11 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
-public class SalesSummaryResponseDTO extends BaseModel {
+public class SalesSummaryResponseDTO {
     protected UUID Id;
-
-
-    protected Date createdAt;
 
     private String customerName;
     private double totalAmountSummary;

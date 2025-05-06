@@ -31,9 +31,11 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
         SalesSummary salesSummary = SalesSummary.builder()
                 .customerName(salesSummaryRequestDTO.getCustomerName())
                 .paymentStatus(salesSummaryRequestDTO.getPaymentStatus())
-                .quantitySold(salesSummaryRequestDTO.getQuantitySoldSummary())
-                .totalAmount(salesSummaryRequestDTO.getTotalAmountSummary())
                 .build();
+
+        double totalAmountSummary = 0;
+        int quantitySummary = 0;
+
 
 
         List<Sales> saleItemsList = new ArrayList<>();
@@ -48,6 +50,9 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
                         .salesSummary(salesSummary)
                         .build();
 
+                totalAmountSummary += saleDTO.getTotalAmount();
+                quantitySummary += saleDTO.getQuantitySold();
+
                 saleItemsList.add(sales);
 
 
@@ -55,6 +60,8 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
 
         }
 
+        salesSummary.setQuantitySold(quantitySummary);
+        salesSummary.setTotalAmount(totalAmountSummary);
         salesSummary.setSaleItems(saleItemsList);
 
         SalesSummary newSalesSummary = salesSummaryRepository.save(salesSummary);
