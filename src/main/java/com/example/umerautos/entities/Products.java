@@ -25,7 +25,6 @@ public class Products extends BaseModel {
     private Brands brand;
 
 
-
     @ManyToMany
     @JoinTable(
             name = "product_compatible_models",
