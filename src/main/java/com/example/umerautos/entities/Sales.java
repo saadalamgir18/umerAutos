@@ -1,9 +1,6 @@
 package com.example.umerautos.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -24,7 +21,7 @@ public class Sales extends BaseModel{
     private double totalAmount;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sales_summary_id")
     private SalesSummary salesSummary;
 }

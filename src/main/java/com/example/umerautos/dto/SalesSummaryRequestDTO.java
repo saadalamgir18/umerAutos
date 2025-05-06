@@ -22,7 +22,7 @@ public class SalesSummaryRequestDTO {
 
     private double totalAmountSummary;
 
-    private  double quantitySoldSummary;
+    private  int quantitySoldSummary;
 
     private List<SaleDTO> saleItems;
 
