@@ -1,11 +1,15 @@
 package com.example.umerautos.dto;
 
 import com.example.umerautos.entities.BaseModel;
+import com.example.umerautos.entities.PaymentStatus;
+import com.example.umerautos.entities.Sales;
 import com.example.umerautos.entities.SalesSummary;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,14 +24,28 @@ public class SalesSummaryResponseDTO {
     private double totalAmountSummary;
 
     private  int quantitySoldSummary;
+    private List<SalesResponseDTO> saleItems;
+
+    private PaymentStatus paymentStatus;
 
     public static SalesSummaryResponseDTO mapToDTO(SalesSummary salesSummary){
+        List<SalesResponseDTO> salesDTOs = salesSummary.getSaleItems().stream()
+                .map(sale -> SalesResponseDTO.builder()
+                        .id(sale.getId())
+                        .productName(sale.getProduct().getName())
+                        .quantitySold(sale.getQuantitySold())
+                        .totalPrice(sale.getTotalAmount())
+                        .build()
+                )
+                .toList();
         return  SalesSummaryResponseDTO
                 .builder()
                 .customerName(salesSummary.getCustomerName())
                 .quantitySoldSummary(salesSummary.getQuantitySold())
                 .totalAmountSummary(salesSummary.getTotalAmount())
                 .Id(salesSummary.getId())
+                .paymentStatus(salesSummary.getPaymentStatus())
+                .saleItems(salesDTOs)
                 .build();
 
     }

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SalesSummaryServiceImpl implements SalesSummaryService{
@@ -74,6 +75,6 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
     @Override
     public List<SalesSummaryResponseDTO> findAll() {
         List<SalesSummary> salesSummaries =  salesSummaryRepository.findAll();
-        return List.of();
+        return salesSummaries.stream().map(salesSummary -> SalesSummaryResponseDTO.mapToDTO(salesSummary)).collect(Collectors.toList());
     }
 }
