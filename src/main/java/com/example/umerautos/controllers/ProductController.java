@@ -4,6 +4,7 @@ import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.entities.Products;
+import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.services.ProductsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,25 +25,25 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> findAll(@RequestParam(required = false) String name){
+    public ResponseEntity<?> findAll(@RequestParam(required = false) String name) throws ResourceNotFoundException {
         List<ProductsResponseDTO> productsResponseDTO = productsService.findAll(name);
         if (!productsResponseDTO.isEmpty()){
             return CustomResponse.generateResponse(HttpStatus.OK, true, "success", productsResponseDTO);
         }
         else {
-            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "something went wrong", null);
+            throw  new ResourceNotFoundException();
 
         }
 
     }
     @GetMapping("/products/{productId}")
-    public ResponseEntity<?>  findAll(@PathVariable UUID productId){
+    public ResponseEntity<?>  findAll(@PathVariable UUID productId) throws ResourceNotFoundException {
         ProductsResponseDTO productsResponseDTO = productsService.findById(productId);
         if (productsResponseDTO.getId() != null){
             return CustomResponse.generateResponse(HttpStatus.OK, true, "success", productsResponseDTO);
         }
         else {
-            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "product does not exist on id " + productId, null);
+            throw  new ResourceNotFoundException();
 
         }
     }
@@ -54,6 +55,7 @@ public class ProductController {
             return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", productsResponseDTO);
         }
         else {
+            System.out.println("somethig went wrong");
             return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
 
         }
@@ -66,6 +68,12 @@ public class ProductController {
 
         return productsService.deleteOne(productId);
 
-
     }
+
+//    @GetMapping("/products/low-stock")
+//    public ResponseEntity<?> lowStock(){
+//
+//        return null;
+//
+//    }
 }
