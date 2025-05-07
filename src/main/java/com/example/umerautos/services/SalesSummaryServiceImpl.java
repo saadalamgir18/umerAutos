@@ -24,6 +24,8 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
     @Autowired private ProductsRepository productsRepo;
     @Autowired private SalesRepository salesRepository;
 
+    @Autowired private ProductsService productsService;
+
 
     @Override
     @Transactional
@@ -44,6 +46,9 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
             Optional<Products> products = productsRepo.findById(saleDTO.getProductId());
             if (products.isPresent()){
                 System.out.println("product exist! " + saleDTO.getProductId());
+
+                productsService.updateStockQuantity(products, saleDTO);
+
                 Sales sales = Sales.builder()
                         .product(products.get())
                         .quantitySold(saleDTO.getQuantitySold())
@@ -71,6 +76,8 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
 
 
     }
+
+
 
     @Override
     public List<SalesSummaryResponseDTO> findAll() {

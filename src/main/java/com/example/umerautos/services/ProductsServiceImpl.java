@@ -3,6 +3,7 @@ package com.example.umerautos.services;
 import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
+import com.example.umerautos.dto.SaleDTO;
 import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.repositories.*;
@@ -99,5 +100,12 @@ public class ProductsServiceImpl implements ProductsService{
 
         }
 
+    }
+
+    public void updateStockQuantity(Optional<Products> products, SaleDTO saleDTO) {
+
+        products.get().setQuantityInStock(products.get().getQuantityInStock() -  saleDTO.getQuantitySold());
+
+        productsRepo.save(products.get());
     }
 }
