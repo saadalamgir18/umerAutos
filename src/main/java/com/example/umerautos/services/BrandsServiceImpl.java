@@ -31,13 +31,7 @@ public class BrandsServiceImpl implements BrandsService{
     @Override
     public BrandsResponseDTO findOne(UUID id) {
         Optional<Brands> brands = brandsRepository.findById(id);
-        if (brands.isPresent()){
-
-            return BrandsResponseDTO.mapTo(brands.get());
-
-        }else {
-            return null;
-        }
+        return brands.map(BrandsResponseDTO::mapTo).orElse(null);
     }
 
     @Override

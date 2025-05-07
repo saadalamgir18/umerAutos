@@ -19,8 +19,6 @@ public class SalesSummaryController {
 
     @PostMapping("/sales-summary")
     public ResponseEntity<?> saveSales(@RequestBody SalesSummaryRequestDTO salesRequestDTO){
-        System.out.println(salesRequestDTO.getCustomerName() + " "+ salesRequestDTO.getTotalAmountSummary() + " "+ salesRequestDTO.getSaleItems()  + " "+ salesRequestDTO.getQuantitySoldSummary());
-        System.out.println(salesRequestDTO.toString());
        SalesSummaryResponseDTO salesSummaryResponseDTO = salesSummaryService.saveOne(salesRequestDTO);
        if (salesSummaryResponseDTO.getId() != null){
            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "sales created successfully!", salesSummaryResponseDTO);

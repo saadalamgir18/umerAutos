@@ -63,7 +63,6 @@ public class ProductsServiceImpl implements ProductsService{
     public List<ProductsResponseDTO> findAll(String productName) {
        List<Products> products = productsRepo.findByName(productName);
 
-        products.stream().forEach(products1 -> System.out.println(products1.getCompatibleModels()));
         return products.stream()
                 .map(ProductsResponseDTO::mapToDto)
                 .collect(Collectors.toList());

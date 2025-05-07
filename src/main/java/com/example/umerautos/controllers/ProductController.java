@@ -64,7 +64,6 @@ public class ProductController {
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<?> deleteOne(@PathVariable UUID productId){
-        System.out.println("deleting product on this id: " + productId);
 
         return productsService.deleteOne(productId);
 

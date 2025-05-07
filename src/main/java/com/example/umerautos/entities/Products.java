@@ -20,17 +20,18 @@ public class Products extends BaseModel {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brandId")
     private Brands brand;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "product_compatible_models",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "model_id")
     )
+    @Fetch(value = FetchMode.SUBSELECT)
     private Set<CompatibleModels> compatibleModels; //associate with compatible model
 
     @ManyToOne
@@ -49,14 +50,13 @@ public class Products extends BaseModel {
 
     private double sellingPrice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplierId")
     private Suppliers supplierId; //associate with supplier
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelfCodeId")
     private ShelfCode shelfCode;
-
 
 
 }

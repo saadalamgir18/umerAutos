@@ -31,7 +31,7 @@ public class SalesSummaryResponseDTO {
     public static SalesSummaryResponseDTO mapToDTO(SalesSummary salesSummary){
         List<SalesResponseDTO> salesDTOs = salesSummary.getSaleItems().stream()
                 .map(sale -> SalesResponseDTO.builder()
-                        .id(sale.getId())
+                        .productId(sale.getId())
                         .productName(sale.getProduct().getName())
                         .quantitySold(sale.getQuantitySold())
                         .totalPrice(sale.getTotalAmount())
