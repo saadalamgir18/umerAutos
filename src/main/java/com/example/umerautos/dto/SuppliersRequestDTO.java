@@ -1,16 +1,13 @@
-package com.example.umerautos.entities;
+package com.example.umerautos.dto;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
-@Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Suppliers extends BaseModel{
-
+@ToString
+public class SuppliersRequestDTO {
     private String company;
 
     private String contactPerson;
@@ -18,5 +15,4 @@ public class Suppliers extends BaseModel{
     private String email;
 
     private String phoneNumber;
-
 }

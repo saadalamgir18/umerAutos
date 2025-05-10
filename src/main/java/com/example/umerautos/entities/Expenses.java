@@ -9,14 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Suppliers extends BaseModel{
-
-    private String company;
-
-    private String contactPerson;
-
-    private String email;
-
-    private String phoneNumber;
+public class Expenses extends BaseModel{
+    private String description;
+    private double amount;
 
 }
