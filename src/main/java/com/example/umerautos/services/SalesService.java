@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface SalesService {
 
+    List<SalesResponseDTO> findTodaySales();
     List<SalesResponseDTO> findAll();
+
     Double getTodayTotalSalesAmount();
 }

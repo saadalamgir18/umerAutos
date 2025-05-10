@@ -19,15 +19,27 @@ public class SalesController {
     @Autowired private SalesService salesService;
 
     @GetMapping("/today-sales")
+    public ResponseEntity<?> findTodaySale() {
+
+
+        return salesService.findTodaySales().isEmpty() ? CustomResponse.generateResponse(HttpStatus.OK, true , "successful", new ArrayList<>())
+                :
+             CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesService.findTodaySales());
+
+
+        }
+    @GetMapping("/sales")
     public ResponseEntity<?> findAll() {
+
+        System.out.println("finding all sales");
 
 
         return salesService.findAll().isEmpty() ? CustomResponse.generateResponse(HttpStatus.OK, true , "successful", new ArrayList<>())
                 :
-             CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesService.findAll());
+                CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesService.findAll());
 
 
-        }
+    }
 
     @GetMapping("/today-sale/totalSale")
     public ResponseEntity<?> todayTotalSale() {

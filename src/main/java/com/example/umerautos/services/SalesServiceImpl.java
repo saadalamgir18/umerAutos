@@ -28,7 +28,7 @@ public class SalesServiceImpl implements SalesService{
 
 
     @Override
-    public List<SalesResponseDTO> findAll() {
+    public List<SalesResponseDTO> findTodaySales() {
         List<Object[]> rawResults = salesRepository.findTodaySalesSummary();
         return rawResults.stream().map(row-> SalesResponseDTO
                 .builder()
@@ -37,6 +37,20 @@ public class SalesServiceImpl implements SalesService{
                 .quantitySold(((Number) row[2]).intValue())
                 .totalPrice(((Number) row[3]).doubleValue())
                 .profit(((Number) row[4]).doubleValue())
+                .id((UUID) row[5])
+                .build()).collect(Collectors.toList());
+    }
+    @Override
+    public List<SalesResponseDTO> findAll() {
+        List<Object[]> rawResults = salesRepository.findAllSales();
+        return rawResults.stream().map(row-> SalesResponseDTO
+                .builder()
+                .productId((UUID) row[0])
+                .productName((String) row[1])
+                .quantitySold(((Number) row[2]).intValue())
+                .totalPrice(((Number) row[3]).doubleValue())
+                .profit(((Number) row[4]).doubleValue())
+                .id((UUID) row[5])
                 .build()).collect(Collectors.toList());
     }
 

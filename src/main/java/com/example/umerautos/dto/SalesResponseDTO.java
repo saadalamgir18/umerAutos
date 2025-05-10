@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class SalesResponseDTO {
+    private UUID id;
     private UUID productId;
     private String productName;
     private int quantitySold;
@@ -18,7 +19,8 @@ public class SalesResponseDTO {
     public static SalesResponseDTO mapToDTO(Sales sales){
         return SalesResponseDTO
                 .builder()
-                .productId( sales.getId())
+                .id(sales.getId())
+                .productId( sales.getProduct().getId())
                 .productName(sales.getProduct().getName())
                 .quantitySold(sales.getQuantitySold())
                 .totalPrice(sales.getTotalAmount())

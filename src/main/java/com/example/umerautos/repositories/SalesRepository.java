@@ -34,13 +34,27 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
                 p.name,
                 SUM(s.quantitySold),
                 SUM(s.totalAmount),
-                SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold) AS profit
+                SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold) AS profit,
+                s.id
             FROM Sales s
             JOIN s.product p
             WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE
             GROUP BY p.id, p.name
             """)
     List<Object[]> findTodaySalesSummary();
+
+    @Query("""
+            SELECT
+                p.id,
+                p.name,
+                s.quantitySold,
+                s.totalAmount,
+                (s.totalAmount - p.purchasePrice) * s.quantitySold AS profit,
+                s.id
+            FROM Sales s
+            JOIN s.product p
+            """)
+    List<Object[]> findAllSales();
 
 
     @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE ")

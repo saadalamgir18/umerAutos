@@ -13,11 +13,11 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1")
-public class ModelController {
+public class CompatibleModelsController {
+    @Autowired
+    private CompatibleModelService modelService;
 
-    @Autowired private CompatibleModelService modelService;
-
-    @PostMapping("/models")
+    @PostMapping("/compatible-models")
     public ResponseEntity<?> createOne(@RequestBody CompatibleModelRequestDTO requestDTO){
         CompatibleModelResponseDTO modelResponseDTO = modelService.createOne(requestDTO);
         if (modelResponseDTO.getId() != null){
@@ -27,7 +27,7 @@ public class ModelController {
         return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "fail", null);
     }
 
-    @GetMapping("/models")
+    @GetMapping("/compatible-models")
     public ResponseEntity<?> findAll(){
         Set<CompatibleModelResponseDTO> responseDTO = modelService.findAll();
         if (!responseDTO.isEmpty()){
@@ -36,7 +36,5 @@ public class ModelController {
         }
         return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "fail", null);
 
-
     }
-
 }
