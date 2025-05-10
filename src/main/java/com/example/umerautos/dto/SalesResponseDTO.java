@@ -13,6 +13,7 @@ public class SalesResponseDTO {
     private String productName;
     private int quantitySold;
     private double totalPrice;
+    private double profit;
 
     public static SalesResponseDTO mapToDTO(Sales sales){
         return SalesResponseDTO

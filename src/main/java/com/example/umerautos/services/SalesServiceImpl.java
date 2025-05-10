@@ -36,6 +36,7 @@ public class SalesServiceImpl implements SalesService{
                 .productName((String) row[1])
                 .quantitySold(((Number) row[2]).intValue())
                 .totalPrice(((Number) row[3]).doubleValue())
+                .profit(((Number) row[4]).doubleValue())
                 .build()).collect(Collectors.toList());
     }
 

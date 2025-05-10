@@ -27,6 +27,8 @@ public class SalesSummaryResponseDTO {
     private List<SalesResponseDTO> saleItems;
 
     private PaymentStatus paymentStatus;
+    protected Date createdAt;
+
 
     public static SalesSummaryResponseDTO mapToDTO(SalesSummary salesSummary){
         List<SalesResponseDTO> salesDTOs = salesSummary.getSaleItems().stream()
@@ -46,6 +48,7 @@ public class SalesSummaryResponseDTO {
                 .Id(salesSummary.getId())
                 .paymentStatus(salesSummary.getPaymentStatus())
                 .saleItems(salesDTOs)
+                .createdAt(salesSummary.getCreatedAt())
                 .build();
 
     }
