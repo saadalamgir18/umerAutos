@@ -8,6 +8,7 @@ import com.example.umerautos.entities.Brands;
 import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.ShelfCode;
+import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,14 +41,11 @@ public class ProductsServiceImpl implements ProductsService{
         Products newProduct  = Products.builder()
                 .name(products.getName())
                 .brand(brandsRepository.findById(products.getBrandId()).orElse(null))
-//                .compatibleModels(compatibleModelsRepository.findById(products.getModelId()).orElse(null))
-//                .category(categoryRepository.findById(products.getCategoryId()).orElse(null))
                 .sku(products.getSku())
                 .description(products.getDescription())
                 .quantityInStock(products.getQuantityInStock())
                 .purchasePrice(products.getPurchasePrice())
                 .sellingPrice(products.getSellingPrice())
-//                .supplierId(suppliersRepository.findById(products.getSupplierId()).orElse(null))
                 .shelfCode(shelfCodeRepository.findById(products.getShelfCodeId()).orElse(null))
                 .compatibleModels(models)
                 .build();
@@ -124,17 +122,15 @@ public class ProductsServiceImpl implements ProductsService{
     }
 
     @Override
-    public ResponseEntity<?> deleteOne(UUID id) {
+    public void deleteOne(UUID id) throws ResourceNotFoundException {
 
         Optional<Products> products = productsRepo.findById(id);
         if (products.isPresent()){
 
             productsRepo.deleteById(id);
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "product deleted successful!", null);
 
         }else {
-            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "product does not exit with id: " + id, null);
-
+            throw new ResourceNotFoundException();
 
         }
 

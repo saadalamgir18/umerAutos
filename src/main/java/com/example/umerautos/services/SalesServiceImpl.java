@@ -1,6 +1,9 @@
 package com.example.umerautos.services;
 
+import com.example.umerautos.dto.ProductInfoDTO;
 import com.example.umerautos.dto.SalesResponseDTO;
+import com.example.umerautos.dto.SalesUpdateResponseDTO;
+import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.repositories.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,12 +41,12 @@ public class SalesServiceImpl implements SalesService{
                 .quantitySold(((Number) row[2]).intValue())
                 .totalPrice(((Number) row[3]).doubleValue())
                 .profit(((Number) row[4]).doubleValue())
-                .id((UUID) row[5])
                 .build()).collect(Collectors.toList());
     }
     @Override
     public List<SalesResponseDTO> findAll() {
         List<Object[]> rawResults = salesRepository.findAllSales();
+        System.out.println("fetched today sales");
         return rawResults.stream().map(row-> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])
@@ -52,6 +56,25 @@ public class SalesServiceImpl implements SalesService{
                 .profit(((Number) row[4]).doubleValue())
                 .id((UUID) row[5])
                 .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public SalesUpdateResponseDTO findSaleById(UUID id) {
+        return salesRepository.findById(id).map(sales -> {
+            Products product = sales.getProduct();
+
+            return SalesUpdateResponseDTO.builder()
+                    .id(sales.getId())
+                    .quantitySold(sales.getQuantitySold())
+                    .totalPrice(sales.getTotalAmount())
+                    .product(ProductInfoDTO.builder()
+                            .id(product.getId())
+                            .productName(product.getName())
+                            .sku(product.getSku())
+                            .build())
+                    .build();
+        }).orElseThrow(() -> new RuntimeException("Sale not found"));
+
     }
 
 

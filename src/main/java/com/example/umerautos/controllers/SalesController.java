@@ -1,8 +1,10 @@
 package com.example.umerautos.controllers;
 
 import com.example.umerautos.customresponse.CustomResponse;
+import com.example.umerautos.dto.SaleUpdateRequestDTO;
 import com.example.umerautos.dto.SalesResponseDTO;
 import com.example.umerautos.dto.SalesSummaryRequestDTO;
+import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,6 +42,26 @@ public class SalesController {
                 CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesService.findAll());
 
 
+    }
+
+    @GetMapping("/sales/{id}")
+    public ResponseEntity<?> getSaleById(@PathVariable UUID id){
+        try {
+
+            SalesUpdateResponseDTO salesUpdateResponseDTO = salesService.findSaleById(id);
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesUpdateResponseDTO);
+
+        } catch (Exception e) {
+            System.out.println("runtime exception");
+            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "fail", null);
+        }
+
+
+    }
+
+    @PutMapping("/sales/{id}")
+    public ResponseEntity<?> updateSale(@PathVariable UUID id, @RequestBody SaleUpdateRequestDTO requestDTO){
+        return null;
     }
 
     @GetMapping("/today-sale/totalSale")

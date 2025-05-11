@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class CustomResponse {
     public static ResponseEntity<Object> generateResponse(HttpStatus httpStatus, boolean isSuccess, String message, Object responseBody){
+
         Map<String, Object> map = new HashMap<>();
 
          map.put("status", httpStatus.value());

@@ -4,6 +4,7 @@ import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.dto.SaleDTO;
 import com.example.umerautos.entities.Products;
+import com.example.umerautos.globalException.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface ProductsService {
      List<ProductsResponseDTO> findAll(String productName);
      ProductsResponseDTO findById(UUID id);
      ProductsResponseDTO updateOne(UUID id, ProductsRequestDTO requestDTO);
-     ResponseEntity<?> deleteOne(UUID id);
+     void deleteOne(UUID id) throws ResourceNotFoundException;
      void updateStockQuantity(Optional<Products> products, SaleDTO saleDTO);
 }

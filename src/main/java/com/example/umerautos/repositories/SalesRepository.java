@@ -34,8 +34,7 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
                 p.name,
                 SUM(s.quantitySold),
                 SUM(s.totalAmount),
-                SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold) AS profit,
-                s.id
+                SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold) AS profit
             FROM Sales s
             JOIN s.product p
             WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE
