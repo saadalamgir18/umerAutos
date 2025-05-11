@@ -4,8 +4,10 @@ import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.dto.SaleDTO;
+import com.example.umerautos.entities.Brands;
 import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
+import com.example.umerautos.entities.ShelfCode;
 import com.example.umerautos.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -81,8 +83,44 @@ public class ProductsServiceImpl implements ProductsService{
     }
 
     @Override
-    public ProductsResponseDTO updateOne(UUID id) {
-        return null;
+    public ProductsResponseDTO updateOne(UUID id, ProductsRequestDTO requestDTO) {
+
+
+        Products product = productsRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        product.setName(requestDTO.getName());
+        product.setSku(requestDTO.getSku());
+        product.setDescription(requestDTO.getDescription());
+        product.setQuantityInStock(requestDTO.getQuantityInStock());
+        product.setPurchasePrice(requestDTO.getPurchasePrice());
+        product.setSellingPrice(requestDTO.getSellingPrice());
+
+        if (requestDTO.getBrandId() != null) {
+            Brands brand = brandsRepository.findById(requestDTO.getBrandId())
+                    .orElseThrow(() -> new RuntimeException("Brand not found"));
+            product.setBrand(brand);
+
+        }
+        if (requestDTO.getShelfCodeId() != null) {
+            ShelfCode shelfCode = shelfCodeRepository.findById(requestDTO.getShelfCodeId())
+                    .orElseThrow(() -> new RuntimeException("Shelf code not found"));
+            product.setShelfCode(shelfCode);
+        }
+        if (requestDTO.getCompatibleModelIds() != null) {
+            Set<CompatibleModels> models = new HashSet<>(
+                    compatibleModelsRepository.findAllById(requestDTO.getCompatibleModelIds())
+            );
+            product.setCompatibleModels(models);
+        }
+
+
+
+            Products updatedProductResponse = productsRepo.save(product);
+
+            return ProductsResponseDTO.mapToDto(updatedProductResponse);
+
+
     }
 
     @Override

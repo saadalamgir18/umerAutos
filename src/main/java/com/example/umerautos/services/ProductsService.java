@@ -15,7 +15,7 @@ public interface ProductsService {
      ProductsResponseDTO createOne(ProductsRequestDTO products);
      List<ProductsResponseDTO> findAll(String productName);
      ProductsResponseDTO findById(UUID id);
-     ProductsResponseDTO updateOne(UUID id);
+     ProductsResponseDTO updateOne(UUID id, ProductsRequestDTO requestDTO);
      ResponseEntity<?> deleteOne(UUID id);
      void updateStockQuantity(Optional<Products> products, SaleDTO saleDTO);
 }

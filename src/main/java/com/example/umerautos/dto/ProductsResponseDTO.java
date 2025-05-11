@@ -6,6 +6,7 @@ import com.example.umerautos.entities.Products;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,6 +46,9 @@ public class ProductsResponseDTO {
 
     private UUID shelfCodeId;
     private String shelfCodeName;
+
+    private List<UUID> compatibleModelsIds;
+
     private Set<String> compatibleModels;
 
 
@@ -78,6 +82,7 @@ public class ProductsResponseDTO {
                 .shelfCodeName(product.getShelfCode().getName())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
+                .compatibleModelsIds(product.getCompatibleModels().stream().map(CompatibleModels::getId).toList())
                 .compatibleModels(product.getCompatibleModels().stream().map(CompatibleModels::getName).collect(Collectors.toSet()))
 
                 .build();

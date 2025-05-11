@@ -69,10 +69,24 @@ public class ProductController {
 
     }
 
-//    @GetMapping("/products/low-stock")
-//    public ResponseEntity<?> lowStock(){
-//
-//        return null;
-//
-//    }
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<?> updateProduct(@PathVariable UUID productId, @RequestBody ProductsRequestDTO requestDTO){
+
+        System.out.println(productId);
+        System.out.println(requestDTO);
+        System.out.println(requestDTO.getCompatibleModelIds());
+        ProductsResponseDTO productsResponseDTO = productsService.updateOne(productId, requestDTO);
+
+        if (productsResponseDTO.getId() != null){
+            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", productsResponseDTO);
+        }
+        else {
+            System.out.println("somethig went wrong");
+            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
+
+        }
+
+    }
+
+
 }

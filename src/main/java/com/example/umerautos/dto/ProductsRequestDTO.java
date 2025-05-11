@@ -24,8 +24,6 @@ public class ProductsRequestDTO {
 
     private UUID brandId;
 
-    private UUID modelId; //associate with compatible model
-
 
     private String sku;
 
@@ -37,11 +35,15 @@ public class ProductsRequestDTO {
 
     private double sellingPrice;
 
-    private UUID supplierId; //associate with supplier
 
     private UUID shelfCodeId;
     private Set<UUID> compatibleModelIds; // just IDs for now
 
 
+    public static Products mapToProducts(ProductsRequestDTO requestDTO) {
+        return Products.builder()
+                .name(requestDTO.getName())
 
+                .build();
+    }
 }
