@@ -72,7 +72,6 @@ public class SalesController {
                 :
                 CustomResponse.generateResponse(HttpStatus.OK, true, "successful", 0);
 
-
     }
 
 

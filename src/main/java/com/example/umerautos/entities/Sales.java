@@ -18,8 +18,10 @@ public class Sales extends BaseModel{
     @JoinColumn(name = "product_id", nullable = false)
     private Products product;
 
+    @Column(nullable = false)
     private int quantitySold;
 
+    @Column(nullable = false)
     private double totalAmount;
 
 

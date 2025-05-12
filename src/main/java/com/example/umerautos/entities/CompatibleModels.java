@@ -1,5 +1,6 @@
 package com.example.umerautos.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.*;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Builder
 public class CompatibleModels extends BaseModel {
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "compatibleModels")

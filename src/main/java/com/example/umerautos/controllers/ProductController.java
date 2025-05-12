@@ -6,6 +6,7 @@ import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.services.ProductsService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<Object> save(@RequestBody ProductsRequestDTO productsRequestDTO){
+    public ResponseEntity<Object> save(@Valid  @RequestBody ProductsRequestDTO productsRequestDTO){
         ProductsResponseDTO productsResponseDTO = productsService.createOne(productsRequestDTO);
         if (productsResponseDTO.getId() != null){
             return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", productsResponseDTO);

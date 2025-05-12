@@ -1,9 +1,11 @@
 package com.example.umerautos.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 import java.util.Set;
@@ -34,9 +36,6 @@ public class Products extends BaseModel {
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<CompatibleModels> compatibleModels; //associate with compatible model
 
-    @ManyToOne
-    @JoinColumn(name = "categoryId")
-    private Category category; // associate with category
 
 
     @Column(nullable = false, unique = true)
@@ -44,18 +43,17 @@ public class Products extends BaseModel {
 
     private String description;
 
+    @Column(nullable = false)
     private int quantityInStock;
 
+    @Column(nullable = false)
     private double purchasePrice;
 
     private double sellingPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplierId")
-    private Suppliers supplierId; //associate with supplier
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelfCodeId")
+    @JoinColumn(name = "shelfCodeId", nullable = false)
     private ShelfCode shelfCode;
 
 

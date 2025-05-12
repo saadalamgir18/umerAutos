@@ -21,9 +21,11 @@ public class SalesSummary extends BaseModel{
     private String customerName;
 
 
+    @Column(nullable = false)
     private int quantitySold;
 
 
+    @Column(nullable = false)
     private double totalAmount;
 
     @Enumerated(value = EnumType.STRING)

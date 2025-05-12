@@ -24,7 +24,6 @@ public class ProductsServiceImpl implements ProductsService{
 
     @Autowired private BrandsRepository brandsRepository;
     @Autowired private CompatibleModelRepository compatibleModelsRepository;
-    @Autowired  private CategoryRepository categoryRepository;
     @Autowired   private SuppliersRepository suppliersRepository;
     @Autowired  private ShelfCodeRepository shelfCodeRepository;
 
