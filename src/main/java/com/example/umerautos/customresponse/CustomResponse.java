@@ -17,4 +17,15 @@ public class CustomResponse {
          map.put("message", message );
          return new ResponseEntity<>(map, httpStatus);
     }
+    public static ResponseEntity<Object> generatePaginationResponse(HttpStatus httpStatus, boolean isSuccess, String message, Object responseBody, Object pagination){
+
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("status", httpStatus.value());
+        map.put("isSuccess", isSuccess);
+        map.put("data", responseBody);
+        map.put("pagination", pagination);
+        map.put("message", message );
+        return new ResponseEntity<>(map, httpStatus);
+    }
 }

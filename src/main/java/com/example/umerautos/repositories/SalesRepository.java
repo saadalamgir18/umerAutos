@@ -1,6 +1,8 @@
 package com.example.umerautos.repositories;
 
 import com.example.umerautos.entities.Sales;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -50,11 +52,12 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
                 s.quantitySold,
                 s.totalAmount,
                 (s.totalAmount - p.purchasePrice) * s.quantitySold AS profit,
-                s.id
+                s.id,
+                s.createdAt
             FROM Sales s
             JOIN s.product p
             """)
-    List<Object[]> findAllSales();
+    Page<Object[]> findAllSales(Pageable pageable);
 
 
     @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE ")

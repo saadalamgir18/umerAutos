@@ -1,9 +1,7 @@
 package com.example.umerautos.services;
 
 import com.example.umerautos.customresponse.CustomResponse;
-import com.example.umerautos.dto.ProductsRequestDTO;
-import com.example.umerautos.dto.ProductsResponseDTO;
-import com.example.umerautos.dto.SaleDTO;
+import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.Brands;
 import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
@@ -11,6 +9,9 @@ import com.example.umerautos.entities.ShelfCode;
 import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -58,15 +59,27 @@ public class ProductsServiceImpl implements ProductsService{
 
 
     }
-
     @Override
-    public List<ProductsResponseDTO> findAll(String productName) {
-       List<Products> products = productsRepo.findByName(productName);
+    public PaginatedResponseDTO<ProductsResponseDTO> findAll(String productName, int page, int limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        Page<Products> productsPage = productsRepo.findByName(productName, pageable);
 
-        return products.stream()
+        PaginationDTO pagination = new PaginationDTO(
+                productsPage.getTotalElements(),
+                productsPage.getTotalPages(),
+                page,
+                limit
+        );
+
+        List<ProductsResponseDTO> responseDTOS = productsPage
+                .getContent()
+                .stream()
                 .map(ProductsResponseDTO::mapToDto)
                 .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(responseDTOS, pagination);
     }
+
 
     @Override
     public ProductsResponseDTO findById(UUID id) {

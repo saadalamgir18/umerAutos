@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -32,14 +30,16 @@ public class SalesController {
 
         }
     @GetMapping("/sales")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam int page, @RequestParam int limit) {
+
+
+
+
 
         System.out.println("finding all sales");
+        var response = salesService.findAll(page, limit);
 
-
-        return salesService.findAll().isEmpty() ? CustomResponse.generateResponse(HttpStatus.OK, true , "successful", new ArrayList<>())
-                :
-                CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesService.findAll());
+        return  CustomResponse.generatePaginationResponse(HttpStatus.OK, true, "successful", response.getData(), response.getPagination());
 
 
     }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,17 +27,21 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> findAll(@RequestParam(required = false) String name) throws ResourceNotFoundException {
-        List<ProductsResponseDTO> productsResponseDTO = productsService.findAll(name);
-        if (!productsResponseDTO.isEmpty()){
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", productsResponseDTO);
-        }
-        else {
-            throw  new ResourceNotFoundException();
+    public ResponseEntity<?> findAll(
+            @RequestParam(required = false) String name,
+            @RequestParam int page,
+            @RequestParam int limit) {
 
-        }
+        var response = productsService.findAll(name, page, limit);
 
+        return CustomResponse.generatePaginationResponse(
+                HttpStatus.OK, true, "success",
+                response.getData(), response.getPagination()
+        );
     }
+
+
+
     @GetMapping("/products/{productId}")
     public ResponseEntity<?>  findAll(@PathVariable UUID productId) throws ResourceNotFoundException {
         ProductsResponseDTO productsResponseDTO = productsService.findById(productId);

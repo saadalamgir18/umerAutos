@@ -4,6 +4,7 @@ import com.example.umerautos.entities.Sales;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -15,6 +16,7 @@ public class SalesResponseDTO {
     private int quantitySold;
     private double totalPrice;
     private double profit;
+    private Date createdAt;
 
     public static SalesResponseDTO mapToDTO(Sales sales){
         return SalesResponseDTO

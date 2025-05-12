@@ -1,18 +1,20 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.dto.ProductInfoDTO;
-import com.example.umerautos.dto.SalesResponseDTO;
-import com.example.umerautos.dto.SalesUpdateResponseDTO;
+import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.repositories.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,10 +58,19 @@ public class SalesServiceImpl implements SalesService{
                 .build()).collect(Collectors.toList());
     }
     @Override
-    public List<SalesResponseDTO> findAll() {
-        List<Object[]> rawResults = salesRepository.findAllSales();
+    public PaginatedResponseDTO<SalesResponseDTO> findAll(int page, int limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+        Page<Object[]> rawResults = salesRepository.findAllSales(pageable);
+        PaginationDTO pagination = new PaginationDTO(
+                rawResults.getTotalElements(),
+                rawResults.getTotalPages(),
+                page,
+                limit
+        );
+
         System.out.println("fetched today sales");
-        return rawResults.stream().map(row-> SalesResponseDTO
+        List<SalesResponseDTO> responseDTOS =  rawResults.getContent().stream().map(row-> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])
                 .productName((String) row[1])
@@ -67,7 +78,11 @@ public class SalesServiceImpl implements SalesService{
                 .totalPrice(((Number) row[3]).doubleValue())
                 .profit(((Number) row[4]).doubleValue())
                 .id((UUID) row[5])
+                .createdAt((Date) row[6])
                 .build()).collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(responseDTOS, pagination);
+
     }
 
     @Override
