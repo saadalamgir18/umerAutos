@@ -80,7 +80,7 @@ public class ProductController {
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable UUID productId, @RequestBody ProductsRequestDTO requestDTO){
+    public ResponseEntity<?> updateProduct(@PathVariable UUID productId, @Valid @RequestBody ProductsRequestDTO requestDTO){
 
         System.out.println(productId);
         System.out.println(requestDTO);

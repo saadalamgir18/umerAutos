@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -57,7 +58,7 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
 
 
     @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE ")
-    Double findTodayTotalSalesAmount();
+    double findTodayTotalSalesAmount();
 
     @Query("""
             SELECT
@@ -71,6 +72,10 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
             GROUP BY p.id, p.name
             """)
     List<Object[]> findSalesSummaryByDate(@Param("date") LocalDate date);
+
+
+    @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE s.createdAt BETWEEN :startOfMonth AND :today")
+    double getMonthlyRevenue(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
 
 
 }

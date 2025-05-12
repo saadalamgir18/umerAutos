@@ -1,9 +1,7 @@
 package com.example.umerautos.entities;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -13,6 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(indexes = {
+        @Index(name = "name_Id", columnList = "name, id"),
+
+})
 public class ShelfCode extends BaseModel {
 
     @Column(nullable = false, unique = true)

@@ -4,6 +4,7 @@ import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.SalesSummaryRequestDTO;
 import com.example.umerautos.dto.SalesSummaryResponseDTO;
 import com.example.umerautos.services.SalesSummaryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class SalesSummaryController {
     @Autowired private SalesSummaryService salesSummaryService;
 
     @PostMapping("/sales-summary")
-    public ResponseEntity<?> saveSales(@RequestBody SalesSummaryRequestDTO salesRequestDTO){
+    public ResponseEntity<?> saveSales(@Valid  @RequestBody SalesSummaryRequestDTO salesRequestDTO){
        SalesSummaryResponseDTO salesSummaryResponseDTO = salesSummaryService.saveOne(salesRequestDTO);
        if (salesSummaryResponseDTO.getId() != null){
            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "sales created successfully!", salesSummaryResponseDTO);

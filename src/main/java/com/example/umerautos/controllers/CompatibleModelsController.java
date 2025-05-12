@@ -4,6 +4,7 @@ import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.CompatibleModelRequestDTO;
 import com.example.umerautos.dto.CompatibleModelResponseDTO;
 import com.example.umerautos.services.CompatibleModelService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CompatibleModelsController {
     private CompatibleModelService modelService;
 
     @PostMapping("/compatible-models")
-    public ResponseEntity<?> createOne(@RequestBody CompatibleModelRequestDTO requestDTO){
+    public ResponseEntity<?> createOne(@Valid  @RequestBody CompatibleModelRequestDTO requestDTO){
         CompatibleModelResponseDTO modelResponseDTO = modelService.createOne(requestDTO);
         if (modelResponseDTO.getId() != null){
             return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", modelResponseDTO);

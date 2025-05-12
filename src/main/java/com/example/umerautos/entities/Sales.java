@@ -11,6 +11,9 @@ import org.hibernate.annotations.FetchMode;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(indexes = {
+        @Index(name = "name_Id_createdAt", columnList = "id, createdAt"),
+})
 public class Sales extends BaseModel{
 
 

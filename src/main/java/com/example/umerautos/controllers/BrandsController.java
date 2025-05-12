@@ -5,6 +5,7 @@ import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.BrandsResponseDTO;
 import com.example.umerautos.entities.Brands;
 import com.example.umerautos.services.BrandsService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class BrandsController {
     }
 
     @PostMapping("/brands")
-    public ResponseEntity<Object> saveOne(@RequestBody Brands brands){
+    public ResponseEntity<Object> saveOne(@Valid @RequestBody Brands brands){
         BrandsResponseDTO brandsResponseDTOS =   brandsService.createOne(brands);
         if (brandsResponseDTOS.getId() != null){
             return CustomResponse.generateResponse(HttpStatus.OK, true, "success", brandsResponseDTOS);

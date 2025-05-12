@@ -23,6 +23,7 @@ public class ProductsRequestDTO {
 
 
     @NotBlank(message = "product name is mandatory")
+    @Size(min = 3)
     private String name;
 
     @NotNull(message = "brandId is mandatory")

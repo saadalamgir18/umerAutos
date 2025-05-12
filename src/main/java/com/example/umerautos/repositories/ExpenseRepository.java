@@ -10,11 +10,12 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public interface ExpenseRepository extends JpaRepository<Expenses, UUID> {
-    @Query("SELECT SUM(e.amount) FROM Expenses e" )
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expenses e WHERE FUNCTION('DATE', e.createdAt) = CURRENT_DATE" )
     double todayExpense();
 
-    @Query("SELECT SUM(e.amount) FROM Expenses e WHERE e.createdAt BETWEEN :startOfMonth AND :today")
-    Double getMonthlyExpense(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
+
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expenses e WHERE e.createdAt BETWEEN :startOfMonth AND :today")
+    double getMonthlyExpense(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
 
 
 }

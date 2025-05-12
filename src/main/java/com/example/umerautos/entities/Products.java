@@ -17,6 +17,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(indexes = {
+        @Index(name = "nameAndIdIndexing", columnList = "name, id"),
+
+})
 public class Products extends BaseModel {
 
     @Column(nullable = false)

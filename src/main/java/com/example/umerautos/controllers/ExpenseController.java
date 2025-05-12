@@ -4,6 +4,7 @@ import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ExpenseRequestDTO;
 import com.example.umerautos.dto.ExpenseResponseDTO;
 import com.example.umerautos.services.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class ExpenseController {
 
     }
     @PostMapping("/expenses")
-    public ResponseEntity<?> saveOne(@RequestBody ExpenseRequestDTO requestDTO){
+    public ResponseEntity<?> saveOne(@Valid  @RequestBody ExpenseRequestDTO requestDTO){
         try {
 
             ExpenseResponseDTO responseDTOS = expenseService.createOne(requestDTO);
@@ -56,6 +57,7 @@ public class ExpenseController {
         try {
 
             double todayExpense  = expenseService.todayExpense();
+            System.out.println("todayExpense: "+todayExpense);
 
             return CustomResponse.generateResponse(HttpStatus.OK, true, "success", todayExpense);
         } catch (Exception e) {

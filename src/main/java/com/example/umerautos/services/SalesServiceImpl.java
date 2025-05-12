@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,12 +25,21 @@ public class SalesServiceImpl implements SalesService{
     @Autowired private SalesRepository salesRepository;
 
 
-    public Double getTodayTotalSalesAmount() {
+    public double getTodayTotalSalesAmount() {
         Double total = salesRepository.findTodayTotalSalesAmount();
         return total != null ? total : 0.0;
     }
 
-//    salesRepo.findSalesSummaryByDate(LocalDate.now().minusDays(1));
+    @Override
+    public double getMonthlyRevenue() {
+        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        LocalDateTime today = LocalDateTime.now();
+
+        Timestamp start = Timestamp.valueOf(startOfMonth);
+        Timestamp end = Timestamp.valueOf(today);
+        return salesRepository.getMonthlyRevenue(start, end);
+    }
+
 
 
 

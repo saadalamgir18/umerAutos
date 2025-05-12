@@ -74,6 +74,18 @@ public class SalesController {
 
     }
 
+    @GetMapping("/sales/monthly-revenue")
+    public ResponseEntity<?> getMonthlyRevenue(){
+        try {
+
+            double monthlyRevenue = salesService.getMonthlyRevenue();
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "successful", monthlyRevenue);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 
 
