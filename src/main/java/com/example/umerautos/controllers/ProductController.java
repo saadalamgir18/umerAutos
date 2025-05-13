@@ -29,8 +29,8 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<?> findAll(
             @RequestParam(required = false) String name,
-            @RequestParam int page,
-            @RequestParam int limit) {
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "6") int limit) {
 
         var response = productsService.findAll(name, page, limit);
 
