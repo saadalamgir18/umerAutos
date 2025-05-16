@@ -1,5 +1,6 @@
 package com.example.umerautos.services;
 
+import com.example.umerautos.dto.BrandsRequestDTO;
 import com.example.umerautos.dto.BrandsResponseDTO;
 import com.example.umerautos.entities.Brands;
 
@@ -11,5 +12,5 @@ public interface BrandsService {
     public List<BrandsResponseDTO> findAll();
     public BrandsResponseDTO findOne(UUID id);
 
-    public BrandsResponseDTO createOne(Brands brands);
+    public BrandsResponseDTO createOne(BrandsRequestDTO brands);
 }

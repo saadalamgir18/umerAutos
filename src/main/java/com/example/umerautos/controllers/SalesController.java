@@ -2,8 +2,6 @@ package com.example.umerautos.controllers;
 
 import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.SaleUpdateRequestDTO;
-import com.example.umerautos.dto.SalesResponseDTO;
-import com.example.umerautos.dto.SalesSummaryRequestDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;

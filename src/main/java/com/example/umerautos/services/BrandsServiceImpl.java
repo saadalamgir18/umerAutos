@@ -1,5 +1,6 @@
 package com.example.umerautos.services;
 
+import com.example.umerautos.dto.BrandsRequestDTO;
 import com.example.umerautos.dto.BrandsResponseDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.entities.Brands;
@@ -35,8 +36,13 @@ public class BrandsServiceImpl implements BrandsService{
     }
 
     @Override
-    public BrandsResponseDTO createOne(Brands brands) {
-        Brands newBrand =  brandsRepository.save(brands);
+    public BrandsResponseDTO createOne(BrandsRequestDTO brands) {
+
+        Brands requestBrands = Brands
+                .builder()
+                .name(brands.getName())
+                .build();
+        Brands newBrand =  brandsRepository.save(requestBrands);
         return BrandsResponseDTO.mapTo(newBrand);
     }
 }
