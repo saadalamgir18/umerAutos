@@ -13,4 +13,5 @@ public interface BrandsService {
     public BrandsResponseDTO findOne(UUID id);
 
     public BrandsResponseDTO createOne(BrandsRequestDTO brands);
+    public BrandsResponseDTO updateOne(BrandsRequestDTO brands, UUID id);
 }

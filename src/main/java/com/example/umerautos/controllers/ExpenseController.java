@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -45,6 +46,43 @@ public class ExpenseController {
             }
 
             return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", responseDTOS);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    @GetMapping("/expenses/{id}")
+    public ResponseEntity<?> findOne(@PathVariable UUID id){
+        try {
+
+            ExpenseResponseDTO responseDTOS = expenseService.findOne(id);
+
+            if (responseDTOS == null){
+
+                throw new RuntimeException();
+            }
+
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTOS);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+    @PutMapping("/expenses/{id}")
+    public ResponseEntity<?> updateOne(@Valid  @RequestBody ExpenseRequestDTO requestDTO, @PathVariable UUID id){
+        try {
+
+            ExpenseResponseDTO responseDTOS = expenseService.updateOne(requestDTO, id);
+
+            if (responseDTOS == null){
+
+                throw new RuntimeException();
+            }
+
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTOS);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

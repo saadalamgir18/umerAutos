@@ -3,6 +3,7 @@ package com.example.umerautos.services;
 import com.example.umerautos.dto.CompatibleModelRequestDTO;
 import com.example.umerautos.dto.CompatibleModelResponseDTO;
 import com.example.umerautos.entities.CompatibleModels;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Set;
@@ -17,5 +18,5 @@ public interface CompatibleModelService {
     public CompatibleModelResponseDTO findOne(UUID id);
 
 
-
+    CompatibleModelResponseDTO updateOne(CompatibleModelRequestDTO requestDTO, UUID modelId);
 }

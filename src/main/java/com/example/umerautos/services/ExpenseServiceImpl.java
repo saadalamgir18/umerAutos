@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService{
@@ -43,5 +45,27 @@ public class ExpenseServiceImpl implements ExpenseService{
         Timestamp end = Timestamp.valueOf(today);
         return expenseRepository.getMonthlyExpense(start, end);
 
+    }
+
+    @Override
+    public ExpenseResponseDTO updateOne(ExpenseRequestDTO requestDTO, UUID id) {
+        Optional<Expenses> expenses = expenseRepository.findById(id);
+        if (expenses.isPresent()){
+            expenses.get().setAmount(requestDTO.getAmount());
+            expenses.get().setDescription(requestDTO.getDescription());
+           Expenses updatedExpense =  expenseRepository.save(expenses.get());
+            return ExpenseResponseDTO.mapToDTO(updatedExpense);
+        }
+        return null;
+    }
+
+    @Override
+    public ExpenseResponseDTO findOne(UUID id) {
+        Optional<Expenses> expenses = expenseRepository.findById(id);
+        if (expenses.isPresent()){
+            return ExpenseResponseDTO.mapToDTO(expenses.get());
+        }
+
+        return null;
     }
 }

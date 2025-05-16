@@ -61,4 +61,21 @@ public class BrandsController {
 
         }
     }
+
+    @PutMapping("/brands/{brandId}")
+    public ResponseEntity<Object> updateOne(@Valid @RequestBody BrandsRequestDTO brands, @PathVariable UUID brandId){
+        try {
+
+            BrandsResponseDTO brandsResponseDTOS =   brandsService.updateOne(brands, brandId);
+            if (brandsResponseDTOS != null){
+                return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", brandsResponseDTOS);
+            }
+            else {
+                return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "Brand with this id is not present: " + brandId, null);
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

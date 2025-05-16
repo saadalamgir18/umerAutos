@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,6 +38,29 @@ public class CompatibleModelServiceImpl implements CompatibleModelService{
 
     @Override
     public CompatibleModelResponseDTO findOne(UUID id) {
+
+        Optional<CompatibleModels> models = compatibleModelsRepository.findById(id);
+        if (models.isPresent()){
+
+            return CompatibleModelResponseDTO.mapToDTO(models.get());
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public CompatibleModelResponseDTO updateOne(CompatibleModelRequestDTO requestDTO, UUID modelId) {
+        Optional<CompatibleModels> models = compatibleModelsRepository.findById(modelId);
+        if (models.isPresent()){
+
+            models.get().setName(requestDTO.getName());
+
+            CompatibleModels updateModel = compatibleModelsRepository.save(models.get());
+
+
+            return CompatibleModelResponseDTO.mapToDTO(updateModel);
+        }
+
         return null;
     }
 }

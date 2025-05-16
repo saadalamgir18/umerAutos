@@ -28,7 +28,7 @@ public class Sales extends BaseModel{
     private double totalAmount;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "sales_summary_id")
     private SalesSummary salesSummary;
 }

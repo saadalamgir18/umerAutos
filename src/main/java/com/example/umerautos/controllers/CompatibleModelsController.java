@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -38,4 +39,37 @@ public class CompatibleModelsController {
         return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "fail", null);
 
     }
+
+    @GetMapping("/compatible-models/{modelId}")
+    public ResponseEntity<?> findOne(@PathVariable UUID modelId){
+        try {
+
+            CompatibleModelResponseDTO responseDTO = modelService.findOne(modelId);
+            if (responseDTO != null){
+                return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTO);
+
+            }
+            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "Model with this id is not present: "+ modelId, null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping("/compatible-models/{modelId}")
+    public ResponseEntity<?> updateOne(@Valid  @RequestBody CompatibleModelRequestDTO requestDTO  ,@PathVariable UUID modelId){
+        try {
+
+            CompatibleModelResponseDTO responseDTO = modelService.updateOne(requestDTO, modelId);
+            if (responseDTO != null){
+                return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTO);
+
+            }
+            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "Model with this id is not present: "+ modelId, null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 }

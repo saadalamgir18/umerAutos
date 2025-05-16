@@ -2,6 +2,7 @@ package com.example.umerautos.services;
 
 
 import com.example.umerautos.dto.PaginatedResponseDTO;
+import com.example.umerautos.dto.SaleUpdateRequestDTO;
 import com.example.umerautos.dto.SalesResponseDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 
@@ -18,4 +19,8 @@ public interface SalesService {
     double getTodayTotalSalesAmount();
 
     double getMonthlyRevenue();
+
+    SalesUpdateResponseDTO updateSale(SaleUpdateRequestDTO requestDTO, UUID id);
+
+    void deleteOne(UUID id);
 }

@@ -45,4 +45,18 @@ public class BrandsServiceImpl implements BrandsService{
         Brands newBrand =  brandsRepository.save(requestBrands);
         return BrandsResponseDTO.mapTo(newBrand);
     }
+
+    @Override
+    public BrandsResponseDTO updateOne(BrandsRequestDTO brands, UUID id) {
+        Optional<Brands> db_brands = brandsRepository.findById(id);
+        if (db_brands.isPresent()){
+
+            db_brands.get().setName(brands.getName());
+
+            Brands updatedBrands = brandsRepository.save(db_brands.get());
+            return BrandsResponseDTO.mapTo(updatedBrands);
+        }else {
+            return null;
+        }
+    }
 }

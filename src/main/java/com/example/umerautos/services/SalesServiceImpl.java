@@ -3,6 +3,8 @@ package com.example.umerautos.services;
 import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
+import com.example.umerautos.globalException.ResourceNotFoundException;
+import com.example.umerautos.repositories.ProductsRepository;
 import com.example.umerautos.repositories.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class SalesServiceImpl implements SalesService{
 
 
     @Autowired private SalesRepository salesRepository;
+    @Autowired private ProductsRepository productsRepository;
 
 
     public double getTodayTotalSalesAmount() {
@@ -42,7 +45,46 @@ public class SalesServiceImpl implements SalesService{
         return salesRepository.getMonthlyRevenue(start, end);
     }
 
+    @Override
+    public SalesUpdateResponseDTO updateSale(SaleUpdateRequestDTO requestDTO, UUID id) {
+        Optional<Sales> sales = salesRepository.findById(id);
+        if (sales.isPresent()){
+            sales.get().setQuantitySold(requestDTO.getQuantitySold());
+            sales.get().setTotalAmount(requestDTO.getTotalAmount());
 
+            Sales updatedSales = salesRepository.save(sales.get());
+            return  SalesUpdateResponseDTO.mapToDTO(updatedSales);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteOne(UUID id) {
+
+        try {
+
+            Optional<Sales> sales = salesRepository.findById(id);
+            if (sales.isPresent()){
+                Products products = sales.get().getProduct();
+                products.setQuantityInStock(products.getQuantityInStock() +  sales.get().getQuantitySold());
+
+                productsRepository.save(products);
+
+                salesRepository.deleteById(id);
+            }else {
+
+                throw new ResourceNotFoundException();
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
+    }
 
 
     @Override
@@ -69,7 +111,6 @@ public class SalesServiceImpl implements SalesService{
                 limit
         );
 
-        System.out.println("fetched today sales");
         List<SalesResponseDTO> responseDTOS =  rawResults.getContent().stream().map(row-> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])

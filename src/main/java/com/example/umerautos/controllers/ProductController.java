@@ -67,17 +67,13 @@ public class ProductController {
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<?> deleteOne(@PathVariable UUID productId){
-    try {
-        productsService.deleteOne(productId);
-        return CustomResponse.generateResponse(HttpStatus.OK, true, "success", null);
 
-
-
-    }catch (Exception e){
-
-        throw new RuntimeException();
-
-    }
+        try {
+            productsService.deleteOne(productId);
+            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", null);
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
 
     }
 
