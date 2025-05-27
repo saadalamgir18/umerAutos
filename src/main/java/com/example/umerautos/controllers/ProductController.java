@@ -83,8 +83,6 @@ public class ProductController {
     @PutMapping("/products/{productId}")
     @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<?> updateProduct(@PathVariable UUID productId, @Valid @RequestBody ProductsRequestDTO requestDTO){
-
-
         ProductsResponseDTO productsResponseDTO = productsService.updateOne(productId, requestDTO);
 
         if (productsResponseDTO.getId() != null){
