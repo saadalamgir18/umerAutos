@@ -6,6 +6,7 @@ import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.services.ProductsService;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class ProductController {
     }
 
     @PostMapping("/products")
+    @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<?> save(@Valid  @RequestBody ProductsRequestDTO productsRequestDTO){
         ProductsResponseDTO productsResponseDTO = productsService.createOne(productsRequestDTO);
         if (productsResponseDTO.getId() != null){
@@ -66,6 +68,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/{productId}")
+    @CacheEvict(value = "products", key = "#id")
     public ResponseEntity<?> deleteOne(@PathVariable UUID productId){
 
         try {
@@ -78,11 +81,10 @@ public class ProductController {
     }
 
     @PutMapping("/products/{productId}")
+    @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<?> updateProduct(@PathVariable UUID productId, @Valid @RequestBody ProductsRequestDTO requestDTO){
 
-        System.out.println(productId);
-        System.out.println(requestDTO);
-        System.out.println(requestDTO.getCompatibleModelIds());
+
         ProductsResponseDTO productsResponseDTO = productsService.updateOne(productId, requestDTO);
 
         if (productsResponseDTO.getId() != null){

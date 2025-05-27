@@ -2,7 +2,6 @@ package com.example.umerautos.services;
 
 import com.example.umerautos.dto.BrandsRequestDTO;
 import com.example.umerautos.dto.BrandsResponseDTO;
-import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.entities.Brands;
 import com.example.umerautos.repositories.BrandsRepository;
 import org.springframework.stereotype.Service;

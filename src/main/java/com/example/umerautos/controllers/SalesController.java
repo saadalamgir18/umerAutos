@@ -29,7 +29,6 @@ public class SalesController {
             throw new RuntimeException(e);
         }
 
-
         }
     @GetMapping("/sales")
     public ResponseEntity<?> findAll(@RequestParam int page, @RequestParam int limit) {
