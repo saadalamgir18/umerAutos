@@ -31,7 +31,6 @@ public class ProductsServiceImpl implements ProductsService{
     @Autowired private ProductsRepository productsRepo;
 
 
-
     @Override
     public ProductsResponseDTO createOne(ProductsRequestDTO products) {
         Set<CompatibleModels> models = new HashSet<>(compatibleModelsRepository.findAllById(products.getCompatibleModelIds()));

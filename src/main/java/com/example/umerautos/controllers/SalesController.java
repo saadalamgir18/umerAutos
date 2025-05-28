@@ -5,6 +5,7 @@ import com.example.umerautos.dto.SaleUpdateRequestDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,10 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class SalesController {
 
-    @Autowired private SalesService salesService;
+    private SalesService salesService;
 
     @GetMapping("/today-sales")
     public ResponseEntity<?> findTodaySale() {

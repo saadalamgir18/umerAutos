@@ -1,4 +1,4 @@
-package com.example.umerautos.controllersTest;
+package com.example.umerautos.unitTests.controllersTest;
 
 import com.example.umerautos.controllers.BrandsController;
 import com.example.umerautos.dto.BrandsRequestDTO;
@@ -12,8 +12,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BrandControllerTest {
+@ActiveProfiles("test")
+public class BrandControllerTests {
 
     @InjectMocks
     private BrandsController brandsController;
@@ -31,9 +35,8 @@ public class BrandControllerTest {
     private BrandsService brandsService;
 
 
-
     @ParameterizedTest
-    @ValueSource(strings = {"lefan", "panther", "service"})
+    @ValueSource(strings = {"Lefan", "panther", "service"})
     @DisplayName("findAllBrands_Success")
     public void testFindAllBrands_Success(String str){
         List<BrandsResponseDTO> mockBrands = List.of(BrandsResponseDTO.builder()
@@ -42,7 +45,7 @@ public class BrandControllerTest {
 
         when(brandsService.findAll()).thenReturn(mockBrands);
 
-        ResponseEntity<?> response = brandsController.findAll();
+        ResponseEntity<List<BrandsResponseDTO>> response = brandsController.findAll();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -58,20 +61,15 @@ public class BrandControllerTest {
 
         when(brandsService.findOne(brandId)).thenReturn(mockBrand);
 
-        ResponseEntity<Object> response = brandsController.findOne(brandId);
+        ResponseEntity<BrandsResponseDTO> response = brandsController.findOne(brandId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        @SuppressWarnings("unchecked")
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
+
+       BrandsResponseDTO body = response.getBody();
 
 
         assertNotNull(body);
-        assertTrue((Boolean) body.get("isSuccess"));
-        assertEquals("success", body.get("message"));
 
-        // Access your DTO
-        BrandsResponseDTO dto = (BrandsResponseDTO) body.get("data");
-
-        assertEquals(brandId, dto.getId());
+        assertEquals(brandId, body.getId());
 
     }
 
@@ -86,25 +84,14 @@ public class BrandControllerTest {
 
         when(brandsService.findOne(brandId)).thenReturn(null);
 
-            ResponseEntity<Object> response = brandsController.findOne(brandId);
+            ResponseEntity<BrandsResponseDTO> response = brandsController.findOne(brandId);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
 
-        @SuppressWarnings("unchecked")
-        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        BrandsResponseDTO body =  response.getBody();
 
-
-        assertNotNull(body);
-
-        assertFalse((Boolean) body.get("isSuccess"));
-
-        assertNotEquals("fail", body.get("message"));
-
-        // Access your DTO
-        BrandsResponseDTO dto = (BrandsResponseDTO) body.get("data");
-
-        assertNull(dto);
+        assertNotEquals(HttpStatus.OK, response.getStatusCode());
 
     }
 

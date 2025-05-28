@@ -1,10 +1,12 @@
 package com.example.umerautos.customresponse;
 
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.HashMap;
 import java.util.Map;
 
+@ToString
 public class CustomResponse {
     public static ResponseEntity<Object> generateResponse(HttpStatus httpStatus, boolean isSuccess, String message, Object responseBody){
 

@@ -5,7 +5,7 @@ import com.example.umerautos.dto.ExpenseRequestDTO;
 import com.example.umerautos.dto.ExpenseResponseDTO;
 import com.example.umerautos.services.ExpenseService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +15,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class ExpenseController {
 
-    @Autowired private ExpenseService expenseService;
+    private ExpenseService expenseService;
 
     @GetMapping("/expenses")
     public ResponseEntity<?> getAll(){

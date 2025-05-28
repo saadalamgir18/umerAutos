@@ -20,14 +20,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+
 public class SalesSummaryServiceImpl implements SalesSummaryService{
-    @Autowired private SalesSummaryRepository salesSummaryRepository;
-    @Autowired private ProductsRepository productsRepo;
-    @Autowired private SalesRepository salesRepository;
 
-    @Autowired private ProductsService productsService;
+    private SalesSummaryRepository salesSummaryRepository;
+    private ProductsRepository productsRepo;
+    private SalesRepository salesRepository;
+    private ProductsService productsService;
+    private EmailProducer emailProducer;
 
-    @Autowired private EmailProducer emailProducer;
+    public SalesSummaryServiceImpl(SalesSummaryRepository salesSummaryRepository,
+                                   ProductsRepository productsRepo, SalesRepository salesRepository,
+                                   ProductsService productsService,
+                                   EmailProducer emailProducer) {
+        this.salesSummaryRepository = salesSummaryRepository;
+        this.productsRepo = productsRepo;
+        this.salesRepository = salesRepository;
+        this.productsService = productsService;
+        this.emailProducer = emailProducer;
+    }
 
     @Value(value = "${lowItemThreshold}")
     private int lowItemThreshold ;

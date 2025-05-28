@@ -5,6 +5,7 @@ import com.example.umerautos.dto.SalesSummaryRequestDTO;
 import com.example.umerautos.dto.SalesSummaryResponseDTO;
 import com.example.umerautos.services.SalesSummaryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class SalesSummaryController {
 
-    @Autowired private SalesSummaryService salesSummaryService;
+    private SalesSummaryService salesSummaryService;
 
     @PostMapping("/sales-summary")
     public ResponseEntity<?> saveSales(@Valid  @RequestBody SalesSummaryRequestDTO salesRequestDTO){

@@ -6,6 +6,7 @@ import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.services.ProductsService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,12 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductsService productsService;
 
-    public ProductController(ProductsService productsService) {
-        this.productsService = productsService;
-    }
+
 
     @GetMapping("/products")
     public ResponseEntity<?> findAll(
