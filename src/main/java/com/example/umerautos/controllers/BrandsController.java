@@ -1,12 +1,10 @@
 package com.example.umerautos.controllers;
 
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.BrandsRequestDTO;
 import com.example.umerautos.dto.BrandsResponseDTO;
 import com.example.umerautos.services.BrandsService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,57 +21,56 @@ public class BrandsController {
     private final BrandsService brandsService;
 
     @GetMapping("/brands")
-    public ResponseEntity<List<BrandsResponseDTO>> findAll(){
+    public ResponseEntity<List<BrandsResponseDTO>> findAll() {
 
-        List<BrandsResponseDTO> brandsResponseDTOS =   brandsService.findAll();
+        List<BrandsResponseDTO> brandsResponseDTOS = brandsService.findAll();
 
-        if (!brandsResponseDTOS.isEmpty()){
+        if (!brandsResponseDTOS.isEmpty()) {
             return new ResponseEntity<>(brandsResponseDTOS, HttpStatus.OK);
 
-        }
-        else {
+        } else {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
     }
+
     @GetMapping("/brands/{brandId}")
-    public ResponseEntity<BrandsResponseDTO> findOne(@PathVariable UUID brandId){
+    public ResponseEntity<BrandsResponseDTO> findOne(@PathVariable UUID brandId) {
 
         try {
-            BrandsResponseDTO brandsResponseDTOS =   brandsService.findOne(brandId);
-            if (brandsResponseDTOS != null){
+            BrandsResponseDTO brandsResponseDTOS = brandsService.findOne(brandId);
+            if (brandsResponseDTOS != null) {
                 return new ResponseEntity<>(brandsResponseDTOS, HttpStatus.OK);
-            }
-            else {
+            } else {
+                System.out.println("return null: ");
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
 
         } catch (Exception e) {
+            System.out.println("throwing exception in controller: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     @PostMapping("/brands")
-    public ResponseEntity<BrandsResponseDTO> saveOne(@Valid @RequestBody BrandsRequestDTO brands){
-        BrandsResponseDTO brandsResponseDTOS =   brandsService.createOne(brands);
-        if (brandsResponseDTOS != null){
+    public ResponseEntity<BrandsResponseDTO> saveOne(@Valid @RequestBody BrandsRequestDTO brands) {
+        BrandsResponseDTO brandsResponseDTOS = brandsService.createOne(brands);
+        if (brandsResponseDTOS != null) {
             return new ResponseEntity<>(brandsResponseDTOS, HttpStatus.CREATED);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
 
     @PutMapping("/brands/{brandId}")
-    public ResponseEntity<BrandsResponseDTO> updateOne(@Valid @RequestBody BrandsRequestDTO brands, @PathVariable UUID brandId){
+    public ResponseEntity<BrandsResponseDTO> updateOne(@Valid @RequestBody BrandsRequestDTO brands, @PathVariable UUID brandId) {
         try {
 
-            BrandsResponseDTO brandsResponseDTOS =   brandsService.updateOne(brands, brandId);
-            if (brandsResponseDTOS != null){
+            BrandsResponseDTO brandsResponseDTOS = brandsService.updateOne(brands, brandId);
+            if (brandsResponseDTOS != null) {
                 return new ResponseEntity<>(brandsResponseDTOS, HttpStatus.OK);
 
-            }
-            else {
+            } else {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
             }

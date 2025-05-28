@@ -32,7 +32,6 @@ public class BrandsResponseDTO {
                 .id(brand.getId())
                 .name(brand.getName())
                 .build();
-
     }
 
 
