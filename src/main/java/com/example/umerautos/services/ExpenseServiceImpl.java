@@ -1,10 +1,12 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.dto.ExpenseRequestDTO;
-import com.example.umerautos.dto.ExpenseResponseDTO;
+import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.Expenses;
 import com.example.umerautos.repositories.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -26,9 +28,20 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public List<ExpenseResponseDTO> findAll() {
-        List<Expenses> expenses =   expenseRepository.findAll();
-        return expenses.stream().map(ExpenseResponseDTO::mapToDTO).toList();
+    public PaginatedResponseDTO<ExpenseResponseDTO> findAll(int page, int limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+        Page<Expenses> expenses =   expenseRepository.findAll(pageable);
+        PaginationDTO pagination = new PaginationDTO(
+                expenses.getTotalElements(),
+                expenses.getTotalPages(),
+                page,
+                limit
+        );
+
+
+        List<ExpenseResponseDTO> response =  expenses.stream().map(ExpenseResponseDTO::mapToDTO).toList();
+        return new PaginatedResponseDTO<>(response, pagination);
     }
 
     @Override

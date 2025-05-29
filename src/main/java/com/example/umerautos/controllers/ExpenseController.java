@@ -13,16 +13,22 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class ExpenseController {
 
     private ExpenseService expenseService;
 
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
+    }
+
     @GetMapping("/expenses")
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAll(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "6") int limit
+    ){
         try {
 
-            List<ExpenseResponseDTO> responseDTOS = expenseService.findAll();
+            var responseDTOS = expenseService.findAll(page, limit);
 
             return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
 
@@ -93,6 +99,7 @@ public class ExpenseController {
         try {
 
             double todayExpense  = expenseService.todayExpense();
+            System.out.println(todayExpense);
             return new ResponseEntity<>(todayExpense, HttpStatus.OK);
 
         } catch (Exception e) {

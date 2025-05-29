@@ -30,9 +30,8 @@ public class SalesServiceImpl implements SalesService{
     @Autowired private ProductsRepository productsRepository;
 
 
-    public double getTodayTotalSalesAmount() {
-        Double total = salesRepository.findTodayTotalSalesAmount();
-        return total != null ? total : 0.0;
+    public Double getTodayTotalSalesAmount() {
+        return salesRepository.findTodayTotalSalesAmount();
     }
 
     @Override
@@ -88,8 +87,11 @@ public class SalesServiceImpl implements SalesService{
 
 
     @Override
-    public List<SalesResponseDTO> findTodaySales() {
-        List<Object[]> rawResults = salesRepository.findTodaySalesSummary();
+    public List<SalesResponseDTO> findTodaySales(int page, int limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+        List<Object[]> rawResults = salesRepository.findTodaySalesSummary(pageable);
+        System.out.println("rawResults: " + rawResults);
         return rawResults.stream().map(row-> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])

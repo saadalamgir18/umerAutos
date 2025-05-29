@@ -5,6 +5,7 @@ import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,17 +14,22 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class SalesController {
 
     private SalesService salesService;
 
-    @GetMapping("/today-sales")
-    public ResponseEntity<?> findTodaySale() {
+    public SalesController(SalesService salesService) {
+        this.salesService = salesService;
+    }
 
+    @GetMapping("/today-sales")
+    public ResponseEntity<?> findTodaySale(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "6") int limit
+    ) {
 
         try {
-            return new ResponseEntity<>(salesService.findTodaySales(), HttpStatus.OK);
+            return new ResponseEntity<>(salesService.findTodaySales(page, limit), HttpStatus.OK);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -92,7 +98,8 @@ public class SalesController {
     public ResponseEntity<?> todayTotalSale() {
 
         try {
-            double todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
+            Double todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
+            System.out.println(todayTotalSalesAmount);
 
             return new ResponseEntity<>(todayTotalSalesAmount, HttpStatus.OK);
         }catch (Exception e){

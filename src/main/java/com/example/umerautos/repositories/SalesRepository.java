@@ -43,7 +43,7 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
             WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE
             GROUP BY p.id, p.name
             """)
-    List<Object[]> findTodaySalesSummary();
+    List<Object[]> findTodaySalesSummary(Pageable pageable);
 
     @Query("""
             SELECT
@@ -61,7 +61,7 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
 
 
     @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE ")
-    double findTodayTotalSalesAmount();
+    Double findTodayTotalSalesAmount();
 
     @Query("""
             SELECT

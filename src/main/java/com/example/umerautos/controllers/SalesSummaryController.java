@@ -10,14 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class SalesSummaryController {
 
-    private SalesSummaryService salesSummaryService;
+    @Autowired private SalesSummaryService salesSummaryService;
 
     @PostMapping("/sales-summary")
     public ResponseEntity<?> saveSales(@Valid  @RequestBody SalesSummaryRequestDTO salesRequestDTO){
@@ -31,10 +30,14 @@ public class SalesSummaryController {
     }
 
     @GetMapping("/sales-summary")
-    public ResponseEntity<?> getAll(){
-        List<SalesSummaryResponseDTO> salesSummaryResponseDTOS = salesSummaryService.findAll();
-        if (!salesSummaryResponseDTOS.isEmpty()){
-            return new ResponseEntity<>(salesSummaryResponseDTOS, HttpStatus.CREATED);
+    public ResponseEntity<?> getAll(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "6") int limit
+    ){
+        var response  = salesSummaryService.findAll(page, limit);
+        System.out.println(response);
+        if (response.getData() != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
 
         }else {
 

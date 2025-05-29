@@ -11,12 +11,12 @@ import java.util.UUID;
 
 public interface SalesService {
 
-    List<SalesResponseDTO> findTodaySales();
+    List<SalesResponseDTO> findTodaySales(int page, int limit);
     PaginatedResponseDTO<SalesResponseDTO> findAll(int page, int limit);
     SalesUpdateResponseDTO findSaleById(UUID id);
 
 
-    double getTodayTotalSalesAmount();
+    Double getTodayTotalSalesAmount();
 
     double getMonthlyRevenue();
 

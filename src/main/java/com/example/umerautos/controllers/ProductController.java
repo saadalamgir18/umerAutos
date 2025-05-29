@@ -31,7 +31,7 @@ public class ProductController {
 
         var response = productsService.findAll(name, page, limit);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 

@@ -1,9 +1,6 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.dto.LowStockEmailDTO;
-import com.example.umerautos.dto.SaleDTO;
-import com.example.umerautos.dto.SalesSummaryRequestDTO;
-import com.example.umerautos.dto.SalesSummaryResponseDTO;
+import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.entities.SalesSummary;
@@ -13,6 +10,9 @@ import com.example.umerautos.repositories.SalesRepository;
 import com.example.umerautos.repositories.SalesSummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -116,8 +116,18 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
 
 
     @Override
-    public List<SalesSummaryResponseDTO> findAll() {
-        List<SalesSummary> salesSummaries =  salesSummaryRepository.findAll();
-        return salesSummaries.stream().map(salesSummary -> SalesSummaryResponseDTO.mapToDTO(salesSummary)).collect(Collectors.toList());
+    public PaginatedResponseDTO<SalesSummaryResponseDTO> findAll(int page, int limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+
+        Page<SalesSummary> salesSummaries =  salesSummaryRepository.findAll(pageable);
+        PaginationDTO pagination = new PaginationDTO(
+                salesSummaries.getTotalElements(),
+                salesSummaries.getTotalPages(),
+                page,
+                limit
+        );
+        List<SalesSummaryResponseDTO> salesSummaryResponseDTOS =  salesSummaries.stream().map(salesSummary -> SalesSummaryResponseDTO.mapToDTO(salesSummary)).collect(Collectors.toList());
+        return new PaginatedResponseDTO<>(salesSummaryResponseDTOS, pagination);
     }
 }
