@@ -23,9 +23,10 @@ public class SalesSummaryController {
     public ResponseEntity<?> saveSales(@Valid  @RequestBody SalesSummaryRequestDTO salesRequestDTO){
        SalesSummaryResponseDTO salesSummaryResponseDTO = salesSummaryService.saveOne(salesRequestDTO);
        if (salesSummaryResponseDTO.getId() != null){
-           return CustomResponse.generateResponse(HttpStatus.CREATED, true, "sales created successfully!", salesSummaryResponseDTO);
+           return new ResponseEntity<>(salesSummaryResponseDTO, HttpStatus.CREATED);
        }else {
-           return CustomResponse.generateResponse(HttpStatus.BAD_REQUEST, false, "arguments are not correct", null);
+
+           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
        }
     }
 
@@ -33,9 +34,12 @@ public class SalesSummaryController {
     public ResponseEntity<?> getAll(){
         List<SalesSummaryResponseDTO> salesSummaryResponseDTOS = salesSummaryService.findAll();
         if (!salesSummaryResponseDTOS.isEmpty()){
-            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "successful", salesSummaryResponseDTOS);
+            return new ResponseEntity<>(salesSummaryResponseDTOS, HttpStatus.CREATED);
+
         }else {
-            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong", null);
+
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 }

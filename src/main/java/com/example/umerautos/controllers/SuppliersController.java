@@ -1,6 +1,5 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.SuppliersRequestDTO;
 import com.example.umerautos.dto.SuppliersResponseDTO;
 import com.example.umerautos.services.SuppliersService;
@@ -22,7 +21,8 @@ public class SuppliersController {
         try {
             List<SuppliersResponseDTO> suppliersResponseDTOS = suppliersService.findAll();
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", suppliersResponseDTOS);
+            return new ResponseEntity<>(suppliersResponseDTOS, HttpStatus.OK);
+
 
         }catch (Exception e){
              throw new RuntimeException();
@@ -33,8 +33,9 @@ public class SuppliersController {
     @PostMapping("/suppliers")
     public ResponseEntity<?> saveOne(@RequestBody SuppliersRequestDTO requestDTO){
         try {
-            SuppliersResponseDTO suppliersRequestDTO = suppliersService.saveOne(requestDTO);
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", suppliersRequestDTO);
+            SuppliersResponseDTO suppliersResponseDTO = suppliersService.saveOne(requestDTO);
+            return new ResponseEntity<>(suppliersResponseDTO, HttpStatus.CREATED);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +46,8 @@ public class SuppliersController {
         try {
             suppliersService.deleteOne(id);
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", null);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);

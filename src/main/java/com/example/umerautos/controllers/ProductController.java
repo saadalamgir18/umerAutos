@@ -1,6 +1,5 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ProductsRequestDTO;
 import com.example.umerautos.dto.ProductsResponseDTO;
 import com.example.umerautos.globalException.ResourceNotFoundException;
@@ -32,10 +31,8 @@ public class ProductController {
 
         var response = productsService.findAll(name, page, limit);
 
-        return CustomResponse.generatePaginationResponse(
-                HttpStatus.OK, true, "success",
-                response.getData(), response.getPagination()
-        );
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+
     }
 
 
@@ -43,8 +40,9 @@ public class ProductController {
     @GetMapping("/products/{productId}")
     public ResponseEntity<?>  findAll(@PathVariable UUID productId) throws ResourceNotFoundException {
         ProductsResponseDTO productsResponseDTO = productsService.findById(productId);
+
         if (productsResponseDTO.getId() != null){
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", productsResponseDTO);
+            return new ResponseEntity<>(productsResponseDTO, HttpStatus.OK);
         }
         else {
             throw  new ResourceNotFoundException();
@@ -57,12 +55,11 @@ public class ProductController {
     public ResponseEntity<?> save(@Valid  @RequestBody ProductsRequestDTO productsRequestDTO){
         ProductsResponseDTO productsResponseDTO = productsService.createOne(productsRequestDTO);
         if (productsResponseDTO.getId() != null){
-            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", productsResponseDTO);
+            return new ResponseEntity<>(productsResponseDTO, HttpStatus.CREATED);
+
         }
         else {
-            System.out.println("somethig went wrong");
-            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
-
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -73,7 +70,7 @@ public class ProductController {
 
         try {
             productsService.deleteOne(productId);
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", null);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }catch (Exception e){
             throw new RuntimeException();
         }
@@ -83,14 +80,14 @@ public class ProductController {
     @PutMapping("/products/{productId}")
     @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<?> updateProduct(@PathVariable UUID productId, @Valid @RequestBody ProductsRequestDTO requestDTO){
+
         ProductsResponseDTO productsResponseDTO = productsService.updateOne(productId, requestDTO);
 
         if (productsResponseDTO.getId() != null){
-            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", productsResponseDTO);
+            return new ResponseEntity<>(productsResponseDTO, HttpStatus.OK);
         }
         else {
-            System.out.println("somethig went wrong");
-            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 

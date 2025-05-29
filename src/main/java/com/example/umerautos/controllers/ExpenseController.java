@@ -1,6 +1,5 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ExpenseRequestDTO;
 import com.example.umerautos.dto.ExpenseResponseDTO;
 import com.example.umerautos.services.ExpenseService;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,11 +23,9 @@ public class ExpenseController {
         try {
 
             List<ExpenseResponseDTO> responseDTOS = expenseService.findAll();
-            if (responseDTOS.isEmpty()){
-                return CustomResponse.generateResponse(HttpStatus.OK, true, "success", new ArrayList<>());
 
-            }
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTOS);
+            return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,7 +42,8 @@ public class ExpenseController {
                 throw new RuntimeException();
             }
 
-            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", responseDTOS);
+            return new ResponseEntity<>(responseDTOS, HttpStatus.CREATED);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -59,17 +56,16 @@ public class ExpenseController {
             ExpenseResponseDTO responseDTOS = expenseService.findOne(id);
 
             if (responseDTOS == null){
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
-                throw new RuntimeException();
             }
+            return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTOS);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
     }
-
 
 
     @PutMapping("/expenses/{id}")
@@ -80,10 +76,11 @@ public class ExpenseController {
 
             if (responseDTOS == null){
 
-                throw new RuntimeException();
-            }
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTOS);
+            }
+            return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -92,12 +89,12 @@ public class ExpenseController {
 
     @GetMapping("/expenses/today")
     public ResponseEntity<?> getToDayExpense(){
+
         try {
 
             double todayExpense  = expenseService.todayExpense();
-            System.out.println("todayExpense: "+todayExpense);
+            return new ResponseEntity<>(todayExpense, HttpStatus.OK);
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", todayExpense);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -109,7 +106,8 @@ public class ExpenseController {
 
             double monthlyExpense  = expenseService.monthlyExpenses();
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", monthlyExpense);
+            return new ResponseEntity<>(monthlyExpense, HttpStatus.OK);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -21,10 +21,12 @@ public class ShelfController {
     public ResponseEntity<?> saveOne(@RequestBody ShelfCode shelfCode){
         ShelfResponseDTO shelfResponseDTO = shelfService.createOne(shelfCode);
         if (shelfResponseDTO.getId() != null){
-            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", shelfResponseDTO);
+
+            return new ResponseEntity<>(shelfResponseDTO, HttpStatus.CREATED);
+
         }
         else {
-            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
@@ -33,10 +35,12 @@ public class ShelfController {
     public ResponseEntity<?> findAll(){
         List<ShelfResponseDTO> shelfResponseDTOS =  shelfService.findAll();
         if (!shelfResponseDTOS.isEmpty()){
-            return CustomResponse.generateResponse(HttpStatus.CREATED, true, "success", shelfResponseDTOS);
+            return new ResponseEntity<>(shelfResponseDTOS, HttpStatus.OK);
+
         }
         else {
-            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong while creating product ", null);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
 
         }
 

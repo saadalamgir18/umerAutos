@@ -1,12 +1,10 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.SaleUpdateRequestDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,59 +23,64 @@ public class SalesController {
 
 
         try {
+            return new ResponseEntity<>(salesService.findTodaySales(), HttpStatus.OK);
 
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "successful", salesService.findTodaySales());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        }
+    }
+
     @GetMapping("/sales")
     public ResponseEntity<?> findAll(@RequestParam int page, @RequestParam int limit) {
 
         var response = salesService.findAll(page, limit);
 
-        return  CustomResponse.generatePaginationResponse(HttpStatus.OK, true, "successful", response.getData(), response.getPagination());
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
 
     }
 
     @GetMapping("/sales/{id}")
-    public ResponseEntity<?> getSaleById(@PathVariable UUID id){
+    public ResponseEntity<?> getSaleById(@PathVariable UUID id) {
         try {
 
+
+
             SalesUpdateResponseDTO salesUpdateResponseDTO = salesService.findSaleById(id);
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", salesUpdateResponseDTO);
+
+            return new ResponseEntity<>(salesUpdateResponseDTO, HttpStatus.OK);
+
 
         } catch (Exception e) {
-            System.out.println("runtime exception");
-            return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "fail", null);
+            throw new RuntimeException(e);
+
         }
 
     }
 
     @PutMapping("/sales/{id}")
-    public ResponseEntity<?> updateSale(@PathVariable UUID id, @Valid @RequestBody SaleUpdateRequestDTO requestDTO){
+    public ResponseEntity<?> updateSale(@PathVariable UUID id, @Valid @RequestBody SaleUpdateRequestDTO requestDTO) {
 
         try {
 
             SalesUpdateResponseDTO responseDTO = salesService.updateSale(requestDTO, id);
-            if (requestDTO != null){
-                return CustomResponse.generateResponse(HttpStatus.OK, true, "success", responseDTO);
+            if (requestDTO != null) {
+                return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
             }
-            return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "fail", null);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @DeleteMapping("/sales/{id}")
-    public ResponseEntity<?> deleteOne(@PathVariable UUID id){
+    public ResponseEntity<?> deleteOne(@PathVariable UUID id) {
         try {
 
             salesService.deleteOne(id);
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "success", null);
+            return new ResponseEntity<>(null, HttpStatus.OK);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -88,27 +91,29 @@ public class SalesController {
     @GetMapping("/today-sale/totalSale")
     public ResponseEntity<?> todayTotalSale() {
 
+        try {
+            double todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
 
-        return salesService.getTodayTotalSalesAmount() > 0 ? CustomResponse.generateResponse(HttpStatus.OK, true , "successful",salesService.getTodayTotalSalesAmount())
-                :
-                CustomResponse.generateResponse(HttpStatus.OK, true, "successful", 0);
+            return new ResponseEntity<>(todayTotalSalesAmount, HttpStatus.OK);
+        }catch (Exception e){
 
+            throw new RuntimeException(e);
+
+        }
     }
 
     @GetMapping("/sales/monthly-revenue")
-    public ResponseEntity<?> getMonthlyRevenue(){
+    public ResponseEntity<?> getMonthlyRevenue() {
         try {
 
             double monthlyRevenue = salesService.getMonthlyRevenue();
-            return CustomResponse.generateResponse(HttpStatus.OK, true, "successful", monthlyRevenue);
+
+            return new ResponseEntity<>(monthlyRevenue, HttpStatus.OK);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
 
 
 }
