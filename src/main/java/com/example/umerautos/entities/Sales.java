@@ -2,8 +2,7 @@ package com.example.umerautos.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+
 
 @Entity
 @Getter
@@ -26,6 +25,10 @@ public class Sales extends BaseModel{
 
     @Column(nullable = false)
     private double totalAmount;
+
+    @Builder.Default
+    @Enumerated(value = EnumType.STRING)
+    private  PaymentStatus paymentStatus = PaymentStatus.PAID;
 
 
     @ManyToOne

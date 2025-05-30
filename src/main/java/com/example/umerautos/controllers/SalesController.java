@@ -18,6 +18,8 @@ public class SalesController {
 
     private SalesService salesService;
 
+
+
     public SalesController(SalesService salesService) {
         this.salesService = salesService;
     }
@@ -50,10 +52,12 @@ public class SalesController {
     @GetMapping("/sales/{id}")
     public ResponseEntity<?> getSaleById(@PathVariable UUID id) {
         try {
-
-
-
+            System.out.println("getting sale by id: " + id);
             SalesUpdateResponseDTO salesUpdateResponseDTO = salesService.findSaleById(id);
+
+            if (salesUpdateResponseDTO.getId() == null){
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
 
             return new ResponseEntity<>(salesUpdateResponseDTO, HttpStatus.OK);
 
@@ -99,7 +103,7 @@ public class SalesController {
 
         try {
             Double todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
-            System.out.println(todayTotalSalesAmount);
+            System.out.println("todayTotalSalesAmount: " + todayTotalSalesAmount);
 
             return new ResponseEntity<>(todayTotalSalesAmount, HttpStatus.OK);
         }catch (Exception e){

@@ -37,6 +37,7 @@ public class SalesSummaryResponseDTO {
                         .productName(sale.getProduct().getName())
                         .quantitySold(sale.getQuantitySold())
                         .totalPrice(sale.getTotalAmount())
+                        .createdAt(sale.getCreatedAt())
                         .build()
                 )
                 .toList();

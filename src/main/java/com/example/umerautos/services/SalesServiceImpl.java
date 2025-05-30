@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
@@ -30,7 +31,7 @@ public class SalesServiceImpl implements SalesService{
     @Autowired private ProductsRepository productsRepository;
 
 
-    public Double getTodayTotalSalesAmount() {
+    public double getTodayTotalSalesAmount() {
         return salesRepository.findTodayTotalSalesAmount();
     }
 
@@ -90,7 +91,7 @@ public class SalesServiceImpl implements SalesService{
     public List<SalesResponseDTO> findTodaySales(int page, int limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
-        List<Object[]> rawResults = salesRepository.findTodaySalesSummary(pageable);
+            List<Object[]> rawResults = salesRepository.findTodaySalesSummary(pageable);
         System.out.println("rawResults: " + rawResults);
         return rawResults.stream().map(row-> SalesResponseDTO
                 .builder()
@@ -103,7 +104,9 @@ public class SalesServiceImpl implements SalesService{
     }
     @Override
     public PaginatedResponseDTO<SalesResponseDTO> findAll(int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
+        Sort sort =  Sort.by("createdAt").descending();
+
+        Pageable pageable = PageRequest.of(page - 1, limit, sort);
 
         Page<Object[]> rawResults = salesRepository.findAllSales(pageable);
         PaginationDTO pagination = new PaginationDTO(
@@ -130,20 +133,30 @@ public class SalesServiceImpl implements SalesService{
 
     @Override
     public SalesUpdateResponseDTO findSaleById(UUID id) {
-        return salesRepository.findById(id).map(sales -> {
-            Products product = sales.getProduct();
+
+        Optional<Sales> existingSale = salesRepository.findById(id);
+
+
+        System.out.println("existing sale is: " + existingSale.get().getId());
+
+        if (existingSale.isPresent()){
+
+            Products product = existingSale.get().getProduct();
 
             return SalesUpdateResponseDTO.builder()
-                    .id(sales.getId())
-                    .quantitySold(sales.getQuantitySold())
-                    .totalPrice(sales.getTotalAmount())
+                    .id(existingSale.get().getId())
+                    .quantitySold(existingSale.get().getQuantitySold())
+                    .totalPrice(existingSale.get().getTotalAmount())
+                    .paymentStatus(existingSale.get().getPaymentStatus())
                     .product(ProductInfoDTO.builder()
                             .id(product.getId())
                             .productName(product.getName())
                             .sku(product.getSku())
                             .build())
                     .build();
-        }).orElseThrow(() -> new RuntimeException("Sale not found"));
+
+        }
+        return new SalesUpdateResponseDTO();
 
     }
 

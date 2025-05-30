@@ -19,4 +19,5 @@ public class Khata extends BaseModel {
     @Column(nullable = false, unique = true)
     private  double outstandingAmount;
 
+
 }

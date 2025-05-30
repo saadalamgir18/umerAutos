@@ -1,5 +1,6 @@
 package com.example.umerautos.dto;
 
+import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import lombok.*;
@@ -17,6 +18,7 @@ public class SalesUpdateResponseDTO {
     private ProductInfoDTO product;
     private int quantitySold;
     private double totalPrice;
+    private PaymentStatus paymentStatus;
 
     public static SalesUpdateResponseDTO mapToDTO(Sales sales){
         return SalesUpdateResponseDTO
@@ -25,5 +27,6 @@ public class SalesUpdateResponseDTO {
                 .quantitySold(sales.getQuantitySold())
                 .totalPrice(sales.getTotalAmount())
                 .build();
+
     }
 }

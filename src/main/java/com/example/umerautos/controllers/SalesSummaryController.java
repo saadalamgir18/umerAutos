@@ -3,6 +3,7 @@ package com.example.umerautos.controllers;
 import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.SalesSummaryRequestDTO;
 import com.example.umerautos.dto.SalesSummaryResponseDTO;
+import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.services.SalesSummaryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,12 @@ public class SalesSummaryController {
     @GetMapping("/sales-summary")
     public ResponseEntity<?> getAll(
             @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "6") int limit
+            @RequestParam(required = false, defaultValue = "6") int limit,
+            @RequestParam(required = false, defaultValue = "paid") String status
     ){
-        var response  = salesSummaryService.findAll(page, limit);
+        PaymentStatus paymentStatus = PaymentStatus.valueOf(status.toUpperCase());
+
+        var response  = salesSummaryService.finadSalesSummary(page, limit, paymentStatus);
         System.out.println(response);
         if (response.getData() != null){
             return new ResponseEntity<>(response, HttpStatus.OK);

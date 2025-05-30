@@ -7,22 +7,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class SuppliersController {
     private SuppliersService suppliersService;
 
+    public SuppliersController(SuppliersService suppliersService) {
+        this.suppliersService = suppliersService;
+    }
+
     @GetMapping("/suppliers")
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<?> findAll(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "6") int limit
+    ){
         try {
-            List<SuppliersResponseDTO> suppliersResponseDTOS = suppliersService.findAll();
+            var suppliersResponseDTOS = suppliersService.findAll(page, limit);
 
             return new ResponseEntity<>(suppliersResponseDTOS, HttpStatus.OK);
-
 
         }catch (Exception e){
              throw new RuntimeException();
