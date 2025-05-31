@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -38,7 +40,7 @@ public class SalesSummaryController {
     ){
         PaymentStatus paymentStatus = PaymentStatus.valueOf(status.toUpperCase());
 
-        var response  = salesSummaryService.finadSalesSummary(page, limit, paymentStatus);
+        var response  = salesSummaryService.findSalesSummary(page, limit, paymentStatus);
         System.out.println(response);
         if (response.getData() != null){
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -46,6 +48,20 @@ public class SalesSummaryController {
         }else {
 
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+    @GetMapping("/sales-summary/{id}")
+    public ResponseEntity<?> getAll(@PathVariable UUID id){
+
+        SalesSummaryResponseDTO summaryResponseDTO  = salesSummaryService.findSalesSummaryById(id);
+        System.out.println(summaryResponseDTO);
+        if (summaryResponseDTO != null){
+            return new ResponseEntity<>(summaryResponseDTO, HttpStatus.OK);
+
+        }else {
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         }
     }

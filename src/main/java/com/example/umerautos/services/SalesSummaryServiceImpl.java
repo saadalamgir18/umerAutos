@@ -5,10 +5,12 @@ import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.entities.SalesSummary;
+import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.producer.EmailProducer;
 import com.example.umerautos.repositories.ProductsRepository;
 import com.example.umerautos.repositories.SalesRepository;
 import com.example.umerautos.repositories.SalesSummaryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -133,7 +135,7 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
     }
 
     @Override
-    public PaginatedResponseDTO<SalesSummaryResponseDTO> finadSalesSummary(int page, int limit, PaymentStatus paymentStatus) {
+    public PaginatedResponseDTO<SalesSummaryResponseDTO> findSalesSummary(int page, int limit, PaymentStatus paymentStatus) {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Page<SalesSummary> salesSummaries  = salesSummaryRepository.findByPaymentStatus(paymentStatus, pageable);
 
@@ -150,5 +152,11 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
 
 
         return new PaginatedResponseDTO<>(salesSummaryResponseDTOS, pagination);}
+
+    @Override
+    public SalesSummaryResponseDTO findSalesSummaryById(UUID id) {
+        return salesSummaryRepository.findById(id)
+                .map(SalesSummaryResponseDTO::mapToDTO).orElse(null);
+    }
 
 }
