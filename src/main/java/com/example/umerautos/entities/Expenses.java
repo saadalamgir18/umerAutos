@@ -22,6 +22,6 @@ public class Expenses extends BaseModel{
 
 
     @Column(nullable = false)
-    private double amount;
+    private int amount;
 
 }

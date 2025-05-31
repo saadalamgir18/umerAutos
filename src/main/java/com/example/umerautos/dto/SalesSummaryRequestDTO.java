@@ -24,7 +24,7 @@ public class SalesSummaryRequestDTO {
     private PaymentStatus paymentStatus;
 
     @NotNull(message = "amount must not be null")
-    private double totalAmountSummary;
+    private int totalAmountSummary;
 
     @NotNull(message = "quantity must not be null")
     private  int quantitySoldSummary;

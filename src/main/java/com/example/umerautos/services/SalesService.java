@@ -16,9 +16,9 @@ public interface SalesService {
     SalesUpdateResponseDTO findSaleById(UUID id);
 
 
-    double getTodayTotalSalesAmount();
+    int getTodayTotalSalesAmount();
 
-    double getMonthlyRevenue();
+    int getMonthlyRevenue();
 
     SalesUpdateResponseDTO updateSale(SaleUpdateRequestDTO requestDTO, UUID id);
 

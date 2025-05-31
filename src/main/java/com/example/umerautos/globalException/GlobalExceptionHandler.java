@@ -1,6 +1,5 @@
 package com.example.umerautos.globalException;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,26 +27,32 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         System.out.println("sending error in response");
-        return CustomResponse.generateResponse(HttpStatus.BAD_REQUEST, false, "Form input are missing", errors);
+        return new ResponseEntity<>("Form input are missing" ,HttpStatus.BAD_REQUEST);
+
+//        return CustomResponse.generateResponse(HttpStatus.BAD_REQUEST, false, "Form input are missing", errors);
 
     }
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<?> notFoundException(){
-        return CustomResponse.generateResponse(HttpStatus.NOT_FOUND, false, "Resource does not exist!", null);
+        return new ResponseEntity<>("Resource does not exist!" ,HttpStatus.NOT_FOUND);
+
     }
 
     @ExceptionHandler(value = RunTimeException.class)
     public ResponseEntity<?> runTimeException(){
-        return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "something went wrong!", null);
+        return new ResponseEntity<>("something went wrong!" ,HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<?> badRequestException(){
-        return CustomResponse.generateResponse(HttpStatus.BAD_REQUEST, false, "Arguments are not correct!", null);
+        return new ResponseEntity<>("Arguments are not correct!" ,HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> exception(){
-        return CustomResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "unknown exception", null);
+        return new ResponseEntity<>("unknown exception" ,HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }

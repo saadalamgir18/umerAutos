@@ -46,7 +46,7 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
 
 
     @Query("SELECT COALESCE(SUM(s.totalAmount), 0) FROM Sales s WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE and s.paymentStatus = 'PAID' ")
-    Double findTodayTotalSalesAmount();
+    int findTodayTotalSalesAmount();
 
     @Query("""
             SELECT
@@ -63,7 +63,7 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
 
 
     @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE s.createdAt BETWEEN :startOfMonth AND :today and s.paymentStatus = 'PAID'")
-    double getMonthlyRevenue(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
+    int getMonthlyRevenue(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
 
 
 }

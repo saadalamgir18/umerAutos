@@ -1,6 +1,5 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.SalesSummaryRequestDTO;
 import com.example.umerautos.dto.SalesSummaryResponseDTO;
 import com.example.umerautos.entities.PaymentStatus;

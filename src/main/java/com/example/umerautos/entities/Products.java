@@ -51,9 +51,9 @@ public class Products extends BaseModel {
     private int quantityInStock;
 
     @Column(nullable = false)
-    private double purchasePrice;
+    private int purchasePrice;
 
-    private double sellingPrice;
+    private int sellingPrice;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

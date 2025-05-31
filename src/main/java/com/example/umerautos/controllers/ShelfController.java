@@ -1,6 +1,5 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.ShelfResponseDTO;
 import com.example.umerautos.entities.ShelfCode;
 import com.example.umerautos.services.ShelfService;

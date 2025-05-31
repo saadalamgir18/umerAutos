@@ -15,6 +15,6 @@ public class SaleUpdateRequestDTO {
     private  int quantitySold;
 
     @NotNull(message = "amount must not be null")
-    private double totalAmount;
+    private int totalAmount;
 
 }

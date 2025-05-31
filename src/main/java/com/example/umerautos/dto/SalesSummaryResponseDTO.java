@@ -21,16 +21,16 @@ public class SalesSummaryResponseDTO {
     protected UUID Id;
 
     private String customerName;
-    private double totalAmountSummary;
+    private int totalAmountSummary;
 
-    private  int quantitySoldSummary;
+    private int quantitySoldSummary;
     private List<SalesResponseDTO> saleItems;
 
     private PaymentStatus paymentStatus;
     protected Date createdAt;
 
 
-    public static SalesSummaryResponseDTO mapToDTO(SalesSummary salesSummary){
+    public static SalesSummaryResponseDTO mapToDTO(SalesSummary salesSummary) {
         List<SalesResponseDTO> salesDTOs = salesSummary.getSaleItems().stream()
                 .map(sale -> SalesResponseDTO.builder()
                         .productId(sale.getId())
@@ -41,7 +41,7 @@ public class SalesSummaryResponseDTO {
                         .build()
                 )
                 .toList();
-        return  SalesSummaryResponseDTO
+        return SalesSummaryResponseDTO
                 .builder()
                 .customerName(salesSummary.getCustomerName())
                 .quantitySoldSummary(salesSummary.getQuantitySold())

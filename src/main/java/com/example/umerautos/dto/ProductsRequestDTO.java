@@ -38,9 +38,9 @@ public class ProductsRequestDTO {
     private int quantityInStock;
 
     @Min(value = 1, message = "purchase price should be greater then 1")
-    private double purchasePrice;
+    private int purchasePrice;
 
-    private double sellingPrice;
+    private int sellingPrice;
 
     @NotNull(message = "shelfCode is mandatory")
     private UUID shelfCodeId;

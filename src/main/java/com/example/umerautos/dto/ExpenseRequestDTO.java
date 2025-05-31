@@ -20,7 +20,7 @@ public class ExpenseRequestDTO {
 
     @NotNull(message = "brand name should not be null")
     @Min(value = 1)
-    private double amount;
+    private int amount;
 
     public static Expenses mapToDTO(ExpenseRequestDTO expenses){
         return Expenses

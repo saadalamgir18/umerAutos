@@ -17,7 +17,7 @@ public class SalesUpdateResponseDTO {
     private UUID id;
     private ProductInfoDTO product;
     private int quantitySold;
-    private double totalPrice;
+    private int totalPrice;
     private PaymentStatus paymentStatus;
 
     public static SalesUpdateResponseDTO mapToDTO(Sales sales){

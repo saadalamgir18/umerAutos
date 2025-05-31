@@ -3,7 +3,6 @@ package com.example.umerautos.controllers;
 import com.example.umerautos.dto.SuppliersRequestDTO;
 import com.example.umerautos.dto.SuppliersResponseDTO;
 import com.example.umerautos.services.SuppliersService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

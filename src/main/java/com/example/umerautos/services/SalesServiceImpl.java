@@ -31,12 +31,12 @@ public class SalesServiceImpl implements SalesService{
     @Autowired private ProductsRepository productsRepository;
 
 
-    public double getTodayTotalSalesAmount() {
+    public int getTodayTotalSalesAmount() {
         return salesRepository.findTodayTotalSalesAmount();
     }
 
     @Override
-    public double getMonthlyRevenue() {
+    public int getMonthlyRevenue() {
         LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
         LocalDateTime today = LocalDateTime.now();
 
@@ -98,8 +98,8 @@ public class SalesServiceImpl implements SalesService{
                 .productId((UUID) row[0])
                 .productName((String) row[1])
                 .quantitySold(((Number) row[2]).intValue())
-                .totalPrice(((Number) row[3]).doubleValue())
-                .profit(((Number) row[4]).doubleValue())
+                .totalPrice(((Number) row[3]).intValue())
+                .profit(((Number) row[4]).intValue())
                 .build()).collect(Collectors.toList());
     }
     @Override
@@ -121,8 +121,8 @@ public class SalesServiceImpl implements SalesService{
                 .productId((UUID) row[0])
                 .productName((String) row[1])
                 .quantitySold(((Number) row[2]).intValue())
-                .totalPrice(((Number) row[3]).doubleValue())
-                .profit(((Number) row[4]).doubleValue())
+                .totalPrice(((Number) row[3]).intValue())
+                .profit(((Number) row[4]).intValue())
                 .id((UUID) row[5])
                 .createdAt((Date) row[6])
                 .build()).collect(Collectors.toList());

@@ -4,8 +4,6 @@ import com.example.umerautos.dto.SaleUpdateRequestDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -102,7 +100,7 @@ public class SalesController {
     public ResponseEntity<?> todayTotalSale() {
 
         try {
-            Double todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
+            int todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
             System.out.println("todayTotalSalesAmount: " + todayTotalSalesAmount);
 
             return new ResponseEntity<>(todayTotalSalesAmount, HttpStatus.OK);

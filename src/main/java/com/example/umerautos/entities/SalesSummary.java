@@ -26,7 +26,7 @@ public class SalesSummary extends BaseModel{
 
 
     @Column(nullable = false)
-    private double totalAmount;
+    private int totalAmount;
 
     @Enumerated(value = EnumType.STRING)
     private  PaymentStatus paymentStatus;

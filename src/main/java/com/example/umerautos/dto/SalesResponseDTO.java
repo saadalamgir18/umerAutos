@@ -14,8 +14,8 @@ public class SalesResponseDTO {
     private UUID productId;
     private String productName;
     private int quantitySold;
-    private double totalPrice;
-    private double profit;
+    private int totalPrice;
+    private int profit;
     private Date createdAt;
 
     public static SalesResponseDTO mapToDTO(Sales sales){

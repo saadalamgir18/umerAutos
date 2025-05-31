@@ -13,5 +13,5 @@ import java.util.UUID;
 public class SaleDTO {
     private UUID productId;
     private  int quantitySold;
-    private double totalAmount;
+    private int totalAmount;
 }

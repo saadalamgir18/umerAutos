@@ -1,6 +1,5 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.customresponse.CustomResponse;
 import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.Brands;
 import com.example.umerautos.entities.CompatibleModels;
@@ -12,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 

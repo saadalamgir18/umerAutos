@@ -16,7 +16,7 @@ public class ExpenseResponseDTO {
     protected Date createdAt;
 
     private String description;
-    private double amount;
+    private int amount;
 
     public static ExpenseResponseDTO mapToDTO(Expenses expenses){
         return ExpenseResponseDTO

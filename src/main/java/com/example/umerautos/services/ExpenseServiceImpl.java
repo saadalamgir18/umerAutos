@@ -45,12 +45,12 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public double todayExpense() {
+    public int todayExpense() {
         return expenseRepository.todayExpense();
     }
 
     @Override
-    public double monthlyExpenses() {
+    public int monthlyExpenses() {
         LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
         LocalDateTime today = LocalDateTime.now();
 

@@ -11,11 +11,11 @@ import java.util.UUID;
 
 public interface ExpenseRepository extends JpaRepository<Expenses, UUID> {
     @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expenses e WHERE FUNCTION('DATE', e.createdAt) = CURRENT_DATE" )
-    double todayExpense();
+    int todayExpense();
 
 
     @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expenses e WHERE e.createdAt BETWEEN :startOfMonth AND :today")
-    double getMonthlyExpense(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
+    int getMonthlyExpense(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
 
 
 }

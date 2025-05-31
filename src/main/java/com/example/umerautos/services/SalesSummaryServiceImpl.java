@@ -52,7 +52,7 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
 
 
         Map<String, Integer> lowStockItems = new HashMap<>();
-        double totalAmountSummary = 0;
+        int totalAmountSummary = 0;
         int quantitySummary = 0;
 
         SalesSummary salesSummary = SalesSummary.builder()

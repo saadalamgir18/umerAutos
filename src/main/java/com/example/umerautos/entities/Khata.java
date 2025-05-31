@@ -17,7 +17,7 @@ public class Khata extends BaseModel {
     private String phoneNumber;
 
     @Column(nullable = false, unique = true)
-    private  double outstandingAmount;
+    private  int outstandingAmount;
 
 
 }

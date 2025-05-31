@@ -28,8 +28,8 @@ public class ProductsResponseDTO {
     private String sku;
     private String description;
     private int quantityInStock;
-    private double purchasePrice;
-    private double sellingPrice;
+    private int purchasePrice;
+    private int sellingPrice;
 
     // Instead of full entity, return only key data
     private UUID brandId;

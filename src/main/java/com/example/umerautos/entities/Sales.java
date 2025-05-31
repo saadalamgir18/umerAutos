@@ -24,7 +24,7 @@ public class Sales extends BaseModel{
     private int quantitySold;
 
     @Column(nullable = false)
-    private double totalAmount;
+    private int totalAmount;
 
     @Builder.Default
     @Enumerated(value = EnumType.STRING)

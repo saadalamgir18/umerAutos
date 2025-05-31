@@ -12,8 +12,8 @@ public interface ExpenseService {
 
     ExpenseResponseDTO createOne(ExpenseRequestDTO requestDTO);
     PaginatedResponseDTO<ExpenseResponseDTO> findAll(int page, int limit);
-    double todayExpense();
-    double monthlyExpenses();
+    int todayExpense();
+    int monthlyExpenses();
 
     ExpenseResponseDTO updateOne(ExpenseRequestDTO requestDTO, UUID id);
 
