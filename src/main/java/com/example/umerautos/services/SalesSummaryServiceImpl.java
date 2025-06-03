@@ -5,13 +5,10 @@ import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.entities.SalesSummary;
-import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.producer.EmailProducer;
 import com.example.umerautos.repositories.ProductsRepository;
 import com.example.umerautos.repositories.SalesRepository;
 import com.example.umerautos.repositories.SalesSummaryRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,15 +53,15 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
         int quantitySummary = 0;
 
         SalesSummary salesSummary = SalesSummary.builder()
-                .customerName(salesSummaryRequestDTO.getCustomerName())
-                .paymentStatus(salesSummaryRequestDTO.getPaymentStatus())
+                .customerName(salesSummaryRequestDTO.customerName())
+                .paymentStatus(salesSummaryRequestDTO.paymentStatus())
                 .build();
 
 
         List<Sales> saleItemsList = new ArrayList<>();
 
-        for (SaleDTO saleDTO :salesSummaryRequestDTO.getSaleItems()){
-            Optional<Products> product = productsRepo.findById(saleDTO.getProductId());
+        for (SaleDTO saleDTO :salesSummaryRequestDTO.saleItems()){
+            Optional<Products> product = productsRepo.findById(saleDTO.productId());
             if (product.isPresent()){
 
                 if (product.get().getQuantityInStock() < lowItemThreshold){
@@ -75,14 +72,14 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
 
                 Sales sales = Sales.builder()
                         .product(product.get())
-                        .quantitySold(saleDTO.getQuantitySold())
-                        .totalAmount(saleDTO.getTotalAmount())
+                        .quantitySold(saleDTO.quantitySold())
+                        .totalAmount(saleDTO.totalAmount())
                         .salesSummary(salesSummary)
-                        .paymentStatus(salesSummaryRequestDTO.getPaymentStatus())
+                        .paymentStatus(salesSummaryRequestDTO.paymentStatus())
                         .build();
 
-                totalAmountSummary += saleDTO.getTotalAmount();
-                quantitySummary += saleDTO.getQuantitySold();
+                totalAmountSummary += saleDTO.totalAmount();
+                quantitySummary += saleDTO.quantitySold();
 
                 saleItemsList.add(sales);
 
@@ -96,7 +93,6 @@ public class SalesSummaryServiceImpl implements SalesSummaryService{
         salesSummary.setSaleItems(saleItemsList);
 
         SalesSummary newSalesSummary = salesSummaryRepository.save(salesSummary);
-
 
         if (!lowStockItems.isEmpty()){
 

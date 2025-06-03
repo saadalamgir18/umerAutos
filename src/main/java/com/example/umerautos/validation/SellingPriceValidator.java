@@ -12,7 +12,7 @@ public class SellingPriceValidator implements ConstraintValidator<ValidSellingPr
             return true; // Let @NotNull handle null checks
         }
 
-        if (product.getSellingPrice() <= product.getPurchasePrice()) {
+        if (product.sellingPrice() <= product.purchasePrice()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("Selling price must be greater than purchase price")
                     .addPropertyNode("sellingPrice")

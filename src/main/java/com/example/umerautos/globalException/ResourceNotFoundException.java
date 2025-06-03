@@ -1,7 +1,11 @@
 package com.example.umerautos.globalException;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import lombok.NoArgsConstructor;
 
-public class ResourceNotFoundException extends NotFoundException {
+public class ResourceNotFoundException extends RuntimeException {
+    String string;
+    public ResourceNotFoundException(String message){
+        super(message);
+    }
 
 }

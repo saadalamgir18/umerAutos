@@ -7,26 +7,26 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@ToString
-public class ExpenseRequestDTO {
-    @NotBlank(message = "brand name should not be null")
-    @Size(min = 3, message = "name size must be greater then 3")
-    private String description;
 
-    @NotNull(message = "brand name should not be null")
-    @Min(value = 1)
-    private int amount;
+@Builder
+public record ExpenseRequestDTO(
+        @NotBlank(message = "brand name should not be null")
+        @Size(min = 3, message = "name size must be greater then 3")
+         String description,
+        @NotNull(message = "brand name should not be null")
+        @Min(value = 1)
+        int amount
+
+) {
+
+
+
 
     public static Expenses mapToDTO(ExpenseRequestDTO expenses){
         return Expenses
                 .builder()
-                .amount(expenses.getAmount())
-                .description(expenses.getDescription())
+                .amount(expenses.amount())
+                .description(expenses.description())
                 .build();
     }
 }

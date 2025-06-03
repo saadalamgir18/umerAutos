@@ -2,24 +2,16 @@ package com.example.umerautos.dto;
 
 
 import com.example.umerautos.entities.CompatibleModels;
-import lombok.*;
+import lombok.Builder;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
-@ToString
-public class CompatibleModelResponseDTO {
-    private UUID id;
-
-    protected Date createdAt;
-
-    protected Date updatedAt;
-    private String name;
+public record CompatibleModelResponseDTO(
+        UUID id, Date createdAt,Date updatedAt, String name
+) {
 
     public static CompatibleModelResponseDTO mapToDTO(CompatibleModels models){
         return CompatibleModelResponseDTO.builder()

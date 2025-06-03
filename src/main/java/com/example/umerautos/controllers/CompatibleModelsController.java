@@ -21,7 +21,7 @@ public class CompatibleModelsController {
     @PostMapping("/compatible-models")
     public ResponseEntity<?> createOne(@Valid  @RequestBody CompatibleModelRequestDTO requestDTO){
         CompatibleModelResponseDTO modelResponseDTO = modelService.createOne(requestDTO);
-        if (modelResponseDTO.getId() != null){
+        if (modelResponseDTO.id() != null){
             return new ResponseEntity<>(modelResponseDTO, HttpStatus.CREATED);
 
         }

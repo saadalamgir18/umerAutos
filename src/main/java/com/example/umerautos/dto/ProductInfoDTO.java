@@ -6,9 +6,5 @@ import lombok.Data;
 import java.util.UUID;
 
 @Builder
-@Data
-public class ProductInfoDTO {
-    private UUID id;
-    private String productName;
-    private String sku;
+public record ProductInfoDTO(UUID id, String productName, String sku) {
 }

@@ -24,7 +24,7 @@ public class CompatibleModelServiceImpl implements CompatibleModelService{
 
         CompatibleModels newModel = compatibleModelsRepository.save(CompatibleModels
                 .builder()
-                .name(models.getName())
+                .name(models.name())
                 .build());
 
         return CompatibleModelResponseDTO.mapToDTO(newModel);
@@ -53,7 +53,7 @@ public class CompatibleModelServiceImpl implements CompatibleModelService{
         Optional<CompatibleModels> models = compatibleModelsRepository.findById(modelId);
         if (models.isPresent()){
 
-            models.get().setName(requestDTO.getName());
+            models.get().setName(requestDTO.name());
 
             CompatibleModels updateModel = compatibleModelsRepository.save(models.get());
 

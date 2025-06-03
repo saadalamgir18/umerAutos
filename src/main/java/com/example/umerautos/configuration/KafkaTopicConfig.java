@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@Profile("dev")
+//@Profile("prod")
 public class KafkaTopicConfig {
 
     @Value(value = "${spring.kafka.bootstrap-servers}")

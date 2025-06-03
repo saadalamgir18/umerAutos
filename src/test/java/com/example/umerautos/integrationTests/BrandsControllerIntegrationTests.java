@@ -23,7 +23,7 @@ public class BrandsControllerIntegrationTests extends BaseIntegrationTest {
 
     @Test
     public void createBrandsTest() throws Exception {
-        BrandsRequestDTO brandsResponseDTO = BrandsRequestDTO.builder().name("panther").build();
+        BrandsRequestDTO brandsResponseDTO = new BrandsRequestDTO("panther");
 
 
         ResponseEntity<BrandsResponseDTO> response = restTemplate.postForEntity(
@@ -36,9 +36,9 @@ public class BrandsControllerIntegrationTests extends BaseIntegrationTest {
 
         BrandsResponseDTO responseBody = response.getBody();
         assertNotNull(responseBody);
-        assertEquals("panther", responseBody.getName());
+        assertEquals("panther", responseBody.name());
 
-        ResponseEntity<BrandsResponseDTO> getByIdResponse = restTemplate.getForEntity(baseUrl + "/brands/" + responseBody.getId(), BrandsResponseDTO.class);
+        ResponseEntity<BrandsResponseDTO> getByIdResponse = restTemplate.getForEntity(baseUrl + "/brands/" + responseBody.id(), BrandsResponseDTO.class);
 
         BrandsResponseDTO bodyById =  getByIdResponse.getBody();
 
@@ -77,14 +77,14 @@ public class BrandsControllerIntegrationTests extends BaseIntegrationTest {
 
     @Test
     public void updateBrandTest(){
-        BrandsRequestDTO createRequest = BrandsRequestDTO.builder().name("Panther").build();
+        BrandsRequestDTO createRequest = new  BrandsRequestDTO("Panther");
         ResponseEntity<BrandsResponseDTO> createResponse = restTemplate.postForEntity(
                 baseUrl + "/brands", createRequest, BrandsResponseDTO.class
         );
-        UUID brandId = createResponse.getBody().getId();
+        UUID brandId = createResponse.getBody().id();
 
         // Step 2: Update the brand using PUT
-        BrandsRequestDTO updateRequest = BrandsRequestDTO.builder().name("Panther Updated").build();
+        BrandsRequestDTO updateRequest = new  BrandsRequestDTO("Panther Updated");
         restTemplate.put(baseUrl + "/brands/" + brandId, updateRequest);
 
         // Step 3: Fetch and verify the update
@@ -92,7 +92,7 @@ public class BrandsControllerIntegrationTests extends BaseIntegrationTest {
                 baseUrl + "/brands/" + brandId, BrandsResponseDTO.class
         );
 
-        assertEquals("Panther Updated", updatedResponse.getBody().getName());
+        assertEquals("Panther Updated", updatedResponse.getBody().name());
     }
 
 }

@@ -1,28 +1,23 @@
 package com.example.umerautos.dto;
 
 import com.example.umerautos.entities.ShelfCode;
-import lombok.*;
+import lombok.Builder;
 
 import java.util.Date;
 import java.util.UUID;
 
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class ShelfResponseDTO {
-    protected Date createdAt;
+public record ShelfResponseDTO(
+        Date createdAt,
 
-    protected Date updatedAt;
+        Date updatedAt,
+        UUID id,
+        String name
+) {
 
-    private UUID id;
 
-    private String name;
-
-    public static ShelfResponseDTO mapToDTO(ShelfCode shelfCode){
+    public static ShelfResponseDTO mapToDTO(ShelfCode shelfCode) {
         return ShelfResponseDTO
                 .builder()
                 .createdAt(shelfCode.getCreatedAt())

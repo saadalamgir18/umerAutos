@@ -12,9 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest
-//@ComponentScan(basePackages = "com.example.umerautos")
 @ActiveProfiles("test")
 class UmerautosApplicationTests {
 

@@ -24,11 +24,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class SalesServiceImpl implements SalesService{
+public class SalesServiceImpl implements SalesService {
 
 
-    @Autowired private SalesRepository salesRepository;
-    @Autowired private ProductsRepository productsRepository;
+    @Autowired
+    private SalesRepository salesRepository;
+    @Autowired
+    private ProductsRepository productsRepository;
 
 
     public int getTodayTotalSalesAmount() {
@@ -48,12 +50,12 @@ public class SalesServiceImpl implements SalesService{
     @Override
     public SalesUpdateResponseDTO updateSale(SaleUpdateRequestDTO requestDTO, UUID id) {
         Optional<Sales> sales = salesRepository.findById(id);
-        if (sales.isPresent()){
-            sales.get().setQuantitySold(requestDTO.getQuantitySold());
-            sales.get().setTotalAmount(requestDTO.getTotalAmount());
+        if (sales.isPresent()) {
+            sales.get().setQuantitySold(requestDTO.quantitySold());
+            sales.get().setTotalAmount(requestDTO.totalAmount());
 
             Sales updatedSales = salesRepository.save(sales.get());
-            return  SalesUpdateResponseDTO.mapToDTO(updatedSales);
+            return SalesUpdateResponseDTO.mapToDTO(updatedSales);
         }
         return null;
     }
@@ -64,24 +66,21 @@ public class SalesServiceImpl implements SalesService{
         try {
 
             Optional<Sales> sales = salesRepository.findById(id);
-            if (sales.isPresent()){
+            if (sales.isPresent()) {
                 Products products = sales.get().getProduct();
-                products.setQuantityInStock(products.getQuantityInStock() +  sales.get().getQuantitySold());
+                products.setQuantityInStock(products.getQuantityInStock() + sales.get().getQuantitySold());
 
                 productsRepository.save(products);
 
                 salesRepository.deleteById(id);
-            }else {
+            } else {
 
-                throw new ResourceNotFoundException();
+                throw new ResourceNotFoundException("sale is not present with id " + id);
             }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
-
 
 
     }
@@ -91,9 +90,9 @@ public class SalesServiceImpl implements SalesService{
     public List<SalesResponseDTO> findTodaySales(int page, int limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
-            List<Object[]> rawResults = salesRepository.findTodaySalesSummary(pageable);
+        List<Object[]> rawResults = salesRepository.findTodaySalesSummary(pageable);
         System.out.println("rawResults: " + rawResults);
-        return rawResults.stream().map(row-> SalesResponseDTO
+        return rawResults.stream().map(row -> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])
                 .productName((String) row[1])
@@ -102,11 +101,12 @@ public class SalesServiceImpl implements SalesService{
                 .profit(((Number) row[4]).intValue())
                 .build()).collect(Collectors.toList());
     }
+
     @Override
     public PaginatedResponseDTO<SalesResponseDTO> findAll(int page, int limit) {
-        Sort sort =  Sort.by("createdAt").descending();
+        Sort sort = Sort.by("createdAt").descending();
 
-        Pageable pageable = PageRequest.of(page - 1, limit, sort);
+        Pageable pageable = PageRequest.of(page, limit, sort);
 
         Page<Object[]> rawResults = salesRepository.findAllSales(pageable);
         PaginationDTO pagination = new PaginationDTO(
@@ -116,7 +116,7 @@ public class SalesServiceImpl implements SalesService{
                 limit
         );
 
-        List<SalesResponseDTO> responseDTOS =  rawResults.getContent().stream().map(row-> SalesResponseDTO
+        List<SalesResponseDTO> responseDTOS = rawResults.getContent().stream().map(row -> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])
                 .productName((String) row[1])
@@ -139,7 +139,7 @@ public class SalesServiceImpl implements SalesService{
 
         System.out.println("existing sale is: " + existingSale.get().getId());
 
-        if (existingSale.isPresent()){
+        if (existingSale.isPresent()) {
 
             Products product = existingSale.get().getProduct();
 
@@ -156,7 +156,7 @@ public class SalesServiceImpl implements SalesService{
                     .build();
 
         }
-        return new SalesUpdateResponseDTO();
+        throw new ResourceNotFoundException("sale with this id not exist: " + id);
 
     }
 

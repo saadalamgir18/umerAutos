@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,27 +18,25 @@ public class ShelfController {
     private final ShelfService shelfService;
 
     @PostMapping("/shelf")
-    public ResponseEntity<?> saveOne(@RequestBody ShelfCode shelfCode){
+    public ResponseEntity<?> saveOne(@RequestBody ShelfCode shelfCode) {
         ShelfResponseDTO shelfResponseDTO = shelfService.createOne(shelfCode);
-        if (shelfResponseDTO.getId() != null){
+        if (shelfResponseDTO.id() != null) {
 
             return new ResponseEntity<>(shelfResponseDTO, HttpStatus.CREATED);
 
-        }
-        else {
+        } else {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
 
     @GetMapping("/shelf")
-    public ResponseEntity<?> findAll(){
-        List<ShelfResponseDTO> shelfResponseDTOS =  shelfService.findAll();
-        if (!shelfResponseDTOS.isEmpty()){
+    public ResponseEntity<?> findAll() {
+        List<ShelfResponseDTO> shelfResponseDTOS = shelfService.findAll();
+        if (!shelfResponseDTOS.isEmpty()) {
             return new ResponseEntity<>(shelfResponseDTOS, HttpStatus.OK);
 
-        }
-        else {
+        } else {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
 

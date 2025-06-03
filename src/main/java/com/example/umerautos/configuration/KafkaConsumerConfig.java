@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-@Profile("dev")
+//@Profile("prod")
 public class KafkaConsumerConfig {
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootStrapAddress;

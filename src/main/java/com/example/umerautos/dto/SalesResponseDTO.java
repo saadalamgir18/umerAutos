@@ -7,22 +7,23 @@ import lombok.Data;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
-@Builder
-public class SalesResponseDTO {
-    private UUID id;
-    private UUID productId;
-    private String productName;
-    private int quantitySold;
-    private int totalPrice;
-    private int profit;
-    private Date createdAt;
 
-    public static SalesResponseDTO mapToDTO(Sales sales){
+@Builder
+public record SalesResponseDTO(
+        UUID id,
+        UUID productId,
+        String productName,
+        int quantitySold,
+        int totalPrice,
+        int profit,
+        Date createdAt
+) {
+
+    public static SalesResponseDTO mapToDTO(Sales sales) {
         return SalesResponseDTO
                 .builder()
                 .id(sales.getId())
-                .productId( sales.getProduct().getId())
+                .productId(sales.getProduct().getId())
                 .productName(sales.getProduct().getName())
                 .quantitySold(sales.getQuantitySold())
                 .totalPrice(sales.getTotalAmount())

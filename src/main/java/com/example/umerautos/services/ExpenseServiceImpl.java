@@ -64,8 +64,8 @@ public class ExpenseServiceImpl implements ExpenseService{
     public ExpenseResponseDTO updateOne(ExpenseRequestDTO requestDTO, UUID id) {
         Optional<Expenses> expenses = expenseRepository.findById(id);
         if (expenses.isPresent()){
-            expenses.get().setAmount(requestDTO.getAmount());
-            expenses.get().setDescription(requestDTO.getDescription());
+            expenses.get().setAmount(requestDTO.amount());
+            expenses.get().setDescription(requestDTO.description());
            Expenses updatedExpense =  expenseRepository.save(expenses.get());
             return ExpenseResponseDTO.mapToDTO(updatedExpense);
         }

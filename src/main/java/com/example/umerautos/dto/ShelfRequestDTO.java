@@ -2,16 +2,14 @@ package com.example.umerautos.dto;
 
 
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
-@ToString
-public class ShelfRequestDTO {
+public record ShelfRequestDTO(
+        @NotNull(message = "name must not be null")
+        String name
+) {
 
-    @NotNull(message = "name must not be null")
-    private String name;
+
 }

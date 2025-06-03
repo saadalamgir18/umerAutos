@@ -3,18 +3,12 @@ package com.example.umerautos.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class SaleUpdateRequestDTO {
+public record SaleUpdateRequestDTO(
+        @NotNull(message = "quantity must not be null")
+        int quantitySold,
 
-    @NotNull(message = "quantity must not be null")
-    private  int quantitySold;
-
-    @NotNull(message = "amount must not be null")
-    private int totalAmount;
-
+        @NotNull(message = "amount must not be null")
+        int totalAmount
+) {
 }

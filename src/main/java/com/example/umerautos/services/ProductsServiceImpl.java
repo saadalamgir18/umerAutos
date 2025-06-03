@@ -29,19 +29,19 @@ public class ProductsServiceImpl implements ProductsService{
 
     @Override
     public ProductsResponseDTO createOne(ProductsRequestDTO products) {
-        Set<CompatibleModels> models = new HashSet<>(compatibleModelsRepository.findAllById(products.getCompatibleModelIds()));
+        Set<CompatibleModels> models = new HashSet<>(compatibleModelsRepository.findAllById(products.compatibleModelIds()));
 
 
 
         Products newProduct  = Products.builder()
-                .name(products.getName())
-                .brand(brandsRepository.findById(products.getBrandId()).orElse(null))
-                .sku(products.getSku())
-                .description(products.getDescription())
-                .quantityInStock(products.getQuantityInStock())
-                .purchasePrice(products.getPurchasePrice())
-                .sellingPrice(products.getSellingPrice())
-                .shelfCode(shelfCodeRepository.findById(products.getShelfCodeId()).orElse(null))
+                .name(products.name())
+                .brand(brandsRepository.findById(products.brandId()).orElse(null))
+                .sku(products.sku())
+                .description(products.description())
+                .quantityInStock(products.quantityInStock())
+                .purchasePrice(products.purchasePrice())
+                .sellingPrice(products.sellingPrice())
+                .shelfCode(shelfCodeRepository.findById(products.shelfCodeId()).orElse(null))
                 .compatibleModels(models)
                 .build();
 
@@ -56,7 +56,7 @@ public class ProductsServiceImpl implements ProductsService{
     }
     @Override
     public PaginatedResponseDTO<ProductsResponseDTO> findAll(String productName, int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
+        Pageable pageable = PageRequest.of(page, limit);
         Page<Products> productsPage = productsRepo.findByName(productName, pageable);
 
         PaginationDTO pagination = new PaginationDTO(
@@ -94,27 +94,27 @@ public class ProductsServiceImpl implements ProductsService{
         Products product = productsRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        product.setName(requestDTO.getName());
-        product.setSku(requestDTO.getSku());
-        product.setDescription(requestDTO.getDescription());
-        product.setQuantityInStock(requestDTO.getQuantityInStock());
-        product.setPurchasePrice(requestDTO.getPurchasePrice());
-        product.setSellingPrice(requestDTO.getSellingPrice());
+        product.setName(requestDTO.name());
+        product.setSku(requestDTO.sku());
+        product.setDescription(requestDTO.description());
+        product.setQuantityInStock(requestDTO.quantityInStock());
+        product.setPurchasePrice(requestDTO.purchasePrice());
+        product.setSellingPrice(requestDTO.sellingPrice());
 
-        if (requestDTO.getBrandId() != null) {
-            Brands brand = brandsRepository.findById(requestDTO.getBrandId())
+        if (requestDTO.brandId() != null) {
+            Brands brand = brandsRepository.findById(requestDTO.brandId())
                     .orElseThrow(() -> new RuntimeException("Brand not found"));
             product.setBrand(brand);
 
         }
-        if (requestDTO.getShelfCodeId() != null) {
-            ShelfCode shelfCode = shelfCodeRepository.findById(requestDTO.getShelfCodeId())
+        if (requestDTO.shelfCodeId() != null) {
+            ShelfCode shelfCode = shelfCodeRepository.findById(requestDTO.shelfCodeId())
                     .orElseThrow(() -> new RuntimeException("Shelf code not found"));
             product.setShelfCode(shelfCode);
         }
-        if (requestDTO.getCompatibleModelIds() != null) {
+        if (requestDTO.compatibleModelIds() != null) {
             Set<CompatibleModels> models = new HashSet<>(
-                    compatibleModelsRepository.findAllById(requestDTO.getCompatibleModelIds())
+                    compatibleModelsRepository.findAllById(requestDTO.compatibleModelIds())
             );
             product.setCompatibleModels(models);
         }
@@ -137,7 +137,7 @@ public class ProductsServiceImpl implements ProductsService{
             productsRepo.deleteById(id);
 
         }else {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("product does not exist with id: " + id);
 
         }
 
@@ -145,7 +145,7 @@ public class ProductsServiceImpl implements ProductsService{
 
     public void updateStockQuantity(Optional<Products> products, SaleDTO saleDTO) {
 
-        products.get().setQuantityInStock(products.get().getQuantityInStock() -  saleDTO.getQuantitySold());
+        products.get().setQuantityInStock(products.get().getQuantityInStock() -  saleDTO.quantitySold());
 
         productsRepo.save(products.get());
     }

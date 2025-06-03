@@ -15,10 +15,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class BrandsController {
-
     private final BrandsService brandsService;
+
+    public BrandsController(BrandsService brandsService) {
+        this.brandsService = brandsService;
+    }
+
 
     @GetMapping("/brands")
     public ResponseEntity<List<BrandsResponseDTO>> findAll() {

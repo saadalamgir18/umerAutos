@@ -4,14 +4,6 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class SaleDTO {
-    private UUID productId;
-    private  int quantitySold;
-    private int totalAmount;
+public record SaleDTO(UUID productId, int quantitySold, int totalAmount) {
 }

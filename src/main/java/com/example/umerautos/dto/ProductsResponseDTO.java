@@ -11,49 +11,19 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class ProductsResponseDTO {
-
-    protected Date createdAt;
-
-    protected Date updatedAt;
-
-    private UUID id;
-    private String name;
-    private String sku;
-    private String description;
-    private int quantityInStock;
-    private int purchasePrice;
-    private int sellingPrice;
-
-    // Instead of full entity, return only key data
-    private UUID brandId;
-    private String brandName;
-
-    private UUID modelId;
-    private String modelName;
-
-    private UUID categoryId;
-    private String categoryName;
-
-    private UUID supplierId;
-    private String supplierName;
-
-    private UUID shelfCodeId;
-    private String shelfCodeName;
-
-    private List<UUID> compatibleModelsIds;
-
-    private Set<String> compatibleModels;
+public record ProductsResponseDTO(
+        Date createdAt,
+        Date updatedAt,
+        UUID id,
+        String name,
+        String sku, String description, int quantityInStock, int purchasePrice, int sellingPrice, UUID brandId,
+        String brandName, UUID modelId, String modelName, UUID categoryId, String categoryName,
+        UUID supplierId, String supplierName, UUID shelfCodeId, String shelfCodeName, List<UUID> compatibleModelsIds,
+        Set<String> compatibleModels
 
 
-
-
+) {
 
 
     public static ProductsResponseDTO mapToDto(Products product) {
@@ -68,16 +38,6 @@ public class ProductsResponseDTO {
 
                 .brandId(product.getBrand().getId())
                 .brandName(product.getBrand().getName())
-
-//                .modelId(product.getCompatibleModels().getId())
-//                .modelName(product.getCompatibleModels().getName())
-
-//                .categoryId(product.getCategory().getId())
-//                .categoryName(product.getCategory().getName())
-
-//                .supplierId(product.getSupplierId().getId())
-//                .supplierName(product.getSupplierId().getCompany())
-
                 .shelfCodeId(product.getShelfCode().getId())
                 .shelfCodeName(product.getShelfCode().getName())
                 .createdAt(product.getCreatedAt())

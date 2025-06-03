@@ -12,46 +12,31 @@ import java.util.Set;
 import java.util.UUID;
 
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
 @ValidSellingPrice
-public class ProductsRequestDTO {
-
-
-    @NotBlank(message = "product name is mandatory")
-    @Size(min = 3)
-    private String name;
-
-    @NotNull(message = "brandId is mandatory")
-    private UUID brandId;
-
-    @NotBlank(message = "sku is mandatory")
-    private String sku;
-
-    private String description;
-
-    @Min(value = 1, message = "purchase price should be greater then 1")
-    private int quantityInStock;
-
-    @Min(value = 1, message = "purchase price should be greater then 1")
-    private int purchasePrice;
-
-    private int sellingPrice;
-
-    @NotNull(message = "shelfCode is mandatory")
-    private UUID shelfCodeId;
-
-    @NotEmpty(message = "Compatible model cannot be empty")
-    private Set<UUID> compatibleModelIds; // just IDs for now
-
+public record ProductsRequestDTO(
+        @NotBlank(message = "product name is mandatory")
+        @Size(min = 3)
+        String name,
+        @NotNull(message = "brandId is mandatory")
+        UUID brandId,
+        @NotBlank(message = "sku is mandatory")
+        String sku,
+        String description,
+        @Min(value = 1, message = "purchase price should be greater then 1")
+        int quantityInStock,
+        @Min(value = 1, message = "purchase price should be greater then 1")
+        int purchasePrice,
+        int sellingPrice,
+        @NotNull(message = "shelfCode is mandatory")
+        UUID shelfCodeId,
+        @NotEmpty(message = "Compatible model cannot be empty")
+        Set<UUID> compatibleModelIds
+) {
 
     public static Products mapToProducts(ProductsRequestDTO requestDTO) {
         return Products.builder()
-                .name(requestDTO.getName())
+                .name(requestDTO.name())
 
                 .build();
     }

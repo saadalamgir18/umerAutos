@@ -12,13 +12,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,9 +53,8 @@ public class BrandControllerTests {
     public void testFindBrandsById_Success(){
         UUID brandId = UUID.randomUUID();
 
-        BrandsResponseDTO mockBrand = BrandsResponseDTO.builder().build();
+        BrandsResponseDTO mockBrand = BrandsResponseDTO.builder().id(brandId).build();
 
-        mockBrand.setId(brandId);
 
         when(brandsService.findOne(brandId)).thenReturn(mockBrand);
 
@@ -69,7 +66,7 @@ public class BrandControllerTests {
 
         assertNotNull(body);
 
-        assertEquals(brandId, body.getId());
+        assertEquals(brandId, body.id());
 
     }
 
@@ -78,9 +75,8 @@ public class BrandControllerTests {
     public void testFindBrandsById_Fail(){
         UUID brandId = UUID.randomUUID();
 
-        BrandsResponseDTO mockBrand = BrandsResponseDTO.builder().build();
+        BrandsResponseDTO mockBrand = BrandsResponseDTO.builder().id(brandId).build();
 
-        mockBrand.setId(brandId);
 
         when(brandsService.findOne(brandId)).thenReturn(null);
 
@@ -100,13 +96,11 @@ public class BrandControllerTests {
     @DisplayName("SaveOneBrand_Success")
     public void testSaveOneBrand_Success(String str){
 
-        BrandsRequestDTO mockRequest = BrandsRequestDTO.builder()
-                .name(str)
-                .build();
+        BrandsRequestDTO mockRequest = new BrandsRequestDTO(str);
 
         BrandsResponseDTO responseDTO = BrandsResponseDTO
                 .builder()
-                .name(mockRequest.getName())
+                .name(mockRequest.name())
                 .build();
 
         when(brandsService.createOne(mockRequest)).thenReturn(responseDTO);

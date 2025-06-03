@@ -1,23 +1,21 @@
 package com.example.umerautos.dto;
 
 import com.example.umerautos.entities.Suppliers;
-import lombok.*;
+import lombok.Builder;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class SuppliersResponseDTO {
-    private String company;
+public record SuppliersResponseDTO(
 
-    private String contactPerson;
+        String company,
 
-    private String email;
+        String contactPerson,
 
-    private String phoneNumber;
+        String email,
 
-    public static SuppliersResponseDTO mapToDTO(Suppliers suppliers){
+        String phoneNumber
+) {
+
+    public static SuppliersResponseDTO mapToDTO(Suppliers suppliers) {
         return SuppliersResponseDTO
                 .builder()
                 .company(suppliers.getCompany())

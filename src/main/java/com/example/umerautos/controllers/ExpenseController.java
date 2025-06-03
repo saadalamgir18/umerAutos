@@ -4,11 +4,9 @@ import com.example.umerautos.dto.ExpenseRequestDTO;
 import com.example.umerautos.dto.ExpenseResponseDTO;
 import com.example.umerautos.services.ExpenseService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -43,7 +41,7 @@ public class ExpenseController {
 
             ExpenseResponseDTO responseDTOS = expenseService.createOne(requestDTO);
 
-            if (responseDTOS.getId() == null){
+            if (responseDTOS.id() == null){
 
                 throw new RuntimeException();
             }

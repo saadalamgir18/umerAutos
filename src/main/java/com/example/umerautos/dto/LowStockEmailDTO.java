@@ -1,14 +1,10 @@
 package com.example.umerautos.dto;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.util.Map;
 
 @Builder
-@Data
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-public class LowStockEmailDTO {
-    private Map<String, Integer> lowStock;
+
+public record LowStockEmailDTO(Map<String, Integer> lowStock) {
 }

@@ -7,18 +7,15 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class SalesUpdateResponseDTO {
-    private UUID id;
-    private ProductInfoDTO product;
-    private int quantitySold;
-    private int totalPrice;
-    private PaymentStatus paymentStatus;
+public record SalesUpdateResponseDTO(
+         UUID id,
+         ProductInfoDTO product,
+         int quantitySold,
+         int totalPrice,
+         PaymentStatus paymentStatus
+) {
+
 
     public static SalesUpdateResponseDTO mapToDTO(Sales sales){
         return SalesUpdateResponseDTO

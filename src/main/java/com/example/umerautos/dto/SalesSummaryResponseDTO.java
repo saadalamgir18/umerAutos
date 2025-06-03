@@ -1,33 +1,26 @@
 package com.example.umerautos.dto;
 
-import com.example.umerautos.entities.BaseModel;
 import com.example.umerautos.entities.PaymentStatus;
-import com.example.umerautos.entities.Sales;
 import com.example.umerautos.entities.SalesSummary;
 import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class SalesSummaryResponseDTO {
-    protected UUID Id;
+public record SalesSummaryResponseDTO(
+         UUID id,
+         String customerName,
+         int totalAmountSummary,
 
-    private String customerName;
-    private int totalAmountSummary;
+         int quantitySoldSummary,
+         List<SalesResponseDTO> saleItems,
 
-    private int quantitySoldSummary;
-    private List<SalesResponseDTO> saleItems;
+         PaymentStatus paymentStatus,
+         Date createdAt
+) {
 
-    private PaymentStatus paymentStatus;
-    protected Date createdAt;
 
 
     public static SalesSummaryResponseDTO mapToDTO(SalesSummary salesSummary) {
@@ -46,7 +39,7 @@ public class SalesSummaryResponseDTO {
                 .customerName(salesSummary.getCustomerName())
                 .quantitySoldSummary(salesSummary.getQuantitySold())
                 .totalAmountSummary(salesSummary.getTotalAmount())
-                .Id(salesSummary.getId())
+                .id(salesSummary.getId())
                 .paymentStatus(salesSummary.getPaymentStatus())
                 .saleItems(salesDTOs)
                 .createdAt(salesSummary.getCreatedAt())

@@ -24,7 +24,7 @@ public class BrandsServiceImpl implements BrandsService{
     public List<BrandsResponseDTO> findAll() {
         List<Brands> allBrands =  brandsRepository.findAll();
 
-        return allBrands.stream().map(BrandsResponseDTO::mapTo).collect(Collectors.toList());
+        return allBrands.stream().map(brands -> new BrandsResponseDTO(brands.getCreatedAt(),brands.getUpdatedAt(),brands.getId(),brands.getName())).collect(Collectors.toList());
 
     }
 
@@ -39,7 +39,7 @@ public class BrandsServiceImpl implements BrandsService{
 
         Brands requestBrands = Brands
                 .builder()
-                .name(brands.getName())
+                .name(brands.name())
                 .build();
         Brands newBrand =  brandsRepository.save(requestBrands);
         return BrandsResponseDTO.mapTo(newBrand);
@@ -50,7 +50,7 @@ public class BrandsServiceImpl implements BrandsService{
         Optional<Brands> db_brands = brandsRepository.findById(id);
         if (db_brands.isPresent()){
 
-            db_brands.get().setName(brands.getName());
+            db_brands.get().setName(brands.name());
 
             Brands updatedBrands = brandsRepository.save(db_brands.get());
             return BrandsResponseDTO.mapTo(updatedBrands);

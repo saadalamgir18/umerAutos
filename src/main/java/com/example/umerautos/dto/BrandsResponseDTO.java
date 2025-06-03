@@ -9,20 +9,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
-public class BrandsResponseDTO {
-    protected Date createdAt;
+public record BrandsResponseDTO(
+        Date createdAt,
+        Date updatedAt,
+        UUID id, String name
 
-    protected Date updatedAt;
+) {
+//    protected Date createdAt;
 
-    private UUID id;
+//    protected Date updatedAt;
 
-    private String name;
+//    private UUID id;
+//
+//    private String name;
 
     public static BrandsResponseDTO mapTo(Brands brand){
         return BrandsResponseDTO

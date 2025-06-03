@@ -9,27 +9,23 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
-@ToString
-public class SalesSummaryRequestDTO {
+public record SalesSummaryRequestDTO(
+        String customerName,
 
+        @Enumerated(value = EnumType.STRING)
+        PaymentStatus paymentStatus,
 
-    private String customerName;
+        @NotNull(message = "amount must not be null")
+        int totalAmountSummary,
 
-    @Enumerated(value = EnumType.STRING)
-    private PaymentStatus paymentStatus;
+        @NotNull(message = "quantity must not be null")
+        int quantitySoldSummary,
 
-    @NotNull(message = "amount must not be null")
-    private int totalAmountSummary;
+        @NotEmpty(message = "sale item must not be empty")
+        List<SaleDTO> saleItems
+) {
 
-    @NotNull(message = "quantity must not be null")
-    private  int quantitySoldSummary;
-
-    @NotEmpty(message = "sale item must not be empty")
-    private List<SaleDTO> saleItems;
 
 }

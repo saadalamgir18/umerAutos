@@ -2,25 +2,22 @@ package com.example.umerautos.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
-@ToString
-public class SuppliersRequestDTO {
+public record SuppliersRequestDTO(
 
-    @NotNull(message = "company must not be null")
+        @NotNull(message = "company must not be null")
 
-    private String company;
+        String company,
 
-    @NotNull(message = "contact person must not be null")
+        @NotNull(message = "contact person must not be null")
 
-    private String contactPerson;
+        String contactPerson,
 
-    @Email(message = "provide valid email")
-    private String email;
+        @Email(message = "provide valid email") String email,
 
-    private String phoneNumber;
+        String phoneNumber) {
+
 }

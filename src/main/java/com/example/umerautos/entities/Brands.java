@@ -22,4 +22,14 @@ public class Brands extends BaseModel{
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Override
+    public String toString() {
+        return "Brands{" +
+                "name='" + name + '\'' +
+                ", Id=" + Id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

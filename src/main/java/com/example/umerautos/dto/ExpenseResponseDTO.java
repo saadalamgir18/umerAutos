@@ -5,20 +5,13 @@ import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
-@ToString
-public class ExpenseResponseDTO {
-    private UUID id;
-    protected Date createdAt;
+public record ExpenseResponseDTO(
+        UUID id, Date createdAt, String description, int amount
+) {
 
-    private String description;
-    private int amount;
-
-    public static ExpenseResponseDTO mapToDTO(Expenses expenses){
+    public static ExpenseResponseDTO mapToDTO(Expenses expenses) {
         return ExpenseResponseDTO
                 .builder()
                 .amount(expenses.getAmount())

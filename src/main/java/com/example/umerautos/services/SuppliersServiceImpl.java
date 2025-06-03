@@ -19,9 +19,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class SuppliersServiceImpl implements SuppliersService{
+public class SuppliersServiceImpl implements SuppliersService {
 
-    @Autowired private SuppliersRepository suppliersRepository;
+    @Autowired
+    private SuppliersRepository suppliersRepository;
 
     @Override
     public PaginatedResponseDTO<SuppliersResponseDTO> findAll(int page, int limit) {
@@ -43,23 +44,23 @@ public class SuppliersServiceImpl implements SuppliersService{
     @Override
     public SuppliersResponseDTO saveOne(SuppliersRequestDTO supplier) {
         Suppliers suppliers = Suppliers.builder()
-                .company(supplier.getCompany())
-                .contactPerson(supplier.getContactPerson())
-                .email(supplier.getEmail())
-                .phoneNumber(supplier.getPhoneNumber())
+                .company(supplier.company())
+                .contactPerson(supplier.contactPerson())
+                .email(supplier.email())
+                .phoneNumber(supplier.phoneNumber())
                 .build();
         ;
-        return SuppliersResponseDTO.mapToDTO(suppliersRepository.save(suppliers)) ;
+        return SuppliersResponseDTO.mapToDTO(suppliersRepository.save(suppliers));
     }
 
     @SneakyThrows
     @Override
     public void deleteOne(UUID id) {
         Optional<Suppliers> supplier = suppliersRepository.findById(id);
-        if (supplier.isPresent()){
+        if (supplier.isPresent()) {
             suppliersRepository.deleteById(id);
-        }else {
-            throw new ResourceNotFoundException();
+        } else {
+            throw new ResourceNotFoundException("supplier does not exist with id: " + id);
         }
 
     }

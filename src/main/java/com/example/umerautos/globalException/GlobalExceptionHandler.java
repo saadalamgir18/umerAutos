@@ -1,18 +1,20 @@
 package com.example.umerautos.globalException;
 
+import com.example.umerautos.dto.ExceptionResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -33,8 +35,11 @@ public class GlobalExceptionHandler {
 
     }
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    public ResponseEntity<?> notFoundException(){
-        return new ResponseEntity<>("Resource does not exist!" ,HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> resourceNotFoundExceptionHandler(ResourceNotFoundException exception){
+
+
+        String message = exception.getMessage();
+        return new ResponseEntity<>(new ExceptionResponse("resource not found", false),HttpStatus.NOT_FOUND);
 
     }
 
@@ -48,6 +53,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> badRequestException(){
         return new ResponseEntity<>("Arguments are not correct!" ,HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<String> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        return new ResponseEntity<>("Endpoint not found", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = Exception.class)

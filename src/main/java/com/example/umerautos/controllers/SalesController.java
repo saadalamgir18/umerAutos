@@ -1,5 +1,6 @@
 package com.example.umerautos.controllers;
 
+import com.example.umerautos.configuration.AppConstants;
 import com.example.umerautos.dto.SaleUpdateRequestDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 import com.example.umerautos.services.SalesService;
@@ -24,8 +25,8 @@ public class SalesController {
 
     @GetMapping("/today-sales")
     public ResponseEntity<?> findTodaySale(
-            @RequestParam(required = false, defaultValue = "1") int page,
-            @RequestParam(required = false, defaultValue = "6") int limit
+            @RequestParam(required = false, defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(required = false, defaultValue = AppConstants.PAGE_SIZE) int limit
     ) {
 
         try {
@@ -38,7 +39,7 @@ public class SalesController {
     }
 
     @GetMapping("/sales")
-    public ResponseEntity<?> findAll(@RequestParam int page, @RequestParam int limit) {
+    public ResponseEntity<?> findAll(@RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page, @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int limit) {
 
         var response = salesService.findAll(page, limit);
 
@@ -53,7 +54,7 @@ public class SalesController {
             System.out.println("getting sale by id: " + id);
             SalesUpdateResponseDTO salesUpdateResponseDTO = salesService.findSaleById(id);
 
-            if (salesUpdateResponseDTO.getId() == null){
+            if (salesUpdateResponseDTO.id() == null){
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
 
