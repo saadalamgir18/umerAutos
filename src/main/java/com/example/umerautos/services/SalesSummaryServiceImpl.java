@@ -172,23 +172,39 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
         }
 
         existingSingleSale.get().setPaymentStatus(PaymentStatus.PAID);
-//
+
         existingSalesSummary.get().setQuantitySold(existingSalesSummary.get().getQuantitySold() - existingSingleSale.get().getQuantitySold());
         existingSalesSummary.get().setTotalAmount(existingSalesSummary.get().getTotalAmount() - existingSingleSale.get().getTotalAmount());
 
-//        existingSalesSummary.get().setSaleItems(
-//                existingSalesSummary
-//                        .get()
-//                        .getSaleItems().stream()
-//                        .filter(saleItem -> !saleItem.getId().equals(request.saleItemId())).toList()
-//        );
-
-//        existingSalesSummary.get().getSaleItems().forEach(saleItem -> System.out.println(saleItem.getId()));
         salesRepository.save(existingSingleSale.get());
 
         SalesSummary salesSummary = salesSummaryRepository.save(existingSalesSummary.get());
         return SalesSummaryResponseDTO.mapToDTO(salesSummary);
-        
+
+    }
+
+    @Override
+    @Transactional
+    public SalesSummaryResponseDTO updateSaleSummaryById(UUID id) {
+        Optional<SalesSummary> existingSalesSummary = salesSummaryRepository.findById(id);
+        if (existingSalesSummary.isEmpty()) {
+            throw new ResourceNotFoundException("sales summary with id: " + id + " does not exist!");
+        }
+
+        existingSalesSummary.get().setPaymentStatus(PaymentStatus.PAID);
+
+        existingSalesSummary.get().setQuantitySold(0);
+        existingSalesSummary.get().setTotalAmount(0);
+
+        SalesSummary summary = existingSalesSummary.get();
+
+        for (Sales sale : summary.getSaleItems()) {
+            sale.setPaymentStatus(PaymentStatus.PAID);
+        }
+
+        SalesSummary salesSummary = salesSummaryRepository.save(summary);
+
+        return SalesSummaryResponseDTO.mapToDTO(salesSummary);
     }
 
 }

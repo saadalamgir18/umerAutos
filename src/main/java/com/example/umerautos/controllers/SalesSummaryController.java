@@ -83,4 +83,19 @@ public class SalesSummaryController {
 
     }
 
+    @PatchMapping("/sales-summary/{id}")
+    public ResponseEntity<?> patchOne(@PathVariable UUID id) {
+        SalesSummaryResponseDTO summaryResponseDTO = salesSummaryService.updateSaleSummaryById(id);
+
+        if (summaryResponseDTO != null) {
+            return new ResponseEntity<>(summaryResponseDTO, HttpStatus.OK);
+
+        } else {
+
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        }
+
+    }
+
 }

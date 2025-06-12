@@ -42,20 +42,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            System.out.println("unauthorized");
             return;
 
         }
         boolean valid = jwtService.validateToken(token, request);
         if (valid) {
 
-            System.out.println("valid");
 
             filterChain.doFilter(request, response);
 
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            System.out.println("unauthorized");
             return;
         }
 

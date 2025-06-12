@@ -19,4 +19,6 @@ public interface SalesSummaryService {
     SalesSummaryResponseDTO findSalesSummaryById(UUID id);
 
     SalesSummaryResponseDTO updateSaleSummaryById(UUID id, SalesSummaryUpdate request);
+
+    SalesSummaryResponseDTO updateSaleSummaryById(UUID id);
 }

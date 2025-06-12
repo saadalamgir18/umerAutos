@@ -93,7 +93,6 @@ public class JwtServiceImpl implements JwtService {
     public boolean validateToken(String token, HttpServletRequest request) {
 
         String email = this.extractEmail(token);
-        System.out.println(email);
         if (email == null) {
             return false;
         }
