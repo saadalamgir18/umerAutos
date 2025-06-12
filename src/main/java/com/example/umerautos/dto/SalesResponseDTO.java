@@ -1,8 +1,8 @@
 package com.example.umerautos.dto;
 
+import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.entities.Sales;
 import lombok.Builder;
-import lombok.Data;
 
 import java.util.Date;
 import java.util.UUID;
@@ -16,7 +16,8 @@ public record SalesResponseDTO(
         int quantitySold,
         int totalPrice,
         int profit,
-        Date createdAt
+        Date createdAt,
+        PaymentStatus paymentStatus
 ) {
 
     public static SalesResponseDTO mapToDTO(Sales sales) {
@@ -27,6 +28,7 @@ public record SalesResponseDTO(
                 .productName(sales.getProduct().getName())
                 .quantitySold(sales.getQuantitySold())
                 .totalPrice(sales.getTotalAmount())
+                .paymentStatus(sales.getPaymentStatus())
                 .build();
     }
 }

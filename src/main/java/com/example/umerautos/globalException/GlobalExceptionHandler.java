@@ -4,6 +4,7 @@ import com.example.umerautos.dto.ExceptionResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,29 +30,37 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         System.out.println("sending error in response");
-        return new ResponseEntity<>("Form input are missing" ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Form input are missing", HttpStatus.BAD_REQUEST);
 
 //        return CustomResponse.generateResponse(HttpStatus.BAD_REQUEST, false, "Form input are missing", errors);
 
     }
+
+
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    public ResponseEntity<?> resourceNotFoundExceptionHandler(ResourceNotFoundException exception){
+    public ResponseEntity<?> resourceNotFoundExceptionHandler(ResourceNotFoundException exception) {
 
 
         String message = exception.getMessage();
-        return new ResponseEntity<>(new ExceptionResponse("resource not found", false),HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ExceptionResponse("resource not found", false), HttpStatus.NOT_FOUND);
 
     }
 
     @ExceptionHandler(value = RunTimeException.class)
-    public ResponseEntity<?> runTimeException(){
-        return new ResponseEntity<>("something went wrong!" ,HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> runTimeException() {
+        return new ResponseEntity<>("something went wrong!", HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<?> badCredentialsException() {
+        return new ResponseEntity<>("username and password is not correct!", HttpStatus.FORBIDDEN);
 
     }
 
     @ExceptionHandler(value = BadRequestException.class)
-    public ResponseEntity<?> badRequestException(){
-        return new ResponseEntity<>("Arguments are not correct!" ,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> badRequestException() {
+        return new ResponseEntity<>("Arguments are not correct!", HttpStatus.BAD_REQUEST);
 
     }
 
@@ -61,8 +70,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<?> exception(){
-        return new ResponseEntity<>("unknown exception" ,HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> exception() {
+        return new ResponseEntity<>("unknown exception", HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 }

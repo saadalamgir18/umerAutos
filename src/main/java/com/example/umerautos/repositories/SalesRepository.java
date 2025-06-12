@@ -3,7 +3,6 @@ package com.example.umerautos.repositories;
 import com.example.umerautos.entities.Sales;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,8 +23,11 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
                 SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold) AS profit
             FROM Sales s
             JOIN s.product p
-            WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE
-            and paymentStatus = 'Paid'
+            WHERE (
+                FUNCTION('DATE', s.createdAt) = CURRENT_DATE
+                OR FUNCTION('DATE', s.updatedAt) = CURRENT_DATE
+                )
+            and paymentStatus = 'PAID'
             GROUP BY p.id, p.name
             """)
     List<Object[]> findTodaySalesSummary(Pageable pageable);
@@ -38,14 +40,23 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
                 s.totalAmount,
                 (s.totalAmount - p.purchasePrice) * s.quantitySold AS profit,
                 s.id,
-                s.createdAt
+                s.createdAt,
+                s.paymentStatus
             FROM Sales s
             JOIN s.product p
             """)
     Page<Object[]> findAllSales(Pageable pageable);
 
 
-    @Query("SELECT COALESCE(SUM(s.totalAmount), 0) FROM Sales s WHERE FUNCTION('DATE', s.createdAt) = CURRENT_DATE and s.paymentStatus = 'PAID' ")
+    @Query("""
+            SELECT
+                COALESCE(SUM(s.totalAmount), 0)
+             FROM Sales s
+             WHERE (
+                FUNCTION('DATE', s.createdAt) = CURRENT_DATE
+                OR FUNCTION('DATE', s.updatedAt) = CURRENT_DATE )
+                and s.paymentStatus = 'PAID'
+            """)
     int findTodayTotalSalesAmount();
 
     @Query("""
@@ -62,8 +73,8 @@ public interface SalesRepository extends JpaRepository<Sales, UUID> {
     List<Object[]> findSalesSummaryByDate(@Param("date") LocalDate date);
 
 
-    @Query("SELECT SUM(s.totalAmount) FROM Sales s WHERE s.createdAt BETWEEN :startOfMonth AND :today and s.paymentStatus = 'PAID'")
-    int getMonthlyRevenue(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
+    @Query("SELECT COALESCE(SUM(s.totalAmount)) FROM Sales s WHERE s.createdAt BETWEEN :startOfMonth AND :today and s.paymentStatus = 'PAID'")
+    Integer getMonthlyRevenue(@Param("startOfMonth") Timestamp startOfMonth, @Param("today") Timestamp today);
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.umerautos.services;
 
 import com.example.umerautos.dto.*;
+import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.globalException.ResourceNotFoundException;
@@ -44,7 +45,9 @@ public class SalesServiceImpl implements SalesService {
 
         Timestamp start = Timestamp.valueOf(startOfMonth);
         Timestamp end = Timestamp.valueOf(today);
-        return salesRepository.getMonthlyRevenue(start, end);
+        Integer revenue = salesRepository.getMonthlyRevenue(start, end);
+
+        return revenue != null ? revenue : 0;
     }
 
     @Override
@@ -125,6 +128,7 @@ public class SalesServiceImpl implements SalesService {
                 .profit(((Number) row[4]).intValue())
                 .id((UUID) row[5])
                 .createdAt((Date) row[6])
+                .paymentStatus((PaymentStatus) row[7])
                 .build()).collect(Collectors.toList());
 
         return new PaginatedResponseDTO<>(responseDTOS, pagination);

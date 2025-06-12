@@ -12,19 +12,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductsServiceImpl implements ProductsService{
+public class ProductsServiceImpl implements ProductsService {
 
 
-    @Autowired private BrandsRepository brandsRepository;
-    @Autowired private CompatibleModelRepository compatibleModelsRepository;
-    @Autowired   private SuppliersRepository suppliersRepository;
-    @Autowired  private ShelfCodeRepository shelfCodeRepository;
+    @Autowired
+    private BrandsRepository brandsRepository;
+    @Autowired
+    private CompatibleModelRepository compatibleModelsRepository;
+    @Autowired
+    private SuppliersRepository suppliersRepository;
+    @Autowired
+    private ShelfCodeRepository shelfCodeRepository;
 
-    @Autowired private ProductsRepository productsRepo;
+    @Autowired
+    private ProductsRepository productsRepo;
 
 
     @Override
@@ -32,8 +38,7 @@ public class ProductsServiceImpl implements ProductsService{
         Set<CompatibleModels> models = new HashSet<>(compatibleModelsRepository.findAllById(products.compatibleModelIds()));
 
 
-
-        Products newProduct  = Products.builder()
+        Products newProduct = Products.builder()
                 .name(products.name())
                 .brand(brandsRepository.findById(products.brandId()).orElse(null))
                 .sku(products.sku())
@@ -46,17 +51,17 @@ public class ProductsServiceImpl implements ProductsService{
                 .build();
 
 
-           Products savedProduct = productsRepo.save(newProduct);
+        Products savedProduct = productsRepo.save(newProduct);
 
 
-           return ProductsResponseDTO.mapToDto(savedProduct);
-
+        return ProductsResponseDTO.mapToDto(savedProduct);
 
 
     }
+
     @Override
     public PaginatedResponseDTO<ProductsResponseDTO> findAll(String productName, int page, int limit) {
-        Pageable pageable = PageRequest.of(page, limit);
+        Pageable pageable = PageRequest.of(page - 1, limit);
         Page<Products> productsPage = productsRepo.findByName(productName, pageable);
 
         PaginationDTO pagination = new PaginationDTO(
@@ -80,9 +85,9 @@ public class ProductsServiceImpl implements ProductsService{
     public ProductsResponseDTO findById(UUID id) {
         Optional<Products> dbProduct = productsRepo.findById(id);
 
-        if (dbProduct.isPresent()){
+        if (dbProduct.isPresent()) {
             return ProductsResponseDTO.mapToDto(dbProduct.get());
-        }else{
+        } else {
             return ProductsResponseDTO.builder().build();
         }
     }
@@ -120,10 +125,9 @@ public class ProductsServiceImpl implements ProductsService{
         }
 
 
+        Products updatedProductResponse = productsRepo.save(product);
 
-            Products updatedProductResponse = productsRepo.save(product);
-
-            return ProductsResponseDTO.mapToDto(updatedProductResponse);
+        return ProductsResponseDTO.mapToDto(updatedProductResponse);
 
 
     }
@@ -132,11 +136,11 @@ public class ProductsServiceImpl implements ProductsService{
     public void deleteOne(UUID id) throws ResourceNotFoundException {
 
         Optional<Products> products = productsRepo.findById(id);
-        if (products.isPresent()){
+        if (products.isPresent()) {
 
             productsRepo.deleteById(id);
 
-        }else {
+        } else {
             throw new ResourceNotFoundException("product does not exist with id: " + id);
 
         }
@@ -145,7 +149,7 @@ public class ProductsServiceImpl implements ProductsService{
 
     public void updateStockQuantity(Optional<Products> products, SaleDTO saleDTO) {
 
-        products.get().setQuantityInStock(products.get().getQuantityInStock() -  saleDTO.quantitySold());
+        products.get().setQuantityInStock(products.get().getQuantityInStock() - saleDTO.quantitySold());
 
         productsRepo.save(products.get());
     }

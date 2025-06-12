@@ -9,14 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
 public class SalesController {
 
     private SalesService salesService;
-
 
 
     public SalesController(SalesService salesService) {
@@ -54,7 +53,7 @@ public class SalesController {
             System.out.println("getting sale by id: " + id);
             SalesUpdateResponseDTO salesUpdateResponseDTO = salesService.findSaleById(id);
 
-            if (salesUpdateResponseDTO.id() == null){
+            if (salesUpdateResponseDTO.id() == null) {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
 
@@ -105,7 +104,7 @@ public class SalesController {
             System.out.println("todayTotalSalesAmount: " + todayTotalSalesAmount);
 
             return new ResponseEntity<>(todayTotalSalesAmount, HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
 
             throw new RuntimeException(e);
 
@@ -116,7 +115,7 @@ public class SalesController {
     public ResponseEntity<?> getMonthlyRevenue() {
         try {
 
-            double monthlyRevenue = salesService.getMonthlyRevenue();
+            int monthlyRevenue = salesService.getMonthlyRevenue();
 
             return new ResponseEntity<>(monthlyRevenue, HttpStatus.OK);
 
