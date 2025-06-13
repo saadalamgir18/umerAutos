@@ -28,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    private UserDetailServiceImpl userDetailsService;
+    private final UserDetailServiceImpl userDetailsService;
 
     public JwtServiceImpl(UserDetailServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;

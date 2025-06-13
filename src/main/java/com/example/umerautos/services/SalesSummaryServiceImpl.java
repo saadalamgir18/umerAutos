@@ -6,42 +6,37 @@ import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import com.example.umerautos.entities.SalesSummary;
 import com.example.umerautos.globalException.ResourceNotFoundException;
-import com.example.umerautos.producer.EmailProducer;
 import com.example.umerautos.repositories.ProductsRepository;
 import com.example.umerautos.repositories.SalesRepository;
 import com.example.umerautos.repositories.SalesSummaryRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class SalesSummaryServiceImpl implements SalesSummaryService {
 
-    private SalesSummaryRepository salesSummaryRepository;
-    private ProductsRepository productsRepo;
-    private SalesRepository salesRepository;
-    private ProductsService productsService;
-    private EmailProducer emailProducer;
+    private final SalesSummaryRepository salesSummaryRepository;
+    private final ProductsRepository productsRepo;
+    private final SalesRepository salesRepository;
+    private final ProductsService productsService;
 
     public SalesSummaryServiceImpl(SalesSummaryRepository salesSummaryRepository,
                                    ProductsRepository productsRepo, SalesRepository salesRepository,
-                                   ProductsService productsService,
-                                   EmailProducer emailProducer) {
+                                   ProductsService productsService) {
         this.salesSummaryRepository = salesSummaryRepository;
         this.productsRepo = productsRepo;
         this.salesRepository = salesRepository;
         this.productsService = productsService;
-        this.emailProducer = emailProducer;
     }
-
-    @Value(value = "${lowItemThreshold}")
-    private int lowItemThreshold;
 
 
     @Override
@@ -49,7 +44,6 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
     public SalesSummaryResponseDTO saveOne(SalesSummaryRequestDTO salesSummaryRequestDTO) {
 
 
-        Map<String, Integer> lowStockItems = new HashMap<>();
         int totalAmountSummary = 0;
         int quantitySummary = 0;
 
@@ -65,9 +59,6 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
             Optional<Products> product = productsRepo.findById(saleDTO.productId());
             if (product.isPresent()) {
 
-                if (product.get().getQuantityInStock() < lowItemThreshold) {
-                    lowStockItems.put(product.get().getName(), product.get().getQuantityInStock());
-                }
 
                 productsService.updateStockQuantity(product, saleDTO);
 
@@ -95,21 +86,9 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
 
         SalesSummary newSalesSummary = salesSummaryRepository.save(salesSummary);
 
-        if (!lowStockItems.isEmpty()) {
-
-            this.sendEmail(lowStockItems);
-
-        }
 
         return SalesSummaryResponseDTO.mapToDTO(newSalesSummary);
 
-
-    }
-
-    void sendEmail(Map<String, Integer> lowStockItems) {
-        emailProducer.sendMessage("low-stock-alerts", LowStockEmailDTO.builder()
-                .lowStock(lowStockItems)
-                .build());
 
     }
 
@@ -126,7 +105,7 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
                 page,
                 limit
         );
-        List<SalesSummaryResponseDTO> salesSummaryResponseDTOS = salesSummaries.stream().map(salesSummary -> SalesSummaryResponseDTO.mapToDTO(salesSummary)).collect(Collectors.toList());
+        List<SalesSummaryResponseDTO> salesSummaryResponseDTOS = salesSummaries.stream().map(SalesSummaryResponseDTO::mapToDTO).collect(Collectors.toList());
         return new PaginatedResponseDTO<>(salesSummaryResponseDTOS, pagination);
     }
 
