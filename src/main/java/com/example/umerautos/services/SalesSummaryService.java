@@ -1,9 +1,6 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.dto.PaginatedResponseDTO;
-import com.example.umerautos.dto.SalesSummaryRequestDTO;
-import com.example.umerautos.dto.SalesSummaryResponseDTO;
-import com.example.umerautos.dto.SalesSummaryUpdate;
+import com.example.umerautos.dto.*;
 import com.example.umerautos.entities.PaymentStatus;
 
 import java.util.UUID;
@@ -21,4 +18,8 @@ public interface SalesSummaryService {
     SalesSummaryResponseDTO updateSaleSummaryById(UUID id, SalesSummaryUpdate request);
 
     SalesSummaryResponseDTO updateSaleSummaryById(UUID id);
+
+    SalesSummaryResponseDTO updateSaleSummaryById(UUID id, UpdateDebtorsSales request);
+
+
 }

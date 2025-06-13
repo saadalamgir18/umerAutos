@@ -4,6 +4,7 @@ import com.example.umerautos.configuration.AppConstants;
 import com.example.umerautos.dto.SalesSummaryRequestDTO;
 import com.example.umerautos.dto.SalesSummaryResponseDTO;
 import com.example.umerautos.dto.SalesSummaryUpdate;
+import com.example.umerautos.dto.UpdateDebtorsSales;
 import com.example.umerautos.entities.PaymentStatus;
 import com.example.umerautos.services.SalesSummaryService;
 import jakarta.validation.Valid;
@@ -84,8 +85,10 @@ public class SalesSummaryController {
     }
 
     @PatchMapping("/sales-summary/{id}")
-    public ResponseEntity<?> patchOne(@PathVariable UUID id) {
-        SalesSummaryResponseDTO summaryResponseDTO = salesSummaryService.updateSaleSummaryById(id);
+    public ResponseEntity<?> patchOne(@PathVariable UUID id, @RequestBody UpdateDebtorsSales request) {
+
+        System.out.println(request);
+        SalesSummaryResponseDTO summaryResponseDTO = salesSummaryService.updateSaleSummaryById(id, request);
 
         if (summaryResponseDTO != null) {
             return new ResponseEntity<>(summaryResponseDTO, HttpStatus.OK);
