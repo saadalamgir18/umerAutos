@@ -1,0 +1,26 @@
+# FROM amazoncorretto:21-alpine-jdk
+#
+# WORKDIR /app
+#
+# COPY build/libs/*.jar app.jar
+#
+# EXPOSE 8083
+#
+# CMD ["java", "-jar", "app.jar"]
+
+FROM amazoncorretto:21-alpine-jdk
+
+WORKDIR /app
+
+# Preload build files to warm up Gradle cache
+COPY build.gradle build.gradle
+COPY settings.gradle settings.gradle
+COPY gradle gradle
+COPY gradlew gradlew
+
+# Preload dependencies (optional but speeds things up)
+RUN ./gradlew dependencies
+
+# Source code is bind-mounted via docker-compose, no need to copy here
+
+CMD ["./gradlew", "bootRun"]
