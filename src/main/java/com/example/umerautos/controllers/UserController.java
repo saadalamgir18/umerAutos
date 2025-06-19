@@ -3,6 +3,8 @@ package com.example.umerautos.controllers;
 import com.example.umerautos.dto.UserLoginRequestDTO;
 import com.example.umerautos.dto.UserSignupRequest;
 import com.example.umerautos.dto.UserSignupResponse;
+import com.example.umerautos.dto.UserUpdateRequest;
+import com.example.umerautos.globalException.RunTimeException;
 import com.example.umerautos.services.JwtService;
 import com.example.umerautos.services.UserService;
 import io.jsonwebtoken.Claims;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -80,6 +83,32 @@ public class UserController {
 
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
+
+        UserSignupResponse updatedUser = userService.getUserById(id);
+        if (updatedUser != null) {
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } else {
+
+            throw new RunTimeException();
+        }
+
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest request, @PathVariable UUID id) {
+
+        UserSignupResponse updatedUser = userService.updateUser(request, id);
+        if (updatedUser != null) {
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } else {
+
+            throw new RunTimeException();
+        }
+
+    }
+
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
         String token = jwtService.getToken(request);
@@ -90,6 +119,13 @@ public class UserController {
             return ResponseEntity.ok(Map.of("username", username, "role", role));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers() {
+        List<UserSignupResponse> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+
     }
 
     @PostMapping("/logout")
@@ -105,6 +141,16 @@ public class UserController {
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ResponseEntity.ok().body("Logged out successfully");
+    }
+
+    @DeleteMapping("/me/{id}")
+    public ResponseEntity<?> deleteUser(UUID id) {
+
+        userService.deleteUser(id);
+
+        return new ResponseEntity<>("user deleted successfully!", HttpStatus.ACCEPTED);
+
+
     }
 
 

@@ -14,7 +14,7 @@ A robust Motorcycle Spare Parts Inventory Management System to manage sales, sto
 - ✅ Full CRUD APIs for Products, Sales, Expenses, Customers
 - ✅ Clean UI built with Next.js & Tailwind CSS
 - ✅ Backend APIs built with Spring Boot, Spring Security, and MySQL
-- ✅ JUnit-based Unit Testing
+- ✅ JUnit-based Unit Testing and E2E Testing
 
 ---
 
@@ -48,6 +48,16 @@ A robust Motorcycle Spare Parts Inventory Management System to manage sales, sto
 - Java 17+
 - MySQL 8+
 - Gradle
+
+---
+
+### Swagger documentation
+
+http://localhost:8083/swagger-ui/index.html
+
+### OpenAPI Specs
+
+http://localhost:8083/api-docs
 
 ---
 
