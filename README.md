@@ -1,6 +1,7 @@
 # 🏍️ GearStock Inventory Management System
 
-A robust Motorcycle Spare Parts Inventory Management System to manage sales, stock, expenses, and customer ledgers effectively.
+A robust Motorcycle Spare Parts Inventory Management System to manage sales, stock, expenses, and customer ledgers
+effectively.
 
 ---
 
@@ -20,23 +21,26 @@ A robust Motorcycle Spare Parts Inventory Management System to manage sales, sto
 
 ## 🛠️ Tech Stack
 
-| Frontend            | Backend             | Database      | Other Tools     |
-|---------------------|---------------------|---------------|-----------------|
-| Next.js              | Spring Boot (Gradle) | MySQL         | Tailwind CSS    |
-| React.js (CSR/SSR)   | JPA/Hibernate ORM   |               | JUnit Testing   |
-|                      | Spring Security     |               | Docker (Optional) |
+| Frontend           | Backend              | Database | Other Tools       |
+|--------------------|----------------------|----------|-------------------|
+| Next.js            | Spring Boot (Gradle) | MySQL    | Tailwind CSS      |
+| React.js (CSR/SSR) | JPA/Hibernate ORM    |          | JUnit Testing     |
+|                    | Spring Security      |          | Docker (Optional) |
 
 ---
 
 ## 📷 Screenshots
 
 ### Dashboard Overview
+
 ![Dashboard Screenshot](/screenshots/dashboard.png)
 
 ### Stock Management
+
 ![Stock Management Screenshot](/screenshots/stock-management.png)
 
 ### Sales Report
+
 ![Sales Report Screenshot](/screenshots/sales-report.png)
 
 
@@ -45,6 +49,7 @@ A robust Motorcycle Spare Parts Inventory Management System to manage sales, sto
 ## 📚 Installation Guide
 
 ### Prerequisites
+
 - Java 17+
 - MySQL 8+
 - Gradle
@@ -65,5 +70,21 @@ http://localhost:8083/api-docs
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/motoparts-inventory.git
-   cd motoparts-inventory/backend
+   git clone https://github.com/saadalamgir18/umerAutos.git
+   cd umerAutos
+2. update application.properties file for local dev
+
+   ```
+   spring.profiles.active = dev
+   ```
+
+3. setup backend using docker
+
+```
+spring.profiles.active = dokcer
+
+docker-compose up -d
+
+```
+
+it will dockerize the backend and create a MYSQL container. 
