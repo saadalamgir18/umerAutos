@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,14 +26,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UserController {
+public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     private final UserService userService;
 
     private final JwtService jwtService;
 
-    public UserController(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtService = jwtService;
@@ -46,7 +47,7 @@ public class UserController {
         if (authentication.isAuthenticated()) {
 
 
-            String token = jwtService.generateToken(authentication.getName(), authentication.getAuthorities());
+            String token = jwtService.generateToken(authentication);
 
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
@@ -59,7 +60,7 @@ public class UserController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(Map.of("message", "Login successful"));
+                    .body(Map.of("token", token));
         } else {
             return new ResponseEntity<>("Auth not sucessfull!", HttpStatus.UNAUTHORIZED);
 
@@ -83,6 +84,7 @@ public class UserController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id) {
 
@@ -96,6 +98,7 @@ public class UserController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest request, @PathVariable UUID id) {
 
@@ -143,6 +146,7 @@ public class UserController {
         return ResponseEntity.ok().body("Logged out successfully");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/me/{id}")
     public ResponseEntity<?> deleteUser(UUID id) {
 

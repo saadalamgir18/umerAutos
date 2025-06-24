@@ -6,14 +6,16 @@ import com.example.umerautos.services.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
 public class ExpenseController {
 
-    private ExpenseService expenseService;
+    private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {
         this.expenseService = expenseService;
@@ -23,7 +25,7 @@ public class ExpenseController {
     public ResponseEntity<?> getAll(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "6") int limit
-    ){
+    ) {
         try {
 
             var responseDTOS = expenseService.findAll(page, limit);
@@ -35,13 +37,14 @@ public class ExpenseController {
         }
 
     }
+
     @PostMapping("/expenses")
-    public ResponseEntity<?> saveOne(@Valid  @RequestBody ExpenseRequestDTO requestDTO){
+    public ResponseEntity<?> saveOne(@Valid @RequestBody ExpenseRequestDTO requestDTO) {
         try {
 
             ExpenseResponseDTO responseDTOS = expenseService.createOne(requestDTO);
 
-            if (responseDTOS.id() == null){
+            if (responseDTOS.id() == null) {
 
                 throw new RuntimeException();
             }
@@ -53,13 +56,14 @@ public class ExpenseController {
         }
 
     }
+
     @GetMapping("/expenses/{id}")
-    public ResponseEntity<?> findOne(@PathVariable UUID id){
+    public ResponseEntity<?> findOne(@PathVariable UUID id) {
         try {
 
             ExpenseResponseDTO responseDTOS = expenseService.findOne(id);
 
-            if (responseDTOS == null){
+            if (responseDTOS == null) {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
             }
@@ -72,13 +76,14 @@ public class ExpenseController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/expenses/{id}")
-    public ResponseEntity<?> updateOne(@Valid  @RequestBody ExpenseRequestDTO requestDTO, @PathVariable UUID id){
+    public ResponseEntity<?> updateOne(@Valid @RequestBody ExpenseRequestDTO requestDTO, @PathVariable UUID id) {
         try {
 
             ExpenseResponseDTO responseDTOS = expenseService.updateOne(requestDTO, id);
 
-            if (responseDTOS == null){
+            if (responseDTOS == null) {
 
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
@@ -92,11 +97,11 @@ public class ExpenseController {
     }
 
     @GetMapping("/expenses/today")
-    public ResponseEntity<?> getToDayExpense(){
+    public ResponseEntity<?> getToDayExpense() {
 
         try {
 
-            double todayExpense  = expenseService.todayExpense();
+            double todayExpense = expenseService.todayExpense();
             System.out.println(todayExpense);
             return new ResponseEntity<>(todayExpense, HttpStatus.OK);
 
@@ -105,11 +110,13 @@ public class ExpenseController {
         }
 
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/expenses/monthly")
-    public ResponseEntity<?> getMonthlyExpense(){
+    public ResponseEntity<?> getMonthlyExpense() {
         try {
 
-            double monthlyExpense  = expenseService.monthlyExpenses();
+            double monthlyExpense = expenseService.monthlyExpenses();
 
             return new ResponseEntity<>(monthlyExpense, HttpStatus.OK);
 

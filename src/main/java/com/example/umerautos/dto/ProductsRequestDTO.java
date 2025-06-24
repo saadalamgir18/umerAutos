@@ -1,35 +1,40 @@
 package com.example.umerautos.dto;
 
-import com.example.umerautos.entities.*;
+import com.example.umerautos.entities.Products;
 import com.example.umerautos.validation.ValidSellingPrice;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Builder;
 
 import java.util.Set;
 import java.util.UUID;
 
 
 @Builder
-@ValidSellingPrice
 public record ProductsRequestDTO(
-        @NotBlank(message = "product name is mandatory")
-        @Size(min = 3)
+        @NotBlank(message = "product name is required")
+        @Size(min = 3, message = "name length should be greater then 3 characters")
         String name,
-        @NotNull(message = "brandId is mandatory")
+
+        @NotNull(message = "brandId is required")
         UUID brandId,
-        @NotBlank(message = "sku is mandatory")
+
+        @NotBlank(message = "sku is required")
         String sku,
+
         String description,
-        @Min(value = 1, message = "purchase price should be greater then 1")
+
+        @PositiveOrZero(message = "quantity in stock should be positive")
         int quantityInStock,
+
         @Min(value = 1, message = "purchase price should be greater then 1")
         int purchasePrice,
+
+        @ValidSellingPrice
         int sellingPrice,
-        @NotNull(message = "shelfCode is mandatory")
+
+        @NotNull(message = "shelfCode is required")
         UUID shelfCodeId,
+
         @NotEmpty(message = "Compatible model cannot be empty")
         Set<UUID> compatibleModelIds
 ) {

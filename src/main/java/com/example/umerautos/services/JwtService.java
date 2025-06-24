@@ -2,14 +2,13 @@ package com.example.umerautos.services;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Authentication;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface JwtService {
 
-    String generateToken(String userName, Collection<? extends GrantedAuthority> role);
+    String generateToken(Authentication authentication);
 
     boolean validateToken(String token, HttpServletRequest request);
 
@@ -20,4 +19,6 @@ public interface JwtService {
     String getUsername(String token);
 
     List<String> getRoles(String token);
+
+    String extractEmail(String token);
 }

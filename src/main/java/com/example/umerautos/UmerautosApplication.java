@@ -8,9 +8,9 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class UmerautosApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(UmerautosApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UmerautosApplication.class, args);
+    }
 
 
 }

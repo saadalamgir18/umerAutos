@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -69,6 +70,7 @@ public class SalesSummaryController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/sales-summary/{id}")
     public ResponseEntity<?> updateOne(@RequestBody SalesSummaryUpdate request, @PathVariable UUID id) {
         SalesSummaryResponseDTO summaryResponseDTO = salesSummaryService.updateSaleSummaryById(id, request);
@@ -84,6 +86,7 @@ public class SalesSummaryController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/sales-summary/{id}")
     public ResponseEntity<?> patchOne(@PathVariable UUID id, @RequestBody UpdateDebtorsSales request) {
 

@@ -7,6 +7,7 @@ import com.example.umerautos.services.SalesService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -67,6 +68,7 @@ public class SalesController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/sales/{id}")
     public ResponseEntity<?> updateSale(@PathVariable UUID id, @Valid @RequestBody SaleUpdateRequestDTO requestDTO) {
 
@@ -83,6 +85,7 @@ public class SalesController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/sales/{id}")
     public ResponseEntity<?> deleteOne(@PathVariable UUID id) {
         try {
@@ -96,6 +99,7 @@ public class SalesController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/today-sale/totalSale")
     public ResponseEntity<?> todayTotalSale() {
 
@@ -111,6 +115,7 @@ public class SalesController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/sales/monthly-revenue")
     public ResponseEntity<?> getMonthlyRevenue() {
         try {

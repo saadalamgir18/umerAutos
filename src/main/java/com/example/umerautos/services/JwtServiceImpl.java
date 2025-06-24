@@ -2,23 +2,21 @@ package com.example.umerautos.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -27,12 +25,6 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
-
-    private final UserDetailServiceImpl userDetailsService;
-
-    public JwtServiceImpl(UserDetailServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
 
     private SecretKey getKey() {
@@ -44,8 +36,9 @@ public class JwtServiceImpl implements JwtService {
         return extractPayload(token).getSubject();
     }
 
+    @SuppressWarnings("unchecked")
     public List<String> getRoles(String token) {
-        return extractPayload(token).get("role", List.class);
+        return (List<String>) extractPayload(token).get("role");
     }
 
     @Override
@@ -69,17 +62,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(String userName, Collection<? extends GrantedAuthority> role) {
+    public String generateToken(Authentication authentication) {
 
-        List<String> roles = role.stream().map(role1 -> role1.getAuthority()).toList();
+        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        String username = authentication.getName();
+
         return Jwts.builder()
-                .subject(userName)
-                .claim("userName", userName)
+                .subject(username)
                 .claim("role", roles)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(new Date().getTime() + jwtExpiration * 1000L))
                 .signWith(this.getKey())
-
                 .compact();
     }
 
@@ -91,27 +84,24 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public boolean validateToken(String token, HttpServletRequest request) {
+        try {
+            Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parse(token);
 
-        String email = this.extractEmail(token);
-        if (email == null) {
-            return false;
-        }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        if (userDetails.getUsername().equals(email) && !isTokenExpired(token)) {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             return true;
+
+        } catch (Exception malformedJwtException) {
+            throw new MalformedJwtException("Invalid JWT Token");
         }
 
-        return false;
     }
 
 
-    private String extractEmail(String token) {
+    public String extractEmail(String token) {
 
-        return extractClaim(token, Claims::getSubject);
+        return this.extractClaim(token, Claims::getSubject);
     }
 
     public String getToken(HttpServletRequest request) {

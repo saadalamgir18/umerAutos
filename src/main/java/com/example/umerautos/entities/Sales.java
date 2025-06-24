@@ -13,7 +13,7 @@ import lombok.*;
 @Table(indexes = {
         @Index(name = "name_Id_createdAt", columnList = "id, createdAt"),
 })
-public class Sales extends BaseModel{
+public class Sales extends BaseModel {
 
 
     @ManyToOne
@@ -26,9 +26,13 @@ public class Sales extends BaseModel{
     @Column(nullable = false)
     private int totalAmount;
 
+    @Enumerated
+    @Column(
+            nullable = false,
+            columnDefinition = "ENUM('PAID', 'UNPAID', 'PARTIAL') DEFAULT 'PAID'"
+    )
     @Builder.Default
-    @Enumerated(value = EnumType.STRING)
-    private  PaymentStatus paymentStatus = PaymentStatus.PAID;
+    private PaymentStatus paymentStatus = PaymentStatus.PAID;
 
 
     @ManyToOne

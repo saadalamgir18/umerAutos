@@ -1,15 +1,16 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.configsecurity.MyUserDetails;
 import com.example.umerautos.entities.SalesPerson;
 import com.example.umerautos.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -19,13 +20,17 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<SalesPerson> user = userRepository.findSalesPersonByEmail(username);
-        if (user.isPresent()) {
-            return new MyUserDetails(user.get());
+        SalesPerson user = userRepository.findSalesPersonByEmail(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found with username or email: " + username));
 
-        } else {
-            throw new UsernameNotFoundException("Cannot find the user by the give email!");
+        Set<GrantedAuthority> authorities = Set.of(
+                new SimpleGrantedAuthority(user.getRole())
+        );
+//        return new MyUserDetails(user, authorities);
 
-        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                user.getPassword(),
+                authorities);
+
     }
 }

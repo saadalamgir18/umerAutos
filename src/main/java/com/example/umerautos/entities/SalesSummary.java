@@ -1,6 +1,5 @@
 package com.example.umerautos.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -15,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SalesSummary extends BaseModel{
+public class SalesSummary extends BaseModel {
 
 
     private String customerName;
@@ -29,8 +28,11 @@ public class SalesSummary extends BaseModel{
     private int totalAmount;
 
     @Enumerated(value = EnumType.STRING)
-    private  PaymentStatus paymentStatus;
-
+    @Column(
+            nullable = false,
+            columnDefinition = "ENUM('PAID', 'UNPAID', 'PARTIAL')"
+    )
+    private PaymentStatus paymentStatus;
 
 
     @OneToMany(mappedBy = "salesSummary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
