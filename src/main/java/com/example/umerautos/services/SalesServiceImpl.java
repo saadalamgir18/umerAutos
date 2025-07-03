@@ -155,7 +155,6 @@ public class SalesServiceImpl implements SalesService {
                     .product(ProductInfoDTO.builder()
                             .id(product.getId())
                             .productName(product.getName())
-                            .sku(product.getSku())
                             .build())
                     .build();
 

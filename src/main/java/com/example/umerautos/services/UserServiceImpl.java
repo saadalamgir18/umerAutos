@@ -4,6 +4,7 @@ import com.example.umerautos.dto.UserSignupRequest;
 import com.example.umerautos.dto.UserSignupResponse;
 import com.example.umerautos.dto.UserUpdateRequest;
 import com.example.umerautos.entities.SalesPerson;
+import com.example.umerautos.globalException.ResourceAlreadyExistsException;
 import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.globalException.RunTimeException;
 import com.example.umerautos.repositories.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,7 +31,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserSignupResponse signup(UserSignupRequest user) {
 
-        SalesPerson dbUser = userRepository.findSalesPersonByEmail(user.email()).orElseThrow(() -> new ResourceNotFoundException("user not found with email " + user.email()));
+        Optional<SalesPerson> dbUser = userRepository.findSalesPersonByEmail(user.email());
+        if (dbUser.isPresent()) {
+            throw new ResourceAlreadyExistsException("user already exists with email: " + user.email());
+        }
 
         String hashedPassword = passwordEncoder.encode(user.password());
         System.out.println("hashedPassword: " + hashedPassword);

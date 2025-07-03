@@ -34,15 +34,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    
+
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.0'
-
-// https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
-    implementation 'org.flywaydb:flyway-mysql'
-    // Gradle
-    implementation 'org.flywaydb:flyway-core'
-
+    
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     testImplementation 'com.h2database:h2'
 

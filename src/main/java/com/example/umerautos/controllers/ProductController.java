@@ -113,7 +113,7 @@ public class ProductController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')")
     @Operation(operationId = "updateProduct", description = "This end point is use to update a product")
     @PutMapping("/products/{productId}")
     @CacheEvict(value = "products", allEntries = true)

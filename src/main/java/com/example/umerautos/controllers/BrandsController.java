@@ -5,10 +5,10 @@ import com.example.umerautos.dto.BrandsRequestDTO;
 import com.example.umerautos.dto.BrandsResponseDTO;
 import com.example.umerautos.services.BrandsService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -26,14 +26,15 @@ public class BrandsController {
     @GetMapping("/brands")
     public ResponseEntity<List<BrandsResponseDTO>> findAll() {
 
-        List<BrandsResponseDTO> brandsResponseDTOS = brandsService.findAll();
-
-        if (!brandsResponseDTOS.isEmpty()) {
+        try {
+            List<BrandsResponseDTO> brandsResponseDTOS = brandsService.findAll();
             return new ResponseEntity<>(brandsResponseDTOS, HttpStatus.OK);
 
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     @GetMapping("/brands/{brandId}")

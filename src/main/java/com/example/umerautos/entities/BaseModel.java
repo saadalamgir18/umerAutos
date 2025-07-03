@@ -2,7 +2,8 @@ package com.example.umerautos.entities;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    protected UUID Id;
+    protected UUID id;
 
     @Column(nullable = false)
     @CreationTimestamp

@@ -2,6 +2,7 @@ package com.example.umerautos.controllers;
 
 import com.example.umerautos.dto.ShelfResponseDTO;
 import com.example.umerautos.entities.ShelfCode;
+import com.example.umerautos.globalException.RunTimeException;
 import com.example.umerautos.services.ShelfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,16 +33,19 @@ public class ShelfController {
 
     @GetMapping("/shelf")
     public ResponseEntity<?> findAll() {
-        List<ShelfResponseDTO> shelfResponseDTOS = shelfService.findAll();
-        if (!shelfResponseDTOS.isEmpty()) {
+
+        try {
+
+            List<ShelfResponseDTO> shelfResponseDTOS = shelfService.findAll();
+
             return new ResponseEntity<>(shelfResponseDTOS, HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-
+        } catch (Exception e) {
+            throw new RunTimeException();
 
         }
+
 
     }
 
 }
+

@@ -1,15 +1,11 @@
 package com.example.umerautos.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.validator.constraints.UniqueElements;
 
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -40,12 +36,6 @@ public class Products extends BaseModel {
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<CompatibleModels> compatibleModels; //associate with compatible model
 
-
-
-    @Column(nullable = false, unique = true)
-    private String sku;
-
-    private String description;
 
     @Column(nullable = false)
     private int quantityInStock;

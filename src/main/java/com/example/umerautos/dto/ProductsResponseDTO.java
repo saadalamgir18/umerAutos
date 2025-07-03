@@ -3,7 +3,7 @@ package com.example.umerautos.dto;
 
 import com.example.umerautos.entities.CompatibleModels;
 import com.example.umerautos.entities.Products;
-import lombok.*;
+import lombok.Builder;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +17,7 @@ public record ProductsResponseDTO(
         Date updatedAt,
         UUID id,
         String name,
-        String sku, String description, int quantityInStock, int purchasePrice, int sellingPrice, UUID brandId,
+        int quantityInStock, int purchasePrice, int sellingPrice, UUID brandId,
         String brandName, UUID modelId, String modelName, UUID categoryId, String categoryName,
         UUID supplierId, String supplierName, UUID shelfCodeId, String shelfCodeName, List<UUID> compatibleModelsIds,
         Set<String> compatibleModels
@@ -30,8 +30,6 @@ public record ProductsResponseDTO(
         return ProductsResponseDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .sku(product.getSku())
-                .description(product.getDescription())
                 .quantityInStock(product.getQuantityInStock())
                 .purchasePrice(product.getPurchasePrice())
                 .sellingPrice(product.getSellingPrice())

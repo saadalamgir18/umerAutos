@@ -1,7 +1,6 @@
 package com.example.umerautos.dto;
 
 import com.example.umerautos.entities.Products;
-import com.example.umerautos.validation.ValidSellingPrice;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 
@@ -18,18 +17,13 @@ public record ProductsRequestDTO(
         @NotNull(message = "brandId is required")
         UUID brandId,
 
-        @NotBlank(message = "sku is required")
-        String sku,
-
-        String description,
-
         @PositiveOrZero(message = "quantity in stock should be positive")
         int quantityInStock,
 
         @Min(value = 1, message = "purchase price should be greater then 1")
         int purchasePrice,
 
-        @ValidSellingPrice
+//        @ValidSellingPrice
         int sellingPrice,
 
         @NotNull(message = "shelfCode is required")

@@ -20,7 +20,7 @@ public class CompatibleModelsController {
     public CompatibleModelsController(CompatibleModelService modelService) {
         this.modelService = modelService;
     }
-    
+
     @PostMapping("/compatible-models")
     public ResponseEntity<?> createOne(@Valid @RequestBody CompatibleModelRequestDTO requestDTO) {
         CompatibleModelResponseDTO modelResponseDTO = modelService.createOne(requestDTO);
@@ -34,13 +34,17 @@ public class CompatibleModelsController {
 
     @GetMapping("/compatible-models")
     public ResponseEntity<?> findAll() {
-        Set<CompatibleModelResponseDTO> responseDTO = modelService.findAll();
-        if (!responseDTO.isEmpty()) {
+
+        try {
+            Set<CompatibleModelResponseDTO> responseDTO = modelService.findAll();
+
 
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 

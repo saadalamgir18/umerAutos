@@ -26,11 +26,16 @@ public class Sales extends BaseModel {
     @Column(nullable = false)
     private int totalAmount;
 
-    @Enumerated
-    @Column(
-            nullable = false,
-            columnDefinition = "ENUM('PAID', 'UNPAID', 'PARTIAL') DEFAULT 'PAID'"
-    )
+//    @Enumerated
+//    @Column(
+//            nullable = false,
+//            columnDefinition = "ENUM('PAID', 'UNPAID', 'PARTIAL') DEFAULT 'PAID'"
+//    )
+//    @Builder.Default
+//    private PaymentStatus paymentStatus = PaymentStatus.PAID;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     @Builder.Default
     private PaymentStatus paymentStatus = PaymentStatus.PAID;
 

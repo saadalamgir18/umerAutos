@@ -41,8 +41,6 @@ public class ProductsServiceImpl implements ProductsService {
         Products newProduct = Products.builder()
                 .name(products.name())
                 .brand(brandsRepository.findById(products.brandId()).orElse(null))
-                .sku(products.sku())
-                .description(products.description())
                 .quantityInStock(products.quantityInStock())
                 .purchasePrice(products.purchasePrice())
                 .sellingPrice(products.sellingPrice())
@@ -100,8 +98,6 @@ public class ProductsServiceImpl implements ProductsService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         product.setName(requestDTO.name());
-        product.setSku(requestDTO.sku());
-        product.setDescription(requestDTO.description());
         product.setQuantityInStock(requestDTO.quantityInStock());
         product.setPurchasePrice(requestDTO.purchasePrice());
         product.setSellingPrice(requestDTO.sellingPrice());

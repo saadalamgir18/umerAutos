@@ -36,6 +36,16 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(value = ResourceAlreadyExistsException.class)
+    public ResponseEntity<?> resourceAlreadyExist(ResourceAlreadyExistsException exception) {
+
+
+        String message = exception.getMessage();
+        return new ResponseEntity<>(new ExceptionResponse(message, false), HttpStatus.CONFLICT);
+
+    }
+
+
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundExceptionHandler(ResourceNotFoundException exception) {
 
@@ -54,7 +64,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<?> badCredentialsException(Exception exception) {
-        return new ResponseEntity<>(new ExceptionResponse(exception.getMessage(), false), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ExceptionResponse("username or password incorrect!", false), HttpStatus.FORBIDDEN);
 
     }
 
