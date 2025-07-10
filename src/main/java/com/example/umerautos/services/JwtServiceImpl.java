@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -44,10 +45,16 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Claims extractPayload(String token) {
 
-        return Jwts
-                .parser().
-                verifyWith(this.getKey())
-                .build().parseSignedClaims(token).getPayload();
+
+        try {
+            return Jwts
+                    .parser().
+                    verifyWith(this.getKey())
+                    .build().parseSignedClaims(token).getPayload();
+
+        } catch (Exception malformedJwtException) {
+            throw new MalformedJwtException("Invalid JWT Token");
+        }
     }
 
     private Date extractExpiration(String token) {
@@ -62,18 +69,36 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(Authentication authentication) {
+    public String generateAccessToken(UserDetails user) {
 
-        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        String username = authentication.getName();
+        List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        String email = user.getUsername();
 
         return Jwts.builder()
-                .subject(username)
+                .subject(email)
                 .claim("role", roles)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(new Date().getTime() + jwtExpiration * 1000L))
                 .signWith(this.getKey())
                 .compact();
+    }
+
+    @Override
+    public String generateRefreshToken(UserDetails user) {
+
+        String username = user.getUsername();
+
+        return Jwts
+                .builder()
+                .subject(username)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(new Date().getTime() + jwtExpiration * 1000L * 24 * 30 * 6))
+                .signWith(this.getKey())
+                .compact();
+    }
+
+    private List<String> getRolesFromAuth(Authentication authentication) {
+        return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
     public Boolean isTokenExpired(String token) {
@@ -90,6 +115,7 @@ public class JwtServiceImpl implements JwtService {
                     .build()
                     .parse(token);
 
+            System.out.println("token is valid");
             return true;
 
         } catch (Exception malformedJwtException) {
@@ -103,6 +129,13 @@ public class JwtServiceImpl implements JwtService {
 
         return this.extractClaim(token, Claims::getSubject);
     }
+
+    @Override
+    public String refreshToken(String refreshToken, HttpServletRequest request) {
+        boolean validateToken = validateToken(refreshToken, request);
+        return null;
+    }
+
 
     public String getToken(HttpServletRequest request) {
 

@@ -5,7 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Table(indexes = {
-        @Index(name = "name_Id", columnList = "name, id"),
+        @Index(name = "idx_compatible_models_name_id", columnList = "name, id"),
 
 })
 public class CompatibleModels extends BaseModel {

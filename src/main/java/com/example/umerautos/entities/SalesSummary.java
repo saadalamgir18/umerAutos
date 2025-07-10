@@ -28,10 +28,7 @@ public class SalesSummary extends BaseModel {
     private int totalAmount;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(
-            nullable = false,
-            columnDefinition = "ENUM('PAID', 'UNPAID', 'PARTIAL')"
-    )
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
 

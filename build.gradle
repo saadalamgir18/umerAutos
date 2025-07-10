@@ -13,6 +13,9 @@ java {
     }
 }
 
+jar {
+    archiveFileName = "umerautos.jar"  // Force a fixed name
+}
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -29,6 +32,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation 'org.postgresql:postgresql:42.7.7'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,7 +44,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.0'
-    
+
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     testImplementation 'com.h2database:h2'
 

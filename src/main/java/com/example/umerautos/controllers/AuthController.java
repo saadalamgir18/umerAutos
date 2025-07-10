@@ -1,23 +1,17 @@
 package com.example.umerautos.controllers;
 
-import com.example.umerautos.dto.UserLoginRequestDTO;
-import com.example.umerautos.dto.UserSignupRequest;
-import com.example.umerautos.dto.UserSignupResponse;
-import com.example.umerautos.dto.UserUpdateRequest;
+import com.example.umerautos.dto.*;
 import com.example.umerautos.globalException.RunTimeException;
 import com.example.umerautos.services.JwtService;
 import com.example.umerautos.services.UserService;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,46 +20,68 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-
-    private final UserService userService;
 
     private final JwtService jwtService;
+    private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequestDTO request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequestDTO request) {
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        LoginResponse loginResponse = userService.login(request);
 
-        if (authentication.isAuthenticated()) {
+        ResponseCookie cookie = ResponseCookie.from("token", loginResponse.accessToken())
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(24 * 60 * 60 * 30 * 6)
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", loginResponse.refreshToken())
+                .httpOnly(false)
+                .secure(false)
+                .path("/")
+                .sameSite("Lax")
+                .maxAge(24 * 60 * 60 * 30 * 6)
+                .build();
 
 
-            String token = jwtService.generateToken(authentication);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(loginResponse);
 
 
-            ResponseCookie cookie = ResponseCookie.from("token", token)
-                    .httpOnly(false)
-                    .secure(false)
-                    .path("/")
-                    .sameSite("Lax")
-                    .maxAge(24 * 60 * 60)
-                    .build();
+    }
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(Map.of("token", token));
-        } else {
-            return new ResponseEntity<>("Auth not sucessfull!", HttpStatus.UNAUTHORIZED);
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refreshToken(HttpServletRequest request) {
 
-        }
 
+        LoginResponse loginResponse = userService.refreshToken(request);
+        ResponseCookie cookie = ResponseCookie.from("token", loginResponse.accessToken())
+                .httpOnly(false)
+                .secure(false)
+                .path("/")
+                .sameSite("Lax")
+                .maxAge(24 * 60 * 60)
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", loginResponse.refreshToken())
+                .httpOnly(false)
+                .secure(false)
+                .path("/")
+                .sameSite("Lax")
+                .maxAge(24 * 60 * 60 * 30 * 6)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(loginResponse);
 
     }
 
@@ -115,10 +131,12 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
         String token = jwtService.getToken(request);
+        System.out.println("me token: " + token);
         if (token != null && jwtService.validateToken(token, request)) {
-            Claims claims = jwtService.extractPayload(token);
-            String username = jwtService.getUsername(token);
+            String username = jwtService.extractEmail(token);
+            System.out.println("me username: " + username);
             List<String> role = jwtService.getRoles(token);
+            System.out.println(role);
             return ResponseEntity.ok(Map.of("username", username, "role", role));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -148,7 +166,7 @@ public class AuthController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/me/{id}")
-    public ResponseEntity<?> deleteUser(UUID id) {
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
 
         userService.deleteUser(id);
 

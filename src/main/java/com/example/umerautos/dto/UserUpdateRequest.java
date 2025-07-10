@@ -1,5 +1,6 @@
 package com.example.umerautos.dto;
 
+import com.example.umerautos.entities.Roles;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 

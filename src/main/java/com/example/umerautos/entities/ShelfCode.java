@@ -1,7 +1,10 @@
 package com.example.umerautos.entities;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.*;
 
 
@@ -12,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Table(indexes = {
-        @Index(name = "name_Id", columnList = "name, id"),
+        @Index(name = "idx_shelf_code_name_id", columnList = "name, id"),
 
 })
 public class ShelfCode extends BaseModel {

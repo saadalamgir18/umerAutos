@@ -1,8 +1,9 @@
 package com.example.umerautos.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Entity
 @Builder
@@ -22,6 +23,8 @@ public class SalesPerson extends BaseModel {
     private String password;
 
     @Builder.Default
-    private String role = "USER";
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Roles> role = Set.of(Roles.ROLE_USER);
 
 }

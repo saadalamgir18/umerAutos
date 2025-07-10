@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -23,9 +24,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
         SalesPerson user = userRepository.findSalesPersonByEmail(username).orElseThrow(() ->
                 new UsernameNotFoundException("User not found with username or email: " + username));
 
-        Set<GrantedAuthority> authorities = Set.of(
-                new SimpleGrantedAuthority("ROLE_"+user.getRole())
-        );
+        Set<GrantedAuthority> authorities = user
+                .getRole()
+                .stream()
+                .map(roles -> new SimpleGrantedAuthority(roles.name()))
+                .collect(Collectors.toSet());
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
                 user.getPassword(),

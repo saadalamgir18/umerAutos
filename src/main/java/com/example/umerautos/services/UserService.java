@@ -1,14 +1,16 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.dto.UserSignupRequest;
-import com.example.umerautos.dto.UserSignupResponse;
-import com.example.umerautos.dto.UserUpdateRequest;
+import com.example.umerautos.dto.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
     UserSignupResponse signup(UserSignupRequest user);
+
+    LoginResponse login(UserLoginRequestDTO request);
+
 
     UserSignupResponse updateUser(UserUpdateRequest request, UUID id);
 
@@ -17,4 +19,7 @@ public interface UserService {
     List<UserSignupResponse> getAllUsers();
 
     UserSignupResponse getUserById(UUID id);
+
+
+    LoginResponse refreshToken(HttpServletRequest request);
 }

@@ -2,7 +2,7 @@ package com.example.umerautos.configsecurity;
 
 import com.example.umerautos.configsecurity.filters.JwtAuthenticationFilter;
 import com.example.umerautos.services.UserDetailServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,16 +22,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class ConfigSecurity {
 
-    @Autowired
-    private UserDetailServiceImpl userDetailsService;
+    private final UserDetailServiceImpl userDetailsService;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    private CorsConfig corsConfig;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final CorsConfig corsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
