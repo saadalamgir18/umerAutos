@@ -42,6 +42,7 @@ public class ConfigSecurity {
                         .permitAll()
                         .requestMatchers("/api/auth/signup").permitAll().anyRequest().authenticated());
 
+        
         http.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );

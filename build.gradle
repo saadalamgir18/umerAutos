@@ -13,9 +13,6 @@ java {
     }
 }
 
-jar {
-    archiveFileName = "umerautos.jar"  // Force a fixed name
-}
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
