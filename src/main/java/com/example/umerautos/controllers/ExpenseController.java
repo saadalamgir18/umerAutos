@@ -102,7 +102,6 @@ public class ExpenseController {
         try {
 
             double todayExpense = expenseService.todayExpense();
-            System.out.println(todayExpense);
             return new ResponseEntity<>(todayExpense, HttpStatus.OK);
 
         } catch (Exception e) {

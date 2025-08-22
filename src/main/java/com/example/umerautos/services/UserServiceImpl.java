@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
         }
 
         String hashedPassword = passwordEncoder.encode(user.password());
-        System.out.println("hashedPassword: " + hashedPassword);
 
         SalesPerson newUser = userRepository.save(SalesPerson
                 .builder()
@@ -73,7 +72,6 @@ public class UserServiceImpl implements UserService {
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
 
-            System.out.println("accessToken: " + accessToken);
             return LoginResponse.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)

@@ -131,12 +131,9 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
         String token = jwtService.getToken(request);
-        System.out.println("me token: " + token);
         if (token != null && jwtService.validateToken(token, request)) {
             String username = jwtService.extractEmail(token);
-            System.out.println("me username: " + username);
             List<String> role = jwtService.getRoles(token);
-            System.out.println(role);
             return ResponseEntity.ok(Map.of("username", username, "role", role));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

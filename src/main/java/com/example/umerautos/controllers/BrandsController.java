@@ -45,12 +45,10 @@ public class BrandsController {
             if (brandsResponseDTOS != null) {
                 return new ResponseEntity<>(brandsResponseDTOS, HttpStatus.OK);
             } else {
-                System.out.println("return null: ");
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
 
         } catch (Exception e) {
-            System.out.println("throwing exception in controller: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

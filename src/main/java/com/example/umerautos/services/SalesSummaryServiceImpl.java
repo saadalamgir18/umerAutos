@@ -171,8 +171,6 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
     @Transactional
     public SalesSummaryResponseDTO updateSaleSummaryById(UUID id, UpdateDebtorsSales request) {
 
-        System.out.println(request);
-
 
         SalesSummary existingSalesSummary = this.getSaleSummaryById(id);
 

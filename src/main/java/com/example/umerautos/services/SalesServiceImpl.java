@@ -94,7 +94,6 @@ public class SalesServiceImpl implements SalesService {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
         List<Object[]> rawResults = salesRepository.findTodaySalesSummary(pageable);
-        System.out.println("rawResults: " + rawResults);
         return rawResults.stream().map(row -> SalesResponseDTO
                 .builder()
                 .productId((UUID) row[0])
@@ -140,8 +139,6 @@ public class SalesServiceImpl implements SalesService {
 
         Optional<Sales> existingSale = salesRepository.findById(id);
 
-
-        System.out.println("existing sale is: " + existingSale.get().getId());
 
         if (existingSale.isPresent()) {
 

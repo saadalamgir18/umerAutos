@@ -25,7 +25,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
-        System.out.println("validation exception occurred");
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -67,7 +66,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RunTimeException.class)
     public ResponseEntity<?> runTimeException(Exception exception) {
-        System.out.println("run time exception");
         return new ResponseEntity<>(new ExceptionResponse(exception.getMessage(), false), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
@@ -117,7 +115,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> exception(Exception exception) {
-        System.out.println("generel exception occurred");
 
         return new ResponseEntity<>(new ExceptionResponse(exception.getMessage(), false), HttpStatus.INTERNAL_SERVER_ERROR);
 

@@ -51,7 +51,6 @@ public class SalesController {
     @GetMapping("/sales/{id}")
     public ResponseEntity<?> getSaleById(@PathVariable UUID id) {
         try {
-            System.out.println("getting sale by id: " + id);
             SalesUpdateResponseDTO salesUpdateResponseDTO = salesService.findSaleById(id);
 
             if (salesUpdateResponseDTO.id() == null) {
@@ -105,7 +104,6 @@ public class SalesController {
 
         try {
             int todayTotalSalesAmount = salesService.getTodayTotalSalesAmount();
-            System.out.println("todayTotalSalesAmount: " + todayTotalSalesAmount);
 
             return new ResponseEntity<>(todayTotalSalesAmount, HttpStatus.OK);
         } catch (Exception e) {

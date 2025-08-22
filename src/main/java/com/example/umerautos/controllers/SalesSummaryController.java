@@ -44,7 +44,6 @@ public class SalesSummaryController {
         PaymentStatus paymentStatus = PaymentStatus.valueOf(status.toUpperCase());
 
         var response = salesSummaryService.findSalesSummary(page, limit, paymentStatus);
-        System.out.println(response);
         if (response.getData() != null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -59,7 +58,6 @@ public class SalesSummaryController {
     public ResponseEntity<?> getOne(@PathVariable UUID id) {
 
         SalesSummaryResponseDTO summaryResponseDTO = salesSummaryService.findSalesSummaryById(id);
-        System.out.println(summaryResponseDTO);
         if (summaryResponseDTO != null) {
             return new ResponseEntity<>(summaryResponseDTO, HttpStatus.OK);
 
@@ -90,7 +88,6 @@ public class SalesSummaryController {
     @PatchMapping("/sales-summary/{id}")
     public ResponseEntity<?> patchOne(@PathVariable UUID id, @RequestBody UpdateDebtorsSales request) {
 
-        System.out.println(request);
         SalesSummaryResponseDTO summaryResponseDTO = salesSummaryService.updateSaleSummaryById(id, request);
 
         if (summaryResponseDTO != null) {

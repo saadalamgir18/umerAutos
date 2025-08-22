@@ -115,7 +115,6 @@ public class JwtServiceImpl implements JwtService {
                     .build()
                     .parse(token);
 
-            System.out.println("token is valid");
             return true;
 
         } catch (Exception malformedJwtException) {
