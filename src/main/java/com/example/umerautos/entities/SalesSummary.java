@@ -16,21 +16,19 @@ import java.util.List;
 @Builder
 public class SalesSummary extends BaseModel {
 
-
-    private String customerName;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Column(nullable = false)
     private int quantitySold;
 
-
     @Column(nullable = false)
-    private int totalAmount;
+    private double totalAmount;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
-
 
     @OneToMany(mappedBy = "salesSummary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)

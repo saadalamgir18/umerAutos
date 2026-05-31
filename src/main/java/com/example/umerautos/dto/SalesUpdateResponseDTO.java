@@ -5,14 +5,12 @@ import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.Sales;
 import lombok.*;
 
-import java.util.UUID;
-
 @Builder
 public record SalesUpdateResponseDTO(
-         UUID id,
+         Long id,
          ProductInfoDTO product,
          int quantitySold,
-         int totalPrice,
+         double totalPrice,
          PaymentStatus paymentStatus
 ) {
 

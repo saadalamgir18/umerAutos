@@ -4,11 +4,10 @@ import com.example.umerautos.entities.Expenses;
 import lombok.*;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Builder
 public record ExpenseResponseDTO(
-        UUID id, Date createdAt, String description, int amount
+        Long id, Date createdAt, String description, int amount
 ) {
 
     public static ExpenseResponseDTO mapToDTO(Expenses expenses) {

@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
-import java.util.UUID;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,7 +64,7 @@ public class BrandsControllerIntegrationTests extends BaseIntegrationTest {
     @Test
     public void getBrandByIdTest() throws Exception {
 
-        UUID nonExistingId = UUID.randomUUID();
+        Long nonExistingId = new Random().nextLong();
 
         try {
             restTemplate.getForEntity(baseUrl + "/brands/" + nonExistingId, BrandsResponseDTO.class);
@@ -81,7 +81,7 @@ public class BrandsControllerIntegrationTests extends BaseIntegrationTest {
         ResponseEntity<BrandsResponseDTO> createResponse = restTemplate.postForEntity(
                 baseUrl + "/brands", createRequest, BrandsResponseDTO.class
         );
-        UUID brandId = createResponse.getBody().id();
+        Long brandId = createResponse.getBody().id();
 
         // Step 2: Update the brand using PUT
         BrandsRequestDTO updateRequest = new  BrandsRequestDTO("Panther Updated");

@@ -1,9 +1,10 @@
 package com.example.umerautos.services;
 
-import com.example.umerautos.dto.*;
+import com.example.umerautos.dto.PaginatedResponseDTO;
+import com.example.umerautos.dto.SalesSummaryRequestDTO;
+import com.example.umerautos.dto.SalesSummaryResponseDTO;
+import com.example.umerautos.dto.UpdateDebtorsSales;
 import com.example.umerautos.entities.PaymentStatus;
-
-import java.util.UUID;
 
 public interface SalesSummaryService {
 
@@ -11,15 +12,15 @@ public interface SalesSummaryService {
 
     public PaginatedResponseDTO<SalesSummaryResponseDTO> findAll(int page, int limit);
 
-    public PaginatedResponseDTO<SalesSummaryResponseDTO> findSalesSummary(int page, int limit, PaymentStatus paymentStatus);
+    public PaginatedResponseDTO<SalesSummaryResponseDTO> findSalesSummary(int page, int limit, int customerId, PaymentStatus paymentStatus);
 
-    SalesSummaryResponseDTO findSalesSummaryById(UUID id);
+    SalesSummaryResponseDTO findSalesSummaryById(Long id);
 
-    SalesSummaryResponseDTO updateSaleSummaryById(UUID id, SalesSummaryUpdate request);
+    String updateSaleById(Long id);
 
-    SalesSummaryResponseDTO updateSaleSummaryById(UUID id);
+    SalesSummaryResponseDTO updateSaleSummaryById(Long id);
 
-    SalesSummaryResponseDTO updateSaleSummaryById(UUID id, UpdateDebtorsSales request);
+    SalesSummaryResponseDTO updateSaleSummaryById(Long id, UpdateDebtorsSales request);
 
 
 }

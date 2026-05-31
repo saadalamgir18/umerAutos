@@ -7,6 +7,8 @@ import com.example.umerautos.entities.Products;
 import com.example.umerautos.entities.ShelfCode;
 import com.example.umerautos.globalException.ResourceNotFoundException;
 import com.example.umerautos.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,10 +33,12 @@ public class ProductsServiceImpl implements ProductsService {
 
     @Autowired
     private ProductsRepository productsRepo;
+    private static final Logger logger = LoggerFactory.getLogger(ProductsServiceImpl.class);
 
 
     @Override
     public ProductsResponseDTO createOne(ProductsRequestDTO products) {
+        logger.info("Creating new product: {}", products.name());
         Set<CompatibleModels> models = new HashSet<>(compatibleModelsRepository.findAllById(products.compatibleModelIds()));
 
 
@@ -50,7 +54,7 @@ public class ProductsServiceImpl implements ProductsService {
 
 
         Products savedProduct = productsRepo.save(newProduct);
-
+        logger.info("Product created with id: {}", savedProduct.getId());
 
         return ProductsResponseDTO.mapToDto(savedProduct);
 
@@ -59,8 +63,10 @@ public class ProductsServiceImpl implements ProductsService {
 
     @Override
     public PaginatedResponseDTO<ProductsResponseDTO> findAll(String productName, int page, int limit) {
+        logger.info("Fetching all products with name filter: {}", productName);
         Pageable pageable = PageRequest.of(page - 1, limit);
         Page<Products> productsPage = productsRepo.findByName(productName, pageable);
+        logger.info("Found {} products", productsPage.getTotalElements());
 
         PaginationDTO pagination = new PaginationDTO(
                 productsPage.getTotalElements(),
@@ -80,22 +86,28 @@ public class ProductsServiceImpl implements ProductsService {
 
 
     @Override
-    public ProductsResponseDTO findById(UUID id) {
+    public ProductsResponseDTO findById(Long id) {
+        logger.info("Fetching product with id: {}", id);
         Optional<Products> dbProduct = productsRepo.findById(id);
 
         if (dbProduct.isPresent()) {
+            logger.info("Product found: {}", dbProduct.get().getName());
             return ProductsResponseDTO.mapToDto(dbProduct.get());
         } else {
+            logger.warn("Product not found with id: {}", id);
             return ProductsResponseDTO.builder().build();
         }
     }
 
     @Override
-    public ProductsResponseDTO updateOne(UUID id, ProductsRequestDTO requestDTO) {
-
+    public ProductsResponseDTO updateOne(Long id, ProductsRequestDTO requestDTO) {
+        logger.info("Updating product with id: {}", id);
 
         Products product = productsRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> {
+                    logger.error("Product not found for update with id: {}", id);
+                    return new RuntimeException("Product not found");
+                });
 
         product.setName(requestDTO.name());
         product.setQuantityInStock(requestDTO.quantityInStock());
@@ -122,6 +134,7 @@ public class ProductsServiceImpl implements ProductsService {
 
 
         Products updatedProductResponse = productsRepo.save(product);
+        logger.info("Product updated successfully");
 
         return ProductsResponseDTO.mapToDto(updatedProductResponse);
 
@@ -129,14 +142,16 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public void deleteOne(UUID id) throws ResourceNotFoundException {
-
+    public void deleteOne(Long id) throws ResourceNotFoundException {
+        logger.info("Deleting product with id: {}", id);
         Optional<Products> products = productsRepo.findById(id);
         if (products.isPresent()) {
 
             productsRepo.deleteById(id);
+            logger.info("Product deleted successfully");
 
         } else {
+            logger.error("Product not found for deletion with id: {}", id);
             throw new ResourceNotFoundException("product does not exist with id: " + id);
 
         }
@@ -144,9 +159,10 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     public void updateStockQuantity(Optional<Products> products, SaleDTO saleDTO) {
-
+        logger.info("Updating stock quantity for product id: {}", products.get().getId());
         products.get().setQuantityInStock(products.get().getQuantityInStock() - saleDTO.quantitySold());
 
         productsRepo.save(products.get());
+        logger.info("Stock quantity updated successfully");
     }
 }

@@ -10,27 +10,39 @@ import org.springframework.data.repository.query.Param;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
-public interface SalesRepository extends JpaRepository<Sales, UUID> {
+public interface SalesRepository extends JpaRepository<Sales, Long> {
 
-    @Query("""
-            SELECT
-                p.id,
-                p.name,
-                SUM(s.quantitySold),
-                SUM(s.totalAmount),
-                SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold) AS profit
-            FROM Sales s
-            JOIN s.product p
-            WHERE (
-                FUNCTION('DATE', s.createdAt) = CURRENT_DATE
-                OR FUNCTION('DATE', s.updatedAt) = CURRENT_DATE
-                )
-            and paymentStatus = 'PAID'
-            GROUP BY p.id, p.name
-            """)
-    List<Object[]> findTodaySalesSummary(Pageable pageable);
+    @Query(
+            value = """
+                        SELECT
+                            p.id,
+                            p.name,
+                            SUM(s.quantitySold),
+                            SUM(s.totalAmount),
+                            SUM(s.totalAmount) - SUM(p.purchasePrice * s.quantitySold)
+                        FROM Sales s
+                        JOIN s.product p
+                        WHERE (
+                            FUNCTION('DATE', s.createdAt) = CURRENT_DATE
+                            OR FUNCTION('DATE', s.updatedAt) = CURRENT_DATE
+                        )
+                        AND s.paymentStatus = com.example.umerautos.entities.PaymentStatus.PAID
+                        GROUP BY p.id, p.name
+                    """,
+            countQuery = """
+                        SELECT COUNT(DISTINCT p.id)
+                        FROM Sales s
+                        JOIN s.product p
+                        WHERE (
+                            FUNCTION('DATE', s.createdAt) = CURRENT_DATE
+                            OR FUNCTION('DATE', s.updatedAt) = CURRENT_DATE
+                        )
+                        AND s.paymentStatus = com.example.umerautos.entities.PaymentStatus.PAID
+                    """
+    )
+    Page<Object[]> findTodaySalesSummary(Pageable pageable);
+
 
     @Query("""
             SELECT

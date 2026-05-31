@@ -5,16 +5,15 @@ import com.example.umerautos.entities.Sales;
 import lombok.Builder;
 
 import java.util.Date;
-import java.util.UUID;
 
 
 @Builder
 public record SalesResponseDTO(
-        UUID id,
-        UUID productId,
+        Long id,
+        Long productId,
         String productName,
         int quantitySold,
-        int totalPrice,
+        double totalPrice,
         int profit,
         Date createdAt,
         PaymentStatus paymentStatus

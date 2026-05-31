@@ -22,9 +22,8 @@ public class SalesPerson extends BaseModel {
     @Column(nullable = false)
     private String password;
 
-    @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<Roles> role = Set.of(Roles.ROLE_USER);
+    private Set<Roles> role;
 
 }

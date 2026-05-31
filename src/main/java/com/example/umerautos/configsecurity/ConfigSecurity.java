@@ -38,11 +38,13 @@ public class ConfigSecurity {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()));
 
         http.authorizeHttpRequests(auth ->
+
                 auth.requestMatchers("/api/auth/login")
                         .permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/api/auth/signup").permitAll().anyRequest().authenticated());
 
-        
+
         http.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );

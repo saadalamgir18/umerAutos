@@ -4,8 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +27,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
+    private static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
 
     private SecretKey getKey() {
@@ -53,6 +55,7 @@ public class JwtServiceImpl implements JwtService {
                     .build().parseSignedClaims(token).getPayload();
 
         } catch (Exception malformedJwtException) {
+            logger.error("Invalid JWT Token", malformedJwtException);
             throw new MalformedJwtException("Invalid JWT Token");
         }
     }
@@ -70,7 +73,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateAccessToken(UserDetails user) {
-
+        logger.info("Generating access token for user: {}", user.getUsername());
         List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         String email = user.getUsername();
 
@@ -85,7 +88,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateRefreshToken(UserDetails user) {
-
+        logger.info("Generating refresh token for user: {}", user.getUsername());
         String username = user.getUsername();
 
         return Jwts
@@ -118,6 +121,7 @@ public class JwtServiceImpl implements JwtService {
             return true;
 
         } catch (Exception malformedJwtException) {
+            logger.error("Invalid JWT Token during validation", malformedJwtException);
             throw new MalformedJwtException("Invalid JWT Token");
         }
 
@@ -138,12 +142,9 @@ public class JwtServiceImpl implements JwtService {
 
     public String getToken(HttpServletRequest request) {
 
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("token")) {
-                    return cookie.getValue();
-                }
-            }
+        String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            return authorization.substring(7);
         }
         return null;
 

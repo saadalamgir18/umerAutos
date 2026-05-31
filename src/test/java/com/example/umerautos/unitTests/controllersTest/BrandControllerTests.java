@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -36,9 +36,9 @@ public class BrandControllerTests {
     @ParameterizedTest
     @ValueSource(strings = {"Lefan", "panther", "service"})
     @DisplayName("findAllBrands_Success")
-    public void testFindAllBrands_Success(String str){
+    public void testFindAllBrands_Success(String str) {
         List<BrandsResponseDTO> mockBrands = List.of(BrandsResponseDTO.builder()
-                        .name(str)
+                .name(str)
                 .build());
 
         when(brandsService.findAll()).thenReturn(mockBrands);
@@ -50,8 +50,8 @@ public class BrandControllerTests {
 
     @Test
     @DisplayName("findAllBrandsById_Success")
-    public void testFindBrandsById_Success(){
-        UUID brandId = UUID.randomUUID();
+    public void testFindBrandsById_Success() {
+        Long brandId = new Random().nextLong();
 
         BrandsResponseDTO mockBrand = BrandsResponseDTO.builder().id(brandId).build();
 
@@ -61,7 +61,7 @@ public class BrandControllerTests {
         ResponseEntity<BrandsResponseDTO> response = brandsController.findOne(brandId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-       BrandsResponseDTO body = response.getBody();
+        BrandsResponseDTO body = response.getBody();
 
 
         assertNotNull(body);
@@ -72,20 +72,20 @@ public class BrandControllerTests {
 
     @Test
     @DisplayName("FindBrandsById_Fail")
-    public void testFindBrandsById_Fail(){
-        UUID brandId = UUID.randomUUID();
+    public void testFindBrandsById_Fail() {
+        Long brandId = new Random().nextLong();
 
         BrandsResponseDTO mockBrand = BrandsResponseDTO.builder().id(brandId).build();
 
 
         when(brandsService.findOne(brandId)).thenReturn(null);
 
-            ResponseEntity<BrandsResponseDTO> response = brandsController.findOne(brandId);
+        ResponseEntity<BrandsResponseDTO> response = brandsController.findOne(brandId);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
 
-        BrandsResponseDTO body =  response.getBody();
+        BrandsResponseDTO body = response.getBody();
 
         assertNotEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -94,7 +94,7 @@ public class BrandControllerTests {
     @ParameterizedTest
     @ValueSource(strings = {"lefan", "panther", "service"})
     @DisplayName("SaveOneBrand_Success")
-    public void testSaveOneBrand_Success(String str){
+    public void testSaveOneBrand_Success(String str) {
 
         BrandsRequestDTO mockRequest = new BrandsRequestDTO(str);
 

@@ -6,13 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.UUID;
+public interface SalesSummaryRepository extends JpaRepository<SalesSummary, Long> {
 
-public interface SalesSummaryRepository extends JpaRepository<SalesSummary, UUID> {
-
-    Page<SalesSummary> findByPaymentStatus(PaymentStatus paymentStatus, Pageable pageable);
-
+    Page<SalesSummary> findByCustomer_IdAndSaleItems_PaymentStatus(Long customer_id, PaymentStatus paymentStatus, Pageable pageable);
+    
+    Page<SalesSummary> findBySaleItems_PaymentStatus(PaymentStatus paymentStatus, Pageable pageable);
 
 
 }

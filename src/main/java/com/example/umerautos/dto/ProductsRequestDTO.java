@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.util.Set;
-import java.util.UUID;
 
 
 @Builder
@@ -15,7 +14,7 @@ public record ProductsRequestDTO(
         String name,
 
         @NotNull(message = "brandId is required")
-        UUID brandId,
+        Long brandId,
 
         @PositiveOrZero(message = "quantity in stock should be positive")
         int quantityInStock,
@@ -27,10 +26,10 @@ public record ProductsRequestDTO(
         int sellingPrice,
 
         @NotNull(message = "shelfCode is required")
-        UUID shelfCodeId,
+        Long shelfCodeId,
 
         @NotEmpty(message = "Compatible model cannot be empty")
-        Set<UUID> compatibleModelIds
+        Set<Long> compatibleModelIds
 ) {
 
     public static Products mapToProducts(ProductsRequestDTO requestDTO) {

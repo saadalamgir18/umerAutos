@@ -6,11 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.UUID;
 
-public interface ExpenseRepository extends JpaRepository<Expenses, UUID> {
-    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expenses e WHERE FUNCTION('DATE', e.createdAt) = CURRENT_DATE" )
+public interface ExpenseRepository extends JpaRepository<Expenses, Long> {
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expenses e WHERE FUNCTION('DATE', e.createdAt) = CURRENT_DATE")
     int todayExpense();
 
 

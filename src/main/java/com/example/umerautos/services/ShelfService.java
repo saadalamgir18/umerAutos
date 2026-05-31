@@ -9,4 +9,8 @@ public interface ShelfService {
     ShelfResponseDTO createOne(ShelfCode shelfCode);
 
     List<ShelfResponseDTO> findAll();
+
+    ShelfResponseDTO updateOne(Long id, ShelfCode shelfCode);
+
+    void deleteOne(Long id);
 }

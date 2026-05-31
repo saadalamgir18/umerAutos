@@ -6,13 +6,12 @@ import lombok.Builder;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Builder
 public record SalesSummaryResponseDTO(
-        UUID id,
-        String customerName,
-        int totalAmountSummary,
+        Long id,
+        CustomerResponseDto customer,
+        double totalAmountSummary,
 
         int quantitySoldSummary,
         List<SalesResponseDTO> saleItems,
@@ -37,7 +36,7 @@ public record SalesSummaryResponseDTO(
                 .toList();
         return SalesSummaryResponseDTO
                 .builder()
-                .customerName(salesSummary.getCustomerName())
+                .customer(salesSummary.getCustomer() != null ? CustomerResponseDto.mapToDto(salesSummary.getCustomer()) : null)
                 .quantitySoldSummary(salesSummary.getQuantitySold())
                 .totalAmountSummary(salesSummary.getTotalAmount())
                 .id(salesSummary.getId())

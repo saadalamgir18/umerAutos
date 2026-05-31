@@ -1,31 +1,25 @@
 package com.example.umerautos.dto;
 
 import com.example.umerautos.entities.PaymentStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
+public class SalesSummaryRequestDTO {
+    private Long customerId;
+    private PaymentStatus paymentStatus;
+    private double totalAmountSummary;
+    private int quantitySoldSummary;
+    private List<SaleItemDTO> saleItems;
 
-@Builder
-public record SalesSummaryRequestDTO(
-        String customerName,
-
-        @Enumerated(value = EnumType.STRING)
-        PaymentStatus paymentStatus,
-
-        @NotNull(message = "amount must not be null")
-        int totalAmountSummary,
-
-        @NotNull(message = "quantity must not be null")
-        int quantitySoldSummary,
-
-        @NotEmpty(message = "sale item must not be empty")
-        List<SaleDTO> saleItems
-) {
-
-
+    @Getter
+    @Setter
+    public static class SaleItemDTO {
+        private Long productId;
+        private int quantitySold;
+        private double totalAmount;
+    }
 }

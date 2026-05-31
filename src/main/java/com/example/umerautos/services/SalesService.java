@@ -7,20 +7,19 @@ import com.example.umerautos.dto.SalesResponseDTO;
 import com.example.umerautos.dto.SalesUpdateResponseDTO;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface SalesService {
 
     List<SalesResponseDTO> findTodaySales(int page, int limit);
     PaginatedResponseDTO<SalesResponseDTO> findAll(int page, int limit);
-    SalesUpdateResponseDTO findSaleById(UUID id);
+    SalesUpdateResponseDTO findSaleById(Long id);
 
 
     int getTodayTotalSalesAmount();
 
     int getMonthlyRevenue();
 
-    SalesUpdateResponseDTO updateSale(SaleUpdateRequestDTO requestDTO, UUID id);
+    SalesUpdateResponseDTO updateSale(SaleUpdateRequestDTO requestDTO, Long id);
 
-    void deleteOne(UUID id);
+    void deleteOne(Long id);
 }

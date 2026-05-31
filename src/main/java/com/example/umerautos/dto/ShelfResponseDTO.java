@@ -4,7 +4,6 @@ import com.example.umerautos.entities.ShelfCode;
 import lombok.Builder;
 
 import java.util.Date;
-import java.util.UUID;
 
 
 @Builder
@@ -12,7 +11,7 @@ public record ShelfResponseDTO(
         Date createdAt,
 
         Date updatedAt,
-        UUID id,
+        Long id,
         String name
 ) {
 

@@ -8,18 +8,28 @@ import lombok.Builder;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Builder
 public record ProductsResponseDTO(
         Date createdAt,
         Date updatedAt,
-        UUID id,
+        Long id,
         String name,
-        int quantityInStock, int purchasePrice, int sellingPrice, UUID brandId,
-        String brandName, UUID modelId, String modelName, UUID categoryId, String categoryName,
-        UUID supplierId, String supplierName, UUID shelfCodeId, String shelfCodeName, List<UUID> compatibleModelsIds,
+        int quantityInStock,
+        int purchasePrice,
+        int sellingPrice,
+        Long brandId,
+        String brandName,
+        Long modelId,
+        String modelName,
+        Long categoryId,
+        String categoryName,
+        Long supplierId,
+        String supplierName,
+        Long shelfCodeId,
+        String shelfCodeName,
+        List<Long> compatibleModelsIds,
         Set<String> compatibleModels
 
 
